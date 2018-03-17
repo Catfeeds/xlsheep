@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>{$title}</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+</head>
+<body>
+	<div class="weui-pull-to-refresh-layer">
+    <div class="pull-to-refresh-arrow"></div>
+    <div class="pull-to-refresh-preloader"></div>
+    <div class="down">下拉刷新</div>
+    <div class="up">释放刷新</div>
+    <div class="refresh">正在刷新...</div>
+  </div>
+  	<div class="wrap">
+		<div class="bd">
+			<div class="bd_tab">
+				<div class="weui_navbar">
+
+	                	<div class="weui_navbar_item <eq name='type' value='0'>weui_bar_item_on</eq>">
+		                    <a href="{:U('App/Shop/deliveryOrderList',array('type'=>0))}">全部</a>
+		                </div>
+
+		                <div class="weui_navbar_item <eq name='type' value='1'>weui_bar_item_on</eq>">
+		                    <a href="{:U('App/Shop/deliveryOrderList',array('type'=>1))}">未完成</a>
+		                </div>
+		                <div class="weui_navbar_item <eq name='type' value='2'>weui_bar_item_on</eq>">
+		                    <a href="{:U('App/Shop/deliveryOrderList',array('type'=>2))}">已完成</a>
+		                </div>
+
+	            </div>
+			</div>
+			<div class="wait_list" id="list">
+				<empty name='cache'>
+				<p style="padding: 10px;text-align: center;">暂无相关数据</p>
+				<else/>
+				<volist name="cache" id="vo">
+				<div class="weui_cells">
+					<div class="weui_cell">
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <p>订单编号：{$vo.oid}</p>
+		                </div>
+		                <div class="weui_cell_ft color_org">
+		                 <switch name="vo.status">
+								<case value="0">已取消</case>
+								<case value="1">待付款</case>
+								<case value="2">待送货</case>
+								<case value="3">待提货</case>
+								<case value="4">退货中</case>
+								<case value="5">已完成</case>
+								<case value="6">已关闭</case>
+								<case value="7">退货完成</case>
+								<case value="8">退款中</case>
+							</switch>
+		                </div>
+		            </div>
+		            <volist name="vo.items" id="vt">
+
+		            	<a href="{:U('App/Shop/goods',array('id'=>$vt[goodsid]))}" class="weui_media_box weui_media_appmsg bz_wrap">
+	                    <div class="weui_media_hd">
+	                        <img class="img weui_media_appmsg_thumb" src="{$vt.pic}" alt="">
+	                    </div>
+	                    <div class="weui_media_bd fz_14">
+	                        <p>{$vt.name}</p>
+	                        <notempty name="vt.skuattr">
+							<p>{$vt.skuattr}</p>
+							</notempty>
+	                    </div>
+	                    <div class=" ovflw ">
+                            <p><i class="color_org">￥{$vt.price}</i></p>
+                            <p class="text_r fonts85">X{$vt.num}</p>
+                        </div>
+	                </a>
+					</volist>
+	                <div class="weui_cell fz_14">
+		                <div class="weui_cell_bd weui_cell_primary">
+		                    <p>共<i>{$vo.totalnum}</i>件商品</p>
+		                </div>
+		                <div class="weui_cell_ft">合计：<i class="color_6">￥{$vo.payprice}</i>
+							<br/>
+							配送手续费：<i class="color_6">￥{$vo.delivery_fee}</i>
+						</div>
+		            </div>
+	    			<div class="pd_15 c_float bod_top">
+	                    <div class="f_right">
+		                    <div class="weui_cell_ft weui_media_box weui_media_appmsg pd_0">
+		                    	<div>
+									<eq name="vo.status" value="2">
+										<a href="{:U('App/Shop/pickupDeliver',array('sid'=>0,'id'=>$vo['id']))}" class="weui_btn weui_btn_mini weui_btn_primary">到达自提点</a>
+
+									</eq>
+									<!--<eq name="vo.status" value="31">
+								<a href="{:U('App/Shop/pickupSuccess',array('sid'=>0,'id'=>$vo['id']))}" class="weui_btn weui_btn_mini weui_btn_primary">完成自提</a>
+									</eq>-->
+									<a href="{:U('App/Shop/deliveryOrderDetail',array('sid'=>0,'orderid'=>$vo['id']))}" class="weui_btn weui_btn_mini weui_btn_primary">查看订单</a>
+
+								</div>
+							</div>	
+	                    </div>
+	                </div>
+				</div>
+				</volist>
+				</empty>
+				<eq name="datamore" value="1">
+				    <div class="weui-infinite-scroll" id="infinite">
+					<div class="infinite-preloader"></div>
+						  正在加载...
+					</div>
+				</eq>
+				
+			</div>
+		 
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+	<script src="__PUBLIC__/App/js/fastclick.js"></script>
+   <script type="text/javascript">
+	 $(function() {
+		  FastClick.attach(document.body);
+	 });
+	</script>
+	<script type="text/javascript">
+	var type={$type};
+	if($("#infinite")[0]) {
+		var p = 1;
+		var loading = false;
+		$(document.body).infinite().on("infinite", function() {
+		  if(loading) return;
+		  loading = true;
+		  p=p+1;
+		  param ="?p="+p+"type="+type;  
+	      $.get("{:U('App/Ajax/deliveryOrderList')}"+param,function(data){
+	    	   if(data.status==1) {
+	    		   if(data.info) {	    			   
+	                   $("#list").append(data.info);
+	    			   loading = false;
+	                   if(data.more==0) {	            			  
+	                	   $(document.body).destroyInfinite();
+	                   }
+	    	   	   }  
+					$('#infinite').hide();          		   
+	    	   }
+	       })  
+		});
+	}
+	$(document.body).pullToRefresh();
+	$(document.body).on("pull-to-refresh", function() {
+		param ="?p=1";
+	      $.get("{:U('App/Ajax/deliveryOrderList')}"+param,function(data){
+	    	   if(data.status==1) {
+	    		   if(data.info) {	
+	                   $("#list").html(data.info);	
+	        		   if(!$("#infinite")[0] && data.more) {
+	        			   window.location.reload();
+	        		   }
+	    	   	   }   
+				   resetPage();
+	    	   }
+	       }) 
+	});
+	function resetPage() {
+		 p = 1;
+		 $(document.body).pullToRefreshDone();
+		 $(document.body).infinite();
+		 $('#infinite').show();
+	}
+	</script>
+</body>
+</html>

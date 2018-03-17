@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>会员升级-{$_SESSION['WAP']['shopset']['name']}</title>
+		<meta charset="utf-8" />
+		<!--页面优化-->
+		<meta name="MobileOptimized" content="320">
+		<!--默认宽度320-->
+		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<!--viewport 等比 不缩放-->
+		<meta http-equiv="cleartype" content="on">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!--删除苹果菜单-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<!--默认颜色-->
+		<meta name="apple-mobile-web-app-title" content="yes">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<link href="__PUBLIC__/App/images/qiaonongge.ico" type="image/x-icon" rel="shortcut icon">
+		<!--加载全部后 显示-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--不识别电话-->
+		<meta content="email=no" name="format-detection" />
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css" />
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css" />
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+		<style type="text/css">
+		#payprice{color:#a3c31d}
+		.paybox{background:#fff;padding: 10px 25px;font-size:16px;margin-top:20px;}
+		</style>
+	</head>
+	<body>
+		<section class="mui-inner-wrap">
+			<header class="vip-header">
+		      <h1 class="vip-title">升级合伙人</h1>
+		    </header>
+			<div class="mui-content">
+			<form action="" method="post" id="orderform">
+				<section class="cz-ul">
+				<input type="hidden"  value="wxpay" id="paytype">
+				<input type="hidden" id="type" value="">	
+				<input type="hidden" id="money" value="{$_SESSION['WAP']['vip']['money']}">
+					  <div class="weui_cell weui_cell_select" style="padding:0">
+					    <div class="weui_cell_bd weui_cell_primary">
+					      <select id="viptype" class="weui_select" name="select1">
+					        <option selected="" value="0">选择合伙人期限</option>
+					        <volist name="vip_rule" id="vo">
+					        <option value="{$vo[0]}" data-price="{$vo[1]}">{$vo[0]}年</option>
+					        </volist>
+					      </select>
+					    </div>
+					    </div>
+				</section>
+			</form>
+			<p class="paybox">支付金额：<i id="payprice" style="display:inline;">0</i> 元</p>
+			<div class="weui_cells_title">请选择付款方式：</div>
+			<div class="weui_cells weui_cells_radio">
+		        <label class="weui_cell weui_check_label" for="x11">
+		          <div class="weui_cell_bd weui_cell_primary">
+		            <div class="weui_cell pd_0">
+                      	<div class="weui_cell_hd" style="margin-right:10px;"><img src="__PUBLIC__/App/images/icons07.png" alt="" width="20"></div>
+                      	<div class="weui_cell_bd weui_cell_primary">
+                       	 	<p>余额支付<i>(￥{$_SESSION['WAP']['vip']['money']})</i></p>
+                       	 	
+                      	</div>
+                      	<div class="weui_cell_ft"></div>
+                    </div>
+		          </div>
+		          <div class="weui_cell_ft">
+		            <input type="radio" class="weui_check" name="radio1" id="x11" data-paytype="money" data-disable="0" >
+		            <span class="weui_icon_checked"></span>
+		          </div>
+		        </label>
+		        <label class="weui_cell weui_check_label" for="x12">
+		          <div class="weui_cell_bd weui_cell_primary">
+		            <div class="weui_cell pd_0">
+                      	<div class="weui_cell_hd" style="margin-right:10px;"><img src="__PUBLIC__/App/images/wexin.png" alt="" width="20"></div>
+                      	<div class="weui_cell_bd weui_cell_primary">
+                       	 	<p>微信支付</p>
+                      	</div>
+                      	<div class="weui_cell_ft"></div>
+                    </div>
+		          </div>
+		          <div class="weui_cell_ft">
+		            <input type="radio" class="weui_check" name="radio1" id="x12" data-paytype = "wxpay" data-disable="0" checked="checked">
+		            <span class="weui_icon_checked"></span>
+		          </div>
+		        </label>
+		        <div class="weui_cell" id="pay_pwd" style="display:none">
+	                <div class="weui_cell_hd"><label class="weui_label">支付密码</label></div>
+	                <div class="weui_cell_bd weui_cell_primary">
+	                  <input class="weui_input" type="password" id="pay_password" placeholder="请输入支付密码">
+	                </div>
+	            </div>
+	        </div>
+	         <div class="weui_btn_area">
+                <a class="weui_btn weui_btn_primary fz_16" href="javascript:" id="orderconfirm">立即支付</a>
+            </div>
+			</div>
+			<include file="./Tpl/App/Shop_footer.html" />
+		</section>
+		<script type="text/javascript">
+	var paytype=$('#paytype');
+	$('.weui_check').change(function(){
+		var isdis=$(this).data('disable');
+		if(isdis==0){
+			if($(this).data('paytype')=='money') {
+				$('#pay_pwd').show();
+			} else {
+				$('#pay_pwd').hide();
+			}
+			$(paytype).val($(this).data('paytype'));
+		}else{
+			$('.weui_check').removeAttr("checked");
+			$.toptip('请使用其它方式！', 'error');
+		}
+	});
+	$('#viptype').change(function(){
+		var totalprice = $('#viptype option:selected').data('price');
+		$('#payprice').text(totalprice);
+		$('#type').val($(this).val());
+		$('.weui_check').removeAttr("checked");
+		$('#paytype').val('');
+		if($('#money').val()>=totalprice){
+			$("#x11").data('disable',0);
+		} else {
+			$("#x12").prop("checked","checked");
+			$('#paytype').val('wxpay');
+			$("#x11").data('disable',1);
+		}
+	})
+	var okfun=function(){
+		var type = $('#type').val();
+                      	</div>
+                      	<div class="weui_cell_ft"></div>
+                    </div>
+		          </div>
+		          <div class="weui_cell_ft">
+		            <input type="radio" class="weui_check" name="radio1" id="x11" data-paytype="money" data-disable="0" >
+		            <span class="weui_icon_checked"></span>
+		          </div>
+		        </label>
+		        <label class="weui_cell weui_check_label" for="x12">
+		          <div class="weui_cell_bd weui_cell_primary">
+		            <div class="weui_cell pd_0">
+                      	<div class="weui_cell_hd" style="margin-right:10px;"><img src="__PUBLIC__/App/images/wexin.png" alt="" width="20"></div>
+                      	<div class="weui_cell_bd weui_cell_primary">
+                       	 	<p>微信支付</p>
+                      	</div>
+                      	<div class="weui_cell_ft"></div>
+                    </div>
+		          </div>
+		          <div class="weui_cell_ft">
+		            <input type="radio" class="weui_check" name="radio1" id="x12" data-paytype = "wxpay" data-disable="0" checked="checked">
+		            <span class="weui_icon_checked"></span>
+		          </div>
+		        </label>
+		        <div class="weui_cell" id="pay_pwd" style="display:none">
+	                <div class="weui_cell_hd"><label class="weui_label">支付密码</label></div>
+	                <div class="weui_cell_bd weui_cell_primary">
+	                  <input class="weui_input" type="password" id="pay_password" placeholder="请输入支付密码">
+	                </div>
+	            </div>
+	        </div>
+	         <div class="weui_btn_area">
+                <a class="weui_btn weui_btn_primary fz_16" href="javascript:" id="orderconfirm">立即支付</a>
+            </div>
+			</div>
+			<include file="./Tpl/App/Shop_footer.html" />
+		</section>
+		<script type="text/javascript">
+	var paytype=$('#paytype');
+	$('.weui_check').change(function(){
+		var isdis=$(this).data('disable');
+		if(isdis==0){
+			if($(this).data('paytype')=='money') {
+				$('#pay_pwd').show();
+			} else {
+				$('#pay_pwd').hide();
+			}
+			$(paytype).val($(this).data('paytype'));
+		}else{
+			$('.weui_check').removeAttr("checked");
+			$.toptip('请使用其它方式！', 'error');
+		}
+	});
+	$('#viptype').change(function(){
+		var totalprice = $('#viptype option:selected').data('price');
+		$('#payprice').text(totalprice);
+		$('#type').val($(this).val());
+		$('.weui_check').removeAttr("checked");
+		$('#paytype').val('');
+		if($('#money').val()>=totalprice){
+			$("#x11").data('disable',0);
+		} else {
+			$("#x12").prop("checked","checked");
+			$('#paytype').val('wxpay');
+			$("#x11").data('disable',1);
+		}
+	})
+	var okfun=function(){
+		var type = $('#type').val();
+
+		var paytype = $('#paytype').val();
+		var pay_password = $('#pay_password').val();
+		$.ajax({
+			type:'post',
+			data:{'type':type,'paytype':paytype,'password':pay_password},
+			url:"{:U('App/Vip/upgrade')}",
+			dataType:'json',				
+			async:false,
+			success:function(e){
+				if (e.status==1) {
+					$.alert(e.info, function() {
+						window.location.href="{:U('App/Vip/edit')}";
+					});
+				} else {
+					$.toptip(e.info, 'error');
+					return false;
+				}
+			},
+			error:function(){
+			    $.toptip('通讯失败！', 'error');
+				return false;
+			}
+		});	
+	}
+	$('#orderconfirm').on('click',function(){
+		if($('#type').val()==0 || $('#type').val()==''){
+			$.toptip('请选择VIP会员期限！', 'error');
+			return false;
+		}
+		if(!$('#paytype').val()){
+			$.toptip('请选择支付方式！', 'error');
+			return false;
+		}
+		if($('#paytype').val()=='money') {
+			var pay_password = $('#pay_password').val()
+			if(pay_password=='' || pay_password.length!=6){
+				$.toptip('请输入6位数字支付密码！', 'error');
+				return false;
+			}
+			$.ajax({
+				type:'post',
+				data:{'password':pay_password},
+				url:"{:U('App/Shop/checkPayPassword')}",
+				dataType:'json',				
+				async:false,
+				success:function(e){
+					if (e.status==1) {
+						okfun();
+					} else {
+						if(e.nopwd==1) {
+							$.confirm(e.info, function() {
+								window.location.href=e.url;
+							}, function() {
+								return false;
+							});
+						} else {
+							$.toptip(e.info, 'error');
+							return false;
+						}
+					}
+				},
+				error:function(){
+				    $.toptip('通讯失败！', 'error');
+					return false;
+				}
+			});	
+		} else {
+			okfun();
+		}
+	});
+	</script>
+
+
+	<script type='text/javascript'>
+    (function(m, ei, q, i, a, j, s) {
+        m[i] = m[i] || function() {
+            (m[i].a = m[i].a || []).push(arguments)
+        };
+        j = ei.createElement(q),
+            s = ei.getElementsByTagName(q)[0];
+        j.async = true;
+        j.charset = 'UTF-8';
+        j.src = 'https://static.meiqia.com/dist/meiqia.js?_=t';
+        s.parentNode.insertBefore(j, s);
+    })(window, document, 'script', '_MEIQIA');
+    _MEIQIA('entId', 56902);
+</script>
+
+
+	</body>
+
+
+
+
+</html>

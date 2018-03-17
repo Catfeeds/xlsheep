@@ -1,0 +1,142 @@
+<script src="__PUBLIC__/Admin/js/datetime/moment.js"></script>
+<script src="__PUBLIC__/Admin/js/datetime/daterangepicker.js"></script>
+<style type="text/css">
+.report-nav{padding:15px 5px;background: #ffffff;border-bottom: 1px solid #eeeeee;}
+.report-nav a {background-color: #2dc3e8;color:#fff;font-size:14px;padding: 5px 12px;border-radius: 5px;margin-right:15px;text-decoration: none;}
+.report-nav a:hover,.report-nav a.active{background-color: #fb6e52;}
+</style>
+<div class="report-nav">
+	<a <if condition="$type eq ''">class="active"</if> href="{:U('Admin/Shop/clorder')}" data-loader="App-loader" data-loadername="自提核销(全部)">全部</a> 
+	<a <if condition="$type eq '1'">class="active"</if> href="{:U('Admin/Shop/clorder',array('type'=>1))}" data-loader="App-loader" data-loadername="自提核销(待发货)">待发货</a> 
+	<a <if condition="$type eq '2'">class="active"</if> href="{:U('Admin/Shop/clorder',array('type'=>2))}" data-loader="App-loader" data-loadername="自提核销(到达自提点)">到达自提点</a>
+	<a <if condition="$type eq '3'">class="active"</if> href="{:U('Admin/Shop/clorder',array('type'=>3))}" data-loader="App-loader" data-loadername="自提核销(已自提)">已自提</a>
+	<div class="pull-right">
+	    <form id="App-search">
+	    	<label style="margin-bottom: 0px;width:200px;">
+            	<div class="input-group input-group-sm">
+            	<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+               <input type="text" class="form-control input-sm" id="date" name="date" placeholder="日期范围"  value="{$date}">
+           	</div>
+           </label> 
+	        <label style="margin-bottom: 0px;width: 160px;">
+	            <input name="name" type="search" class="form-control input-sm" placeholder="请输入订单号" value="{$name}">
+	        </label>
+	        <input type="hidden" name="type" value="{$type}"/>
+	        <a href="{:U('Admin/Shop/clorder',array('type'=>$type))}" class="btn btn-success" data-loader="App-loader" data-loadername="产品" data-search="App-search">
+	            <i class="fa fa-search"></i>搜索
+	        </a>
+	        <button href="javascript:void(0)" class="btn btn-primary" id="exportOrder"><i class="fa fa-save"></i>导出订单</button>
+	    </form>
+	</div>
+	<div style="clear:both"></div>
+</div>
+<div class="row">
+	<div class="col-xs-12 col-md-12">
+		<div class="widget">
+			<div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i>
+				<span class="widget-caption">自提核销</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize">
+						<i class="fa fa-expand"></i>
+					</a>
+					<a href="#" data-toggle="collapse">
+						<i class="fa fa-minus"></i>
+					</a>
+					<a href="#" data-toggle="dispose">
+						<i class="fa fa-times"></i>
+					</a>
+
+				</div>
+			</div>
+			<div class="widget-body">
+				<table id="App-table" class="table table-bordered table-hover">
+					<thead class="bordered-darkorange">
+						<tr role="row">
+							<th width="30px"><div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+									<label style="padding-left: 4px;"> <input type="checkbox" class="App-checkall colored-blue">
+                                     <span class="text"></span>
+									</label>                                    
+                                </div></th>
+							<th>ID</th>
+							<th>会员ID</th>
+							<th>订单号</th>
+							<empty name="status">
+							<th>状态</th>
+							</empty>
+							<th>订单总额</th>
+							<th>姓名</th>
+							<th>电话</th>
+							<th>支付金额</th>
+							<th>支付方式</th>
+							<th>创建时间</th>
+							<th width="200">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="cache" id="vo">
+							<tr id="item{$vo.id}">
+								<td>
+									<div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+										<label style="padding-left: 4px;"> <input name="checkvalue" type="checkbox" class="colored-blue App-check" value="{$vo.id}">
+	                                     <span class="text"></span>
+										</label>                                    
+	                                </div>
+								</td>
+								<td class=" sorting_1">{$vo.id}</td>
+								<td class=" ">{$vo.vipid}</td>
+								<td class=" ">{$vo.oid}</td>
+								<empty name="status">
+								<td class=" ">
+								<switch name="vo.status">
+									<case value="2">待发货</case>
+									<case value="3">到达自提点</case>
+									<case value="5">已自提</case>
+								</switch>
+								</td>
+								</empty>
+								<td class=" ">{$vo.totalprice}</td>
+								<td class=" ">{$vo.vipname}</td>
+								<td class=" ">{$vo.vipmobile}</td>
+								<td class=" ">{$vo.payprice}</td>
+								<td class=" "><switch name="vo.paytype">
+									<case value="money">余额</case>
+									<case value="alipaywap">支付宝WAP</case>
+									<case value="wxpay">微信支付</case>
+								</switch></td>
+								<td class=" ">{$vo.ctime|date='Y/m/d H:i',###}</td>		
+								<td class="center ">
+									<eq name="vo.status" value="2">
+ 									<a href="{:U('Admin/Shop/clorder/')}" class="btn btn-success btn-xs" data-content="确定订单已到自提点？" data-type="confirm" data-ajax="{:U('Admin/Shop/pickupDeliver',array('id'=>$vo['id']))}">到达自提点</a>&nbsp;&nbsp;
+									</eq>
+									<eq name="vo.status" value="3">
+ 									<a href="{:U('Admin/Shop/clorder/')}" class="btn btn-success btn-xs" data-content="确定客户已自提？" data-type="confirm" data-ajax="{:U('Admin/Shop/pickupSuccess',array('id'=>$vo['id']))}">完成提货</a>&nbsp;&nbsp;
+									</eq>
+									<a href="{:U('Admin/Shop/orderDetail/',array('id'=>$vo['id'],'status'=>$status))}" class="btn btn-primary btn-xs" data-loader="App-loader" data-loadername="订单详情"><i class="fa fa-eye"></i> 详情</a>
+								</td>
+							</tr>
+						</volist>
+												
+					</tbody>
+				</table>
+				<div class="row DTTTFooter">
+					{$page}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+	setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->
+<script type="text/javascript">	
+	//导出订单
+	$('#exportOrder').on('click', function() {
+		$("#App-search").attr('action',"{:U('Admin/Shop/sinceOrderExport')}");
+		$("#App-search").submit();
+	})
+	$('#date').daterangepicker();
+</script>	

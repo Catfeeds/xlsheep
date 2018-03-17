@@ -1,0 +1,8 @@
+<volist name="data" id="vo"> <a
+	href="{:U('App/Vip/msgRead',array('id'=>$vo['id']))}" class="item">
+	<h3
+		<eq name='vo.read' value='0'>class="unread"</eq>
+		>{$vo.title}
+	</h3>
+	<p class="info-time" style="text-indent:0;">{$vo.ctime|date='Y-m-d H:i:s',###}</p>
+</a> </volist>

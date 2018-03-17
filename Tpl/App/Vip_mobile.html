@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/base.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/frozen.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+<script type="text/javascript" src="__PUBLIC__/App/js/rem.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+<title>手机验证</title>
+</head>
+<body>
+<section class="wrap-page wrap">
+	<div class="bd">
+		<div class="weui_cells mg_t0 pd_btm10">
+			<div class="weui_cells_title">手机号码是我们联系您的主要方式，请谨慎填写</div>
+			<div class="weui_cells_title">
+				<div class="input_wp">
+					<div class="weui_cell_bd weui_cell_primary">
+				          <input id="mobile" class="weui_input" type="tel" placeholder="请输入手机号码" value="">
+				     </div>
+				</div>
+			</div>
+			<div class="weui_cells_title">
+				<div class="input_wp">
+					<div class="weui_cell weui_vcode" style="padding:0">
+				        <div class="weui_cell_bd weui_cell_primary">
+				          <input id="code" class="weui_input" type="number" placeholder="请输入验证码" value="">
+				        </div>
+				        <div class="weui_cell_ft">
+				          	<a id="send" class="yzm_btn" href="javascript:;">获取验证码</a>
+				        </div>
+				    </div>
+				</div>
+			</div>
+		</div>
+		<div class="btn_wp pd_10" style="width:auto">
+		<a id="save-btn" href="javascript:;" class="weui_btn weui_btn_primary" style="width:auto;line-height:42px;">提交</a>
+		</div>
+	</div>
+</section>
+<script>
+var reg = /^(13[0-9]|14[57]|15[012356789]|17[0678]|18[0-9])\d{8}$/;
+$('#save-btn').click(function(){
+	var mobile = $('#mobile').val();
+	if(mobile==''){
+		$.toptip('请填写手机号码！', 'error');
+		return false;
+	}else if (reg.test(mobile)==false) {
+		$.toptip('手机号码格式不正确！', 'error');
+		return false;
+	}
+	var code = $('#code').val();
+	if(code==''){
+		$.toptip('请填写验证码！', 'error');
+		return false;
+	}
+    $.ajax({
+		type:'post',
+		data:{'mobile':mobile,'code':code},
+		url:"{:U('App/Vip/mobile')}",
+		dataType:'json',
+		success:function(e){
+			if(e.status==1) {
+				$.toast('操作成功',function(){location.href="{:U('App/Vip/edit')}";});
+			} else {
+				$.toptip(e.info, 'error');
+			}
+			return false;
+		},
+		error:function(){
+		    $.toptip('通讯失败！', 'error');
+			return false;
+		}
+	});	
+})
+var validCode = true;
+$(function() {
+	//获取短信验证码
+	$("#send").click (function  () { 
+		var mobile = $('#mobile').val().replace(/[ ]/g,"");
+		if(mobile==''){
+			$.toptip("请输入手机号码！", 'error');
+	        return false;
+		}
+	    if(!reg.test(mobile)){
+	    	$.toptip("您输入的手机号码有误！", 'error');
+	        return false;
+	    }
+		if (validCode) {
+			send_sms(mobile);			
+		}
+	})
+})
+function send_sms(mobile) {
+    $.ajax({
+   	 	type: "POST",
+        url:"{:U('App/Sms/getCode')}",
+        data:{"mobile":mobile},
+        dataType:'json',
+        error: function(request) {
+        	$.toptip("连接错误！", 'error');
+        },
+        success: function(data) {
+            if(data.status){
+          	   	var time = 60;
+          	   	validCode=false;
+          	   	$("#send").addClass("yzm_btn_disabled");
+          	    $("#send").text("已发送(60)");
+	       		var t=setInterval(function  () {
+	       			time--;	       			
+	       			$("#send").text('已发送('+time+')');
+	       			if (time==0) {
+	       				clearInterval(t);
+	       				$("#send").text("重新获取");
+	       				validCode=true;
+	       				$("#send").removeClass("yzm_btn_disabled");
+	       			}
+	       		},1000)
+          	} else {
+          		$.toptip(data.info, 'error');
+          	}
+        }
+    });
+}
+</script>
+</body>
+</html>

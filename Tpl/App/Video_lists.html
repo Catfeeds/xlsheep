@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>农场直播</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/swiper.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/venobox.css" type="text/css" />
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/venobox.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.vbox').venobox();			
+		})
+	</script>
+</head>
+<body>
+	<div class="wrap">
+		<header>
+			<div class="banner">
+				<div class="swiper-container">
+				  <div class="swiper-wrapper">
+					<adv pid ="5" limit="5" item="v">
+			                 <div class="swiper-slide">
+						<a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if> >
+			              	<img src="{$v[imgurl]}" title="{$v[title]}"width="100%" style="{$v[style]}"/>
+			             </a>
+				    </div>
+			        </adv>	
+				  </div>
+				   <div class="swiper-pagination"></div>
+				</div>
+			</div>
+		</header>
+
+	
+	    <volist name="cate" id="caca"  mod="1">
+		<div class="bd" style="padding-bottom:0;">
+			<div class="weui_cells_title color_6">{$caca.name}</div>
+			<div class="weui_cells">
+				<div class="video_list">
+					<ul class="flex_wp">
+						<volist name="caca['videolist']" id="vo">
+						<li>
+							<img class="img" src="{$vo.imgurl}" alt="{$vo.title}">
+							<a class="play_btn vbox" data-type="iframe" href="{:U('App/Video/show',array('id'=>$vo['id']))}"></a>
+							<p class="text_c">{$vo.title}</p>
+						</li>
+					</volist>
+					</ul>
+				</div>
+			</div>
+		 </div>
+		</volist>
+
+
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+	<script src="__PUBLIC__/App/js/swiper.min.js"></script>
+	<script>
+		var mySwiper = new Swiper('.swiper-container', {
+			autoplay: 5000,//可选选项，自动滑动
+			pagination : '.swiper-pagination',
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>收货地址管理-{$_SESSION['WAP']['shopset']['name']}</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="address">
+				<ul>
+				<volist name="data" id="vo">
+					<li>
+						<div class="weui_cells">
+							<a href="{:U('App/Vip/addressSet',array('id'=>$vo['id']))}" class="vipaddress" data-id="{$vo.id}">
+							<div class="weui_media_box weui_media_text">
+						        <p class=""><i class="mg_r10">{$vo.name}</i><i class="mg_r10">{$vo.mobile}</i></p>
+						        <p class=""><i>{$vo.address}</i></p>
+						    </div>
+						    </a>
+						    <div class="weui_cells weui_cells_checkbox mg_0">
+						    <div  class="ovfl weui_media_box weui_media_appmsg bd_ul">
+					            <label class="bd_ul01 weui_check_label fl">
+					              <div class="weui_cell_hd">
+					                <input type="radio" class="weui_check" name="checkbox1" <eq name="vo.is_default" value="1">checked="checked"</eq> disabled>
+					                <i class="weui_icon_checked"></i>
+					              </div>				           
+					              <div class="weui_cell_bd weui_cell_primary address_default">
+					                <p class="fz_12">默认地址</p>
+					              </div>
+					           </label>	
+					           <div class="bd_ul fr">
+					              <div class="weui_cell_ft mg_r10 color_org">{$vo.remark}</div>
+					              <div class="weui_cell_ft mg_r10">
+					              <a href="javascript:;" class="a-del" data-id="{$vo['id']}">
+					              <i class="iconfont icon-delete"></i>删除
+					              </a>
+					              </div>
+					              <div class="weui_cell_ft mg_r10">
+					              <a href="{:U('App/Vip/addressSet',array('id'=>$vo['id']))}">
+					              <i class="iconfont icon-bianji"></i>编辑</div>
+					              </a>
+					            </div>  
+					           </div>   
+					        </div>
+						</div>
+					</li>
+					</volist>
+				</ul>
+			</div>
+			<div class="weui_btn_area">
+		        <a class="weui_btn org_btn2 fz_16" href="{:U('App/Vip/addressSet')}">+新建收货地址</a>
+		    </div>
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+	<script type="text/javascript">
+	$(function(){
+		$('.a-del').click(function(){
+			var id = $(this).data('id');
+			$.ajax({
+				type:'post',
+				data:{'id':id},
+				url:"{:U('Vip/addressDel')}",
+				dataType:'json',
+				success:function(e){
+					if (e.status==1) {
+						$.toast('操作成功',function(){window.location.reload()});
+					} else {
+						$.toptip(e.msg, 'error');
+					}
+					return false;
+				},
+				error:function(){
+				    $.toptip('通讯失败！', 'error');
+					return false;
+				}
+			});	
+		});
+	    var orderurl = "{$_SESSION['WAP']['orderURL']}";
+	    $("body").on("click",".vipaddress",function(){
+	        var id = $(this).data('id');
+	        if (orderurl) {
+	            var tourl = orderurl + '/vipadd/' + id;
+	            window.location.href = tourl;
+	            return false;
+	        }
+	    });
+	});
+	</script>
+</body>
+</html>

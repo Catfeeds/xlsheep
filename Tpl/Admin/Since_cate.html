@@ -1,0 +1,106 @@
+<script src="__PUBLIC__/App/js/global.js"></script>
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <div class="widget">
+            <div class="widget-header bg-blue">
+                <i class="widget-icon fa fa-arrow-down"></i>
+                <span class="widget-caption">自提点列表</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body">
+                <div class="table-toolbar">
+                    <a href="{:U('Admin/Since/cateSet/')}" class="btn btn-primary" data-loader="App-loader" data-loadername="新增分类">
+                        <i class="fa fa-plus"></i>新增自提点
+                    </a>
+                    <div class="pull-right">
+                        <form id="App-search">
+                        	<label style="margin-bottom: 0px; ">
+								<select class="form-control" name="province" id="province" onChange="get_city(this)">
+		                        <option value="0">请选择省份</option>
+		                        <volist name="provincelist" id="p">
+		                        <option <if condition="$province eq $p['id']">selected</if> value="{$p.id}">{$p.name}</option>
+		                        </volist>
+		                        </select>
+							</label>
+							<label style="margin-bottom: 0px; ">
+								<select class="form-control" name="city" id="city" onChange="get_area(this)">
+		                        <option value="0">请选择城市</option>
+		                        <volist name="citylist" id="p">
+		                        <option <if condition="$city eq $p['id']">selected</if>  value="{$p.id}">{$p.name}</option>
+		                        </volist>
+		                    	</select>
+							</label>
+							<label style="margin-bottom: 0px; ">
+								<select class="form-control" name="district" id="district">
+		                        <option value="0">请选择地区</option>
+		                         <volist name="districtlist" id="p">
+		                        <option <if condition="$district eq $p['id']">selected</if>  value="{$p.id}">{$p.name}</option>
+		                        </volist>
+		                    	</select>
+							</label>
+                            <label style="margin-bottom: 0px;">
+                                <input name="name" type="search" class="form-control input-sm" placeholder="请输入关键地址信息" value="{$name}">
+                            </label>
+                            <a href="{:U('Admin/Since/cate/')}" class="btn btn-success" data-loader="App-loader" data-loadername="金融产品分类" data-search="App-search">
+                                <i class="fa fa-search"></i>搜索
+                            </a>
+                        </form>
+                    </div>
+                </div>
+                <table id="App-table" class="table table-bordered table-hover">
+                    <thead class="bordered-darkorange">
+                        <tr role="row">
+                            <th>ID</th>
+                            <!-- <th>PID</th>
+							<th>Path</th> -->
+							<th>省</th>
+							<th>市</th>
+							<th>区</th>
+                            <th>经度</th>
+                            <th>纬度</th>
+                            <th>地址信息</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <volist name="cache" id="vo">
+                            <tr id="item{$vo.id}">
+                                <td class=" sorting_1">{$vo.id}</td>
+                                <!-- <td class=" ">{$vo.pid}</td>
+<td class=" ">{$vo.bpath}</td>
+ -->							
+								<td class=" ">{$region_list[$vo['province']]['name']}</td>
+								<td class=" ">{$region_list[$vo['city']]['name']}</td>
+								<td class=" ">{$region_list[$vo['district']]['name']}</td>
+                                <td class=" ">{$vo.longitude}</td>
+                                <td class=" ">{$vo.latitude}</td>
+                                <td class=" ">{$vo.address}</td>
+                                <td class="center "><a href="{:U('Admin/Since/cateSet/',array('id'=>$vo['id']))}" class="btn btn-success btn-xs" data-loader="App-loader" data-loadername="设置自提点"><i class="fa fa-edit"></i> 编辑</a>&nbsp;&nbsp;<a href="{:U('Admin/Since/cate/')}" class="btn btn-danger btn-xs" data-type="del" data-content="确定删除该自提点?" data-ajax="{:U('Admin/Since/cateDel/',array('id'=>$vo['id']))}"><i class="fa fa-trash-o"></i> 删除</a>
+                                </td>
+                            </tr>
+                        </volist>
+                    </tbody>
+                </table>
+                <div class="row DTTTFooter">
+                    {$page}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->

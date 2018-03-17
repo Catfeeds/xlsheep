@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>农牧源商城</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/swiper.min.css">
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/swiper.min.css">
+	<style type="text/css">
+	.allgoods_list .goods .goods_msg .weui_media_desc {
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    display: -webkit-box;
+	    -webkit-box-orient: vertical;
+	    -webkit-line-clamp: 2;
+	    max-height: 38px;
+	    white-space: normal;
+	    word-wrap: break-word;
+	}
+	</style>
+
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css2/frozen.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css2/weui.min.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css2/iconfont.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css2/base.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css2/layout.css"/>
+
+
+<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/swiper.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+	<script src="__PUBLIC__/App/js/swiper.js"></script>
+	<style type="text/css">	
+	.allgoods_list .goods .goods_msg .weui_media_desc{overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;max-height:38px;white-space:normal;word-wrap:break-word}
+	.allgoods_list .buy_btn{padding: 2px 5px;font-size:12px;background:#fe8b31;color:#fff;border-radius:5px;margin-top:10px}
+	</style>
+
+</head>
+<body>
+	<div class="wrap">
+		<div class="weui_search_bar" id="search_bar">
+		  <form id="searchForm" action="{:U('App/Shop/goodslist')}" class="weui_search_outer">
+		    <div class="weui_search_inner">
+		      <i class="weui_icon_search"></i>
+			  <input type="hidden" name="cid" value="{$cid}">
+		      <input type="search" name='name' class="weui_search_input" id="search_input" placeholder="搜索" required value="{$name}"/>
+		      <a href="javascript:" class="weui_icon_clear" id="search_clear"></a>
+		    </div>
+		    <label for="search_input" class="weui_search_text" id="search_text">
+		      <i class="weui_icon_search"></i>
+		      <span><eq name="name" value="">搜索<else />{$name}</eq></span>
+		    </label>
+		  </form>
+		  <a href="javascript:" class="weui_search_cancel" id="search_cancel">取消</a>
+		</div>
+
+			<div class="top_nav">
+				<div class="swiper-container top_nav_swp">
+				  <div class="swiper-wrapper">
+				    <div class="swiper-slide">
+						<a href="{:U('App/Shop/goodslist',array('cid'=>$cid,'cid2'=>0))}" <if condition="$cid2 eq 0"> class="on"</if>>全部</a>
+				    </div>
+				    <volist name="cate2" id="vo">
+				    <div class="swiper-slide">
+						<a href="{:U('App/Shop/goodslist',array('cid'=>$cid,'cid2'=>$vo['id']))}" <if condition="$cid2 eq $vo['id']"> class="on"</if>>{$vo.name}</a>
+				    </div>
+				    </volist>
+				  </div>
+				</div>
+			</div>
+
+		<!-- <div class="adopt_tab">
+					<div class="bd_tab">
+
+					<div class="weui-navbar">
+		                <div class="weui-navbar__item  <eq name='cid2' value='0'> weui-navbar__item_on</eq>">
+		                   <a href="{:U('App/Shop/goodslist',array('cid'=>$cid,'cid2'=>0))}">全部</a>
+		                </div>
+
+		                   <volist name="cate2" id="vo">
+		                <div class="weui-navbar__item <eq name='cid2' value='$vo[id]'> weui-navbar__item_on</eq>">
+		                     <a href="{:U('App/Shop/goodslist',array('cid'=>$cid,'cid2'=>$vo['id']))}">{$vo.name}</a>
+		                </div>
+		                 </volist>
+		                
+		            </div>
+
+					 
+					</div>
+				</div> -->
+
+
+
+		<div class="bd live_store">
+			<div class="weui_cells allgoods_list">
+				<p class="line_bg title_hot">商品列表</p>
+				<div class="goods_list01_bd bd_ul flex_wp">
+				<volist name="list" id="vo">
+					<div class="goods">
+						<a href="{:U('App/Shop/goods',array('id'=>$vo['id']))}">
+							<img src="{$vo.imgurl}" class="goods_img">
+						</a>
+						<div class="goods_msg">
+							<p>{$vo.name}</p>
+							<!-- <p class="fz_12 color_9 weui_media_desc">{$vo.summary|msubstr=0,10}</p> -->
+							<div class="c_float mg_t10 weui_media_box pd_0 bd_ul">
+								<div class="f_left">
+									<p class="color_org">{$vo.price}元/{$vo.unit}</p>
+									<p class="old_price">正价：{$vo.oprice}元</p>
+								</div>
+								<div class="f_right">
+									<a href="{:U('App/Shop/goods',array('id'=>$vo['id']))}" class="add_icon"><img src="__PUBLIC__/App/images/add_icon.png" alt=""></a>
+								</div>
+							</div>
+						</div>
+					</div>
+					</volist>
+				</div>
+			</div>
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+		<script> 
+var mySwiper3 = new Swiper('.top_nav_swp', {
+	slidesPerView : 'auto',//'auto'
+})
+var mySwiper4 = new Swiper('.tuangou_swp', {
+	pagination : '.tuangou_swp_pagination',
+})
+</script>
+	</div>
+</body>
+</html>

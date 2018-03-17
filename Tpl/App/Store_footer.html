@@ -1,0 +1,49 @@
+<div class="insert1"></div>
+<div class="footer">
+	<div class="weui_tabbar">
+        <a href="{:U('App/Shop/home')}" class="weui_tabbar_item" id="fthome">
+          <div class="weui_tabbar_icon">
+            <if condition="$actname eq 'fthome'">
+	            <img src="__PUBLIC__/App/images/icon05.png" alt="">
+	            <else />
+	            <img src="__PUBLIC__/App/images/icon005.png" alt="">
+	        </if>
+          </div>
+          <p class="weui_tabbar_label">首页</p>
+        </a>
+        <a href="{:U('App/Shop/category')}" class="weui_tabbar_item" id="ftcategory">
+          <div class="weui_tabbar_icon">
+             <if condition="$actname eq 'ftcategory'">
+	            <img src="__PUBLIC__/App/images/icon06.png" alt="">
+	            <else />
+	            <img src="__PUBLIC__/App/images/icon006.png" alt="">
+	        </if>
+          </div>
+          <p class="weui_tabbar_label">羊奶铺</p>
+        </a>
+        <a href="{:U('App/Shop/goat')}" class="weui_tabbar_item" id="ftgoat">
+          <div class="weui_tabbar_icon">
+            <if condition="$actname eq 'ftgoat'">
+	            <img src="__PUBLIC__/App/images/icon07.png" alt="">
+	            <else />
+	            <img src="__PUBLIC__/App/images/icon007.png" alt="">
+	        </if>
+          </div>
+          <p class="weui_tabbar_label">山羊圈</p>
+        </a>
+        <a href="{:U('App/Vip/index')}" class="weui_tabbar_item" id="ftvip">
+          <div class="weui_tabbar_icon">
+          	<if condition="$actname eq 'ftvip'">
+	            <img src="__PUBLIC__/App/images/icon08.png" alt="">
+	            <else />
+	            <img src="__PUBLIC__/App/images/icon008.png" alt="">
+	        </if>
+          </div>
+          <p class="weui_tabbar_label">我的</p>
+        </a>
+    </div>
+</div>
+<script type="text/javascript">
+	 var actname="{$actname}";
+	 $('#'+actname).addClass('weui_bar_item_on');
+</script>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/base.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<title>账号设置-{$_SESSION['WAP']['shopset']['name']}</title>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="weui_cells">
+				<div class="mine_set c_float">
+					<div class="left_wp f_left">
+						<div class="head_pic">
+							<img class="img" src="{$data.headimgurl}" alt="">
+							<a href="{:U('App/Vip/avatar')}" class="change_pic">修改头像</a>
+						</div>
+					</div>
+					<div class="right_wp f_left">
+						<div class="weui_cells_access">
+					        <a class="weui_cell" href="{:U('App/Vip/myinfo')}">
+					          <div class="weui_cell_bd weui_cell_primary">
+					            <p>昵称：<i>{$data.nickname}</i></p>
+					          </div>
+					          <div class="weui_cell_ft">
+					          </div>
+					        </a>
+					        <a class="weui_cell" href="{:U('App/Vip/auth')}">
+					          <div class="weui_cell_bd weui_cell_primary">
+					            <p>姓名：<i>{$data.name}</i></p>
+					          </div>
+					          <div class="weui_cell_ft">
+					          </div>
+					        </a>
+					        <a class="weui_cell" href="{:U('App/Vip/upgrade')}">
+					          <div class="weui_cell_bd weui_cell_primary">
+					            <p>会员等级：
+					            <switch name="data.groupid">    
+					            <case value="1">普通会员</case>    
+					            <case value="2">VIP会员<br>(截止:{$data.vip_expiration_time|date='Y-m-d',###})</case>
+					            </switch>
+					            </p>
+					          </div>
+					          <div class="weui_cell_ft">
+					          </div>
+					        </a>
+					    </div>
+					</div>
+				</div>
+			</div>	
+			<div class="weui_cells weui_cells_access">
+				<a class="weui_cell" href="{:U('App/Vip/auth')}">
+		          <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/set08.png" alt="" width="20"></div>
+		          <div class="weui_cell_bd weui_cell_primary">
+		            <p>实名认证：<i>{$data.auth_status}</i></p>
+		          </div>
+		          <div class="weui_cell_ft"></div>
+		        </a>
+		        <a class="weui_cell" href="{:U('App/Vip/mobile')}">
+		          <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/set012.png" alt="" width="20"></div>
+		          <div class="weui_cell_bd weui_cell_primary">
+		            <p style="line-height: 25px;">手机号码：<i>{$data.mobile}</i><neq name="data.mobile" value=""><span class="i-left" style="margin-top: 3px;">已验证</span></neq></p>
+		          </div>
+		          <eq name="data.mobile" value="">
+		          <div class="weui_cell_ft"></div>
+		          </eq>
+		        </a>
+				<a class="weui_cell" href="{:U('App/Vip/pay_password_reset')}">
+		          <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/set09.png" alt="" width="20"></div>
+		          <div class="weui_cell_bd weui_cell_primary">
+		            <p>支付密码：<i><eq name="data.pay_password" value="">未设置<else />已设置</eq></i></p>
+		          </div>
+		          <div class="weui_cell_ft"></div>
+		        </a>
+		        <!--
+				<a class="weui_cell" href="javascript:;">
+		          <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/set010.png" alt="" width="20"></div>
+		          <div class="weui_cell_bd weui_cell_primary">
+		            <p>登录密码：<i>未设置</i></p>
+		          </div>
+		          <div class="weui_cell_ft"></div>
+		        </a>
+		         -->
+				<a class="weui_cell" href="{:U('App/Vip/address')}">
+		          <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/set011.png" alt="" width="20"></div>
+		          <div class="weui_cell_bd weui_cell_primary">
+		            <p>收件地址</p>
+		          </div>
+		          <div class="weui_cell_ft"></div>
+		        </a>
+			</div>
+			<!-- 
+			<div class="weui_btn_area">
+		        <a class="weui_btn weui_btn_primary fz_14 lh_2_5" href="javascript:">退出登录</a>
+		   	</div>
+		   	 -->
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>我的余额-{$_SESSION['WAP']['shopset']['name']}</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="hd">
+			<div class="jf_wrap">
+				<p>我的余额：</p>
+				<h2><i>{:number_format($vip['money'],2)}</i>元</h2>
+			</div>
+		</div>
+		<div class="bd">
+		    <div class="balance_wp">
+		    	<div class="weui_cells">
+		    		<volist name="log" id="vo">
+					<div class="bod_top pd_10">
+						<div class="c_float">
+							<p class="f_left">微信支付充值订单：<i>{$vo.opid}</i></p>
+							<p class="color_green f_right">{:number_format($vo['money'],2)}</p>
+						</div>
+						<div class="c_float fz_12 mg_t5 color_9">
+							<p class="f_left"><i class="mg_r10">{$vo.ctime|date="Y-m-d",###}</i><i>{$vo.ctime|date="H:i:s",###}</i></p>
+							<p class="f_right fz_14">已完成</p>
+						</div>
+					</div>
+					</volist>
+				</div>
+		    </div>
+			<!--<a class="float_car">-->
+				<!--<i class="iconfont icon-gouwuche fz_25"></i>-->
+			<!--</a>	-->
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+</html>

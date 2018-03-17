@@ -1,0 +1,166 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+    <meta name="format-detection" content="telephone=no" />
+    <title>砍价-农牧源</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Activity/css/foxui.min.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Activity/css/style.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/Activity/css/iconfont.css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+    <script src="__PUBLIC__/Activity/js/jquery-1.11.1.min.js"></script>
+    <script src='__PUBLIC__/Activity/js/jweixin-1.1.0.js'></script>
+<!--   <script src="../addons/ewei_shopv2/static/__PUBLIC__/Activity/js/dist/foxui/__PUBLIC__/Activity/js/foxui.min.js"></script>-->
+    <script src="__PUBLIC__/Activity/js/require.js"></script>
+    <script src="__PUBLIC__/Activity/js/myconfig-app.js"></script>
+    <style>.danmu {display: none;opacity: 0;}</style>
+
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/swiper.min.css">
+    <script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+    <link rel="stylesheet" href="__PUBLIC__/App/css/swiper.min.css">
+    <style type="text/css">
+    .allgoods_list .goods .goods_msg .weui_media_desc {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        max-height: 38px;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+    .fui-page-group  {
+        position:inherit !important;
+
+    }
+    </style>
+</head>
+
+<body ontouchstart>
+<div class="banner">
+                <div class="swiper-container">
+                  <div class="swiper-wrapper">
+                    <adv pid ="11" limit="5" item="v">
+                        <div class="swiper-slide">
+                        <a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if> >
+                            <img src="{$v[imgurl]}" title="{$v[title]}"width="100%" style="{$v[style]}"/>
+                         </a>
+                        </div>
+                    </adv>  
+                  </div>
+                   <div class="swiper-pagination"></div>
+                </div>
+            </div>
+<div class='fui-page-group '>
+
+    <div class="fui-page-group">
+
+        <div class="fui-page  fui-page-current">
+<!--             <div class="navbar">
+                <div class="weui-search-bar weui-search-bar_focusing" id="searchBar">
+                    <form class="weui-search-bar__form">
+                        <div class="weui-search-bar__box">
+                            <i class="weui-icon-search icon iconfont icon-search"></i>
+                            <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="" name="name">
+                            <a href="javascript:" class="weui-icon-clear iconfont" id="searchClear"></a>
+                        </div>
+                        <label class="weui-search-bar__label" id="searchText" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
+                            <i class="weui-icon-search"></i>
+                            <span>搜索</span>
+                        </label>
+                    </form>
+                </div>
+            </div> -->
+            <div class="fui-goods-group block border">
+
+
+                <empty name='cache'>
+                <div style="padding: 10px; text-align: center;">暂无相关信息</div>
+                <else/>
+                <volist name='cache' id='vv'>
+                    <div class="fui-goods-item" data-goodsid="8">
+                        <a href="{:U('App/Activity/bargoods',array('id'=>$vv['id']))}" data-nocache="true" class="external">
+                            <div class="image" style="background-image: url({$vv['apppic']['imgurl']})">
+
+                            </div>
+                        </a>
+                        <div class="detail">
+                            <a href="{:U('App/Activity/bargoods',array('id'=>$vv['id']))}" data-nocache="true" class="external">
+                                <div class="name">{$vv.name}</div>
+                            </a>
+                            <div class="price">
+                                <span class="text">底价 ￥{$vv.price}</span><br>
+                            </div>
+                            <div class="price"><s style="font-size: 12px;color: #BBBBBB">原价￥{$vv.oprice}</s></div>
+                        </div>
+                    </div>
+                </volist>
+                </empty>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<include file="./Tpl/App/Shop_footer.html" />
+
+
+
+<!-- <div class="fui-navbar footer-nav bordert" style="z-index:10;padding:0;position:absolute">
+    <a href="{:U('App/Shop/index')}" class="nav-item external" data-nocache="true">
+        <span class="label">商城首页</span>
+    </a>
+    <a href="{:U('App/Activity/barlist',array('type'=>1))}" class="nav-item external <eq name='type' value='1'>active</eq>" data-nocache="true">
+        <span class="label">全部砍价</span>
+    </a>
+    <a href="{:U('App/Activity/barlist',array('type'=>2))}" class="nav-item external <eq name='type' value='2'>active</eq>" id="menucart" data-nocache="true">
+        <span class="label">砍价中</span>
+    </a>
+    <a href="{:U('App/Activity/barlist',array('type'=>3))}" class="nav-item external <eq name='type' value='3'>active</eq>" data-nocache="true">
+        <span class="label">已购买</span>
+    </a>
+</div> -->
+
+    <span style="display:none"></span>
+
+
+</div>
+
+<script language="javascript">
+    require(['init']);
+
+    setTimeout(function () {
+        if($(".danmu").length>0){
+            $(".danmu").remove();
+        }
+    }, 500);
+</script>
+
+
+ 
+<script src="__PUBLIC__/App/js/swiper.min.js"></script>
+    <script>
+        var mySwiper = new Swiper('.swiper-container', {
+            autoplay: 5000,//可选选项，自动滑动
+            pagination : '.swiper-pagination',
+        })
+
+
+    </script>
+    
+<script> 
+var mySwiper3 = new Swiper('.top_nav_swp', {
+    slidesPerView : 'auto',//'auto'
+})
+var mySwiper4 = new Swiper('.tuangou_swp', {
+    pagination : '.tuangou_swp_pagination',
+})</script>
+    
+     </body>
+</html>

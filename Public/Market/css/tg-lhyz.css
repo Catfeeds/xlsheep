@@ -1,0 +1,176 @@
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul,
+li,
+input,
+a,
+button,
+textarea{
+	padding: 0;
+	margin: 0;
+}
+body{
+	text-align: center;
+	width: 100%;
+	font-size: 13px;
+	line-height: 30px;
+	color: #fff;
+	font-family: "微软雅黑","arial, helvetica, sans-serif";
+}
+.fl{
+	float: left;
+}
+.fr{
+	float: right;
+}
+.tc{
+	text-align: center;
+}
+.tl{
+	text-align: left;
+}
+.tr{
+	text-align: right;
+}
+.w{
+	margin: 0 auto;
+	width: 1200px;
+	display: inline-block;
+	text-align: left;
+}
+.part{
+	padding: 30px 0 0;
+	width: 100%;	
+}
+.part-a{
+	margin-bottom: -10px;
+	background: #5fc295;
+}
+.part-b{
+	background: #5fbac2;
+}
+.intro{
+	width: 780px;
+	overflow: hidden;
+}
+.intro h2{
+	height: 30px;
+	line-height: 30px;
+	font-size: 16px;
+	font-weight: normal;
+	display: inline-block;
+}
+.intro h2 em{
+	margin-right: 5px;
+	width: 25px;
+	height: 25px;
+	display: block;
+	color:#5fbac2;
+	background: #fff;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-ms-border-radius: 50%;
+	-o-border-radius: 50%;
+	border-radius: 50%;
+	font-size: 18px;
+}
+.imgtab{
+	margin-top: 20px;
+}
+.part-b p{
+	margin: -10px auto 15px;
+}
+.part-c{
+	background: #f6f6f6;
+}
+.part-d{
+	background: #f56949;
+}
+.text{
+	width: 1010px;
+}
+.text h2{
+	font-size: 20px;
+	font-weight: normal;
+}
+.text h2 span{
+	margin-left: 10px;
+	font-size: 16px;
+}
+.real{
+	margin: 15px auto 0;
+	display: inline-block;
+	width: 1010px;
+}
+.real-a{
+	display: inline-block;
+	width: 1010px;
+}
+.txt h1{
+	height: 40px;
+	font-size: 20px;
+}
+.tab-a{
+	background: #f58e49;
+}
+.part-e{
+	background: #f8eaaa;
+}
+.real table{
+	width: 900px;
+}
+.real table tr th,
+.real table tr td{
+	border: #fff 1px solid;
+	height: 35px;
+}
+.real table a{
+	display: block;
+	margin: 0 auto;
+	width:100px;
+	height: 28px;
+	line-height: 28px;
+	background: #fff;
+	color: #F56949;
+}
+.part-f{
+	background: #8ec32d;
+}
+.part-g{
+	padding:5px 0;
+	color: #333;
+	background: #eaebea;
+}
+.part-g p{
+	line-height: 37px;
+}
+
+.fhtab{
+	margin: 15px auto 10px;
+	padding: 10px;
+	border: 1px dashed #fff;
+}
+.text h2{
+	margin-left: 10px;
+}
+.text h2:before{
+	content:"";
+	margin-right:10px;
+	display:inline-block;
+	width:10px;
+	height:10px;
+	background:#fff;
+	-webkit-border-radius:50%;
+	-moz-border-radius:50%;
+	-ms-border-radius:50%;
+	-o-border-radius:50%;
+	border-radius:50%;
+}
+

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>山羊圈</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="weui_cells">
+				<ul class="index_icon_list02 bd_ul">
+				    <li class="">
+				    	<a href="{:U('App/artical/lists',array('cid'=>1))}">
+							<img src="__PUBLIC__/App/images/icons14.png" alt="">
+							<p>品牌背景</p>
+						</a>
+				    </li>
+				    <li class="">
+				    	<a href="{:U('App/artical/lists',array('cid'=>2))}">
+							<img src="__PUBLIC__/App/images/icons15.png" alt="">
+							<p>媒体报道</p>
+						</a>
+				    </li>
+				    <li class="">
+				    	<a href="{:U('App/artical/lists',array('cid'=>3))}">
+							<img src="__PUBLIC__/App/images/icons16.png" alt="">
+							<p>商城公告</p>
+						</a>
+				    </li>
+				    <li class="">
+				    	<a href="{:U('App/artical/lists',array('cid'=>4))}">
+							<img src="__PUBLIC__/App/images/icons17.png" alt="">
+							<p>羊奶资讯</p>
+						</a>
+				    </li>
+			    </ul>
+			</div>
+			<div class="weui_cells video_online">
+				<div class="weui_cell">
+		          <div class="weui_cell_bd weui_cell_primary">
+		            <p class="color_org">工厂牧场在线</p>
+		          </div>
+		        </div>
+              	<div class="weui_cell pd_10 bd_ul">
+    				<div class="video">
+    					<img src="__PUBLIC__/App/images/pic07.jpg" alt="">
+    					<a href="{:U('App/Video/lists',array('cid'=>2))}" class="play_btn"></a>
+    					<p class="text_c lh_2"><i class="color_9">—</i>奶厂在线看<i class="color_9">—</i></p>
+    				</div>
+    				<div class="video">
+    					<img src="__PUBLIC__/App/images/pic08.jpg" alt="">
+    					<a href="{:U('App/Video/lists',array('cid'=>1))}" class="play_btn"></a>
+    					<p class="text_c lh_2"><i class="color_9">—</i>牧场在线看<i class="color_9">—</i></p>
+    				</div>
+              	</div>
+			</div>
+			<div class="weui_cells">
+				<div class="weui_cell">
+		          <div class="weui_cell_bd weui_cell_primary">
+		            <p class="color_org">农牧源牧场官方微信</p>
+		          </div>
+		        </div>
+		        <div class="weui_cells mg_0">
+			        <div class="weui-row weui-no-gutter weui_box_center">
+						<div class="weui-col-33 pd_10 f_left">
+							<img class="img" src="__PUBLIC__/App/images/ewm.jpg" alt="">
+						</div>
+						<div class="weui-col-33 color_6 f_left ">
+							<p>长按二维码扫描</p>
+							<p>关注农牧源牧场微信</p>
+						</div>
+						<div class="weui-col-33 pd_10 f_left ">
+							<img  class="img" src="__PUBLIC__/App/images/pic09.png" alt="">
+						</div>
+			        </div>
+		        </div>
+			</div>
+			<!--<a class="float_car" href="{:U('App/Shop/basket',array('sid'=>0,'lasturl'=>$footlasturl))}">-->
+				<!--<i class="iconfont icon-gouwuche fz_25"></i>-->
+			<!--</a>-->
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+</html>

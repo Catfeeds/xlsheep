@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>{$group.name}-{$_SESSION['WAP']['shopset']['name']}</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/activity/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/activity/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/swiper.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/activity/jquery-weui.min.js"></script>
+	<script src="__PUBLIC__/App/js/swiper.js"></script>
+	<script src="__PUBLIC__/App/js/time.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="goods_msg">
+				<p class="name_msg">{$group.name}</p>
+				<div class="">
+					<p class="price"><i>￥{$group.price}</i><i class="old_price mg_r15">￥{$group.oprice}</i><span>已团<span>{$group.sells}</span>件</span><span><span>{$group.peoplenum}</span>人团</span></p>
+				</div>
+			</div>
+			<notempty name="cache">
+			<div class="weui-cells star_tuangou">
+				<a class="weui-cell weui-cell_access" href="javascript:;">
+	                <div class="weui-cell__bd">
+	                    <p><i>{$count}</i>人正在开团</p>
+	                </div>
+	            </a>
+	            <div id="list">
+		            <volist name="cache" id="vo">
+		            <div  class="weui-media-box weui-media-box_appmsg">
+	                    <div class="weui-media-box__hd">
+	                        <a href="javascript:;"><img class="weui-media-box__thumb" src="{$vo.headimgurl}"></a>
+	                    </div>
+	                    <div class="weui-media-box__bd">
+	                        <h4 class="weui-media-box__title">{$vo.nickname}</h4>
+	                        <p class="weui-media-box__desc">还差<i>{$vo.left}</i>人，剩余<i id="timecount_{$vo.id}" data-end="{$vo.rtime|date='Y/m/d H:i:s',###}"><span class="hour">0</span>:<span class="mini">0</span>:<span class="sec">0</span>:<span class="hm">0</span></i></p>
+	                    </div>
+	                    <span class="weui-cell__ft"><a href="{:U('App/Activity/joinGroup',array('id'=>$vo['id']))}" class="go_join">去参团</a></span>
+	                </div>
+	                </volist>
+                </div>
+                <eq name="datamore" value="1">
+					<div class="weui-loadmore" id="infinite">
+					  <i class="weui-loading"></i>
+					  <span class="weui-loadmore__tips">正在加载</span>
+					</div>
+				</eq>
+			<else />
+			<div class="weui-cells">
+				<div class="weui-loadmore weui-loadmore_line">
+				  <span class="weui-loadmore__tips">暂无开团</span>
+				</div>
+			</div>
+			</notempty>
+			</div>
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+<script> 
+var mySwiper2 = new Swiper('.kj_detial_container', {
+	//可选选项，自动滑动
+	
+})
+$('.fastbuy').on('click',function(){
+    var a = $(this).attr('data-sku');
+    var goodsnum="{$cache.num}";
+    var num=1;
+    var goodsid="{$cache.id}";
+    var vipid="{$_SESSION.WAP.vipid}";
+    if(goodsnum-num<=0){
+        $.toptip('该产品库存不足！请调整购买量或选择其他属性！', 'error');
+        return false;
+    }
+    if(!vipid){
+        var fun=function(){
+            window.location.href=loginback;
+        }
+        $.toast('您还未登录，2秒后自动跳转登陆界面！',function(){window.location.href=loginback;});
+        return false;
+    }
+    if(a==1){
+      var dt={'sid':0,'goodsid':goodsid,'vipid':vipid,'num':num,'isact':1};
+    }else{
+      var dt={'sid':0,'goodsid':goodsid,'vipid':vipid,'num':num};
+    }
+    //保证订单生成页的返回
+    var orderurl="{:U('App/Shop/orderMake',array('sid'=>0,'lasturl'=>$lasturl))}";
+    $.ajax({
+        type:"post",
+        url:"{:U('App/Shop/fastbuy')}",
+        dataType:'json',
+        data:dt,
+        success:function(info){
+            if(info['status']){
+                window.location.href=orderurl;
+            }else{
+                $.toptip(info['msg'], 'error');
+            }
+        },
+        error:function(xh,obj){
+            $.toptip('通讯失败，请重试！', 'error');
+        }
+    });
+    return false;
+});
+if($("#infinite")[0]) {
+	var p = 1;
+	var loading = false;
+	$(document.body).infinite().on("infinite", function() {
+	  if(loading) return;
+	  loading = true;
+	  p=p+1;
+	  param ="?p="+p;  
+      $.get("{:U('App/Activity/groupall')}"+param,function(data){  
+    	   if(data.status==1) {
+    		   if(data.info) {		
+                   $("#list").append(data.info);
+    			   loading = false;
+                   if(data.more==0) {	            			  
+                	   $(document.body).destroyInfinite();
+                   }
+    	   	   }   
+        	   $('#infinite').hide();
+    	   }
+       })  
+	});
+}
+<notempty name="cache">
+<volist name="cache" id="vo">
+$("#timecount_{$vo.id}").fnTimeCountDown("{$vo.rtime|date='Y/m/d H:i:s',###}");
+</volist>
+</notempty>
+</script>
+</html>

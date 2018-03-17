@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>主人寄语-{$_SESSION['WAP']['shopset']['name']}</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="weui_cells">
+    	         <div class="weui_cell">
+    	            <div class="weui_cell_hd"><label class="weui_label" style="padding-top: 2px;width: 45px">备注</label></div>
+    	            <div class="weui_cell_bd weui_cell_primary">
+    	            	<input id="remark"  class="weui_input" type="text" placeholder="如：健康成长" value="{$data.content}">
+    	            </div>
+    	        </div>
+			</div>
+			<input type="hidden" value="{$data.id}" id="cid"/>
+			<div class="weui_btn_area">
+		        <a id="ads-btn" class="weui_btn weui_btn_primary fz_14 lh_2_5" href="javascript:">保存寄语</a>
+		    </div>
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+ <script src="__PUBLIC__/App/js/fastclick.js"></script>
+ <script type="text/javascript">
+ $(function() {
+	  FastClick.attach(document.body);
+ });
+</script>
+<script>
+	$('#ads-btn').click(function(){
+		var remark=$('#remark').val();
+		var cid=$('#cid').val();
+		$.ajax({
+			type:'post',
+			data:{'cid':cid,'remark':remark},
+			url:"{:U('App/Buy/message',array('id'=>$id))}",
+			dataType:'json',
+			success:function(e){
+				if (e.status==1) {
+					$.toast('操作成功','success');
+				} else {
+					$.toptip(e.msg, 'error');
+				}
+				return false;
+			},
+			error:function(){
+			    $.toptip('通讯失败！', 'error');
+				return false;
+			}
+		});	
+		return false;
+	});
+</script>
+</html>

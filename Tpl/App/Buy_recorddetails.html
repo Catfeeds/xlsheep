@@ -1,0 +1,60 @@
+<html><head lang="zh">
+    <meta charset="UTF-8">
+    <title>资金-明细{$_SESSION['WAP']['shopset']['name']}</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=0" name="viewport">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+    <link href="__PUBLIC__/App/css/buy/comon.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/style.css" />   
+    <script src="__PUBLIC__/App/js/zepto.min.js"></script>
+</head>
+<body class="un-ms-con" style="background-color: rgb(244, 243, 239);">
+    <div class="recorddetails">
+        <div class="money">
+            <div class="money_left">金 额:</div>
+            <div class="center"><div class="money_right">{$cache.money}</div></div>
+        </div>
+        <div style="overflow: hidden;">
+            <div class="name_left">时间:</div>
+            <div class="name_right">{$cache.ctime|date="Y-m-d H:i:s",###}</div>
+            <div class="name_left">明细类型:</div>
+            <div class="name_right">
+	            <switch name="cache.type">
+					<case value="1">充值</case>
+					<case value="2">提现</case>
+					<case value="3">购买商品</case>
+					<case value="4">众筹创业项目</case>
+					<case value="5">项目收益</case>
+					<case value="6">返还本金</case>
+					<case value="7">取消提现</case>
+					<case value="8">手续费</case>
+					<case value="9">退款</case>
+					<case value="10">赎回</case>
+					<case value="11">带来注册奖励</case>
+					<case value="12">带来消费奖励</case>
+					<case value="13">购买VIP会员</case>
+                    <case value="17">区域产品被购买返回费用</case>
+                    <case value="18">配送费用</case>
+				</switch>
+            </div>
+            <div class="name_left">余额:</div>
+            <div class="name_right">{$cache.balance}</div>
+            <neq name="cache.oid" value="">
+            <div class="name_left">关联订单号:</div>
+            <div class="name_right">{$cache.oid}</div>
+            </neq>
+            <div class="name_left">备注:</div>
+            <div class="name_right">{$cache.remark}</div>
+        </div>
+    </div>
+</section>
+</article>
+<include file="./Tpl/App/Shop_footer.html" />
+</body>
+</html>

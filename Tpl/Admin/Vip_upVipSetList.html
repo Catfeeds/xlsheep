@@ -1,0 +1,85 @@
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <div class="widget">
+            <div class="widget-header bg-blue">
+                <i class="widget-icon fa fa-arrow-down"></i>
+                <span class="widget-caption">会员列表</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body">
+                <div class="table-toolbar">
+                    <button href="#" class="btn btn-primary" id="sendMsg">
+                        <i class="fa fa-comment-o"></i>发送消息
+                    </button>
+                    <!-- <button href="#" class="btn btn-sky" id="sendMail">
+						<i class="fa fa-envelope-o"></i>发送邮件
+					</button> -->
+                 
+                    <a href="#" class="hide" id="sendMsgbtn" data-loader="App-loader" data-loadername="会员消息"></a>
+                    <a href="#" class="hide" id="sendMailbtn" data-loader="App-loader" data-loadername="发送邮件"></a>
+                    <div class="pull-right">
+                        <form id="App-search">
+                        	
+                            <label style="margin-bottom: 0px;">
+                                <input name="search" type="search" class="form-control input-sm" placeholder="会员昵称或者手机号" value="{$search}">
+                            </label>
+                            <a href="{:U('Admin/Vip/upVipList/')}" class="btn btn-success" data-loader="App-loader" data-loadername="会员列表" data-search="App-search">
+                                <i class="fa fa-search"></i>搜索
+                            </a>
+                        </form>
+                    </div>
+                </div>
+                <table id="App-table" class="table table-bordered table-hover">
+                    <thead class="bordered-darkorange">
+                        <tr role="row">
+                            <th width="20px">
+                                <div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+                                    <label style="padding-left: 4px;">
+                                        <input type="checkbox" class="App-checkall colored-blue">
+                                        <span class="text"></span>
+                                    </label>
+                                </div>
+                            </th>
+                            <th >时间（年）</th>
+                            <th >金钱</th>
+                            <th width="">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <volist name="vipItems" id="vo">
+                            <tr id="item{$vo.id}">
+                                <td>
+                                    <div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+                                        <label style="padding-left: 4px;">
+                                            <input name="checkvalue" type="checkbox" class="colored-blue App-check" value="{$vo.id}">
+                                            <span class="text"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class=" "></td>
+                                <td class=" "></td>
+                                <td class=" "></td>
+                            </tr>
+                        </volist>
+                    </tbody>
+                </table>
+                <div class="row DTTTFooter">
+                    {$page}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+

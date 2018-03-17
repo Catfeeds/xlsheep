@@ -1,0 +1,63 @@
+<div class="row">
+	<div class="col-xs-12 col-md-12">
+		<div class="widget">
+			<div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i>
+				<span class="widget-caption">砍价详情</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize">
+						<i class="fa fa-expand"></i>
+					</a>
+					<a href="#" data-toggle="collapse">
+						<i class="fa fa-minus"></i>
+					</a>
+					<a href="#" data-toggle="dispose">
+						<i class="fa fa-times"></i>
+					</a>
+				</div>
+			</div>
+			<div class="widget-body">
+			   <div class="form-title">
+                        <a href="{:U('Admin/Bargain/launchList')}" class="btn btn-primary" data-loader="App-loader" data-loadername="商城订单">
+						<i class="fa fa-mail-reply"></i>返回
+						</a>
+                   </div>
+                   <div class="form-group">
+                 		  <span style="color:red">商品名称</span>：{$goods.name}，<span style="color:red">原价</span>：{$goods.oprice}元，<span style="color:red">底价</span>：{$goods.price}元
+                   </div>
+				<table id="App-table" class="table table-bordered table-hover">
+					<thead class="bordered-darkorange">
+						<tr role="row">
+							<th>ID</th>
+							<th>砍价者ID</th>
+							<th>砍价者昵称</th>
+							<th>砍价金额</th>
+							<th>当前价钱</th>
+							<th>砍价时间</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="cache" id="vo">
+							<tr id="item{$vo.id}">
+								<td class=" sorting_1">{$vo.id}</td>
+								<td class=" ">{$vo.vipid}</td>
+								<td class=" ">{$vo.nickname}</td>
+								<td class=" ">{:number_format($vo[money],2)}</td>
+								<td class=" ">{:number_format($vo[price],2)}</td>
+								<td class=" ">{$vo.ctime|date='Y-m-d H:i:s',###}</td>				
+							</tr>
+						</volist>												
+					</tbody>
+				</table>
+				<div class="row DTTTFooter">
+					{$page}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+	setBread($('#tmpbread').html());
+</script>

@@ -1,0 +1,179 @@
+<style type="text/css">
+.report-nav{padding:15px 5px;background: #ffffff;border-bottom: 1px solid #eeeeee;}
+.report-nav a {background-color: #2dc3e8;color:#fff;font-size:14px;padding: 5px 12px;border-radius: 5px;margin-right:15px;text-decoration: none;}
+.report-nav a:hover,.report-nav a.active{background-color: #fb6e52;}
+.balance{float:left;width:200px;padding-left: 3px;}
+.balance span{color:red;font-size:16px;}
+</style>
+<div class="report-nav">
+	<a <if condition="$hover eq 'index'">class="active"</if> href="{:U('Admin/Report/index')}" data-loader="App-loader" data-loadername="用户资金流水">用户资金流水</a> 
+	<a <if condition="$hover eq 'investment'">class="active"</if> href="{:U('Admin/Report/investment')}" data-loader="App-loader" data-loadername="用户投资沉淀资金">用户投资沉淀资金</a> 
+	<a <if condition="$hover eq 'nofh'">class="active"</if> href="{:U('Admin/Report/fh')}" data-loader="App-loader" data-loadername="用户分红资金">用户分红资金</a> 
+	<a <if condition="$hover eq 'shop'">class="active"</if> href="{:U('Admin/Report/shop')}" data-loader="App-loader" data-loadername="商城财务">商城财务</a>
+</div>
+<div class="row">
+	<div class="col-xs-12 col-md-12">
+		<div class="widget">
+			<div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i>
+				<span class="widget-caption">商城财务</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize">
+						<i class="fa fa-expand"></i>
+					</a>
+					<a href="#" data-toggle="collapse">
+						<i class="fa fa-minus"></i>
+					</a>
+					<a href="#" data-toggle="dispose">
+						<i class="fa fa-times"></i>
+					</a>
+				</div>
+			</div>
+			<div class="widget-body">
+				<div class="table-toolbar">
+					<div class="balance">
+						用户购买总金额：<span> {$total_money}</span>
+					</div>
+					<div class="pull-right">
+						<form id="App-search">
+							<label style="margin-bottom: 0px;">
+								<input name="vipid" type="search" class="form-control input-sm" value="{$vipid}" placeholder="会员ID">
+							</label>
+							<label style="margin-bottom: 0px;">
+								<input name="keyword" type="search" class="form-control input-sm" value="{$keyword}" placeholder="会员姓名或手机号码">
+							</label>
+							<input type="hidden" name="search" value="1">
+							<a href="{:U('Admin/Report/shop/')}" class="btn btn-success" data-loader="App-loader" data-loadername="商城财务" data-search="App-search">
+								<i class="fa fa-search"></i>搜索
+							</a>
+						</form>
+					</div>
+					<div style="clear:both"></div>
+				</div>
+
+				<table id="App-table" class="table table-bordered table-hover">
+					<thead class="bordered-darkorange">
+						<tr role="row">
+							<th>序号</th>
+							<th width="200">订单号</th>
+							<th>会员ID</th>
+							<th>会员姓名</th>
+							<th>手机号码</th>
+							<th>购买总金额</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="cache" id="vo">
+							<tr id="item{$vo.id}">
+								<td class=" sorting_1">{$vo.index}</td>
+								<td class=" "><a href="{:U('Admin/Shop/orderDetail/',array('id'=>$vo['id'],'status'=>$status))}"  data-loader="App-loader" data-loadername="订单详情">{$vo.oid}</a></td>
+								<td class=" ">{$vo.vipid}</td>
+								<td class=" ">{$vo.vipname}</td>
+								<td class=" ">{$vo.vipmobile}</td>
+								<td class=" ">{$vo.payprice}</td>								
+							</tr>
+						</volist>
+												
+					</tbody>
+				</table>
+				<div class="row DTTTFooter">
+					{$page}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+	setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->
+<!--全选特效封装/全部删除-->
+<script type="text/javascript">
+	//全选
+	var checkall=$('#App-table .App-checkall');
+	var checks=$('#App-table .App-check');
+	var trs=$('#App-table tbody tr');
+	$(checkall).on('click',function(){
+		if($(this).is(":checked")){			
+			$(checks).prop("checked","checked");
+		}else{
+			$(checks).removeAttr("checked");
+		}		
+	});
+	$(trs).on('click',function(){
+		var c=$(this).find("input[type=checkbox]");
+		if($(c).is(":checked")){
+			$(c).removeAttr("checked");
+		}else{
+			$(c).prop("checked","checked");
+		}		
+	});
+	//发放分红
+	var btnfenhong=$('.fenhong');
+	$(btnfenhong).on('click',function(){
+			var id=$(this).data('id');
+			$.ajax({
+					type:"post",
+					url:"{:U('Admin/Finance/fenhong')}",
+					data:{'id':id},
+					dataType: "json",
+					//beforeSend:$.App.loading(),
+					success:function(mb){
+						//$.App.loading();
+						bootbox.dialog({
+	                	message: mb,
+	                	title: "发放分红",
+	                	className: "modal-darkorange",
+	                	buttons: {
+	                		   success: {
+			                        label: "确定",
+			                        className: "btn-blue",
+			                        callback: function () {
+			                        	var fhrate=$('#AppFinanceFhRate').val();
+			                        	if(!fhrate){
+			                        		alert('请填写实际年收益率!');
+			                        		return false;
+			                        	}
+			                        	var dt=$('#AppFinanceFh').serialize();
+			                        	var funok=function(){	
+				                        	$.ajax({
+				                        		type:"post",
+				                        		url:"{:U('Admin/Finance/fhSave')}",
+				                        		data:dt,
+				                        		dataType:"json",
+				                        		async:false,
+				                        		success:function(info){
+				                        			if(info['status']){
+				                        				$.App.alert('success',info['msg']);
+				                        				$('#App-reloader').trigger('click');
+				                        			}else{
+				                        				$.App.alert('danger',info['msg']);
+				                        			}
+				                        			return false;
+				                        		},
+				                        		error:function(xhr){
+													$.App.alert('danger','通讯失败！请重试！');
+													return false;
+												}
+				                        	});
+			                        	}
+			                        	$.App.confirm("确认要给此人发放分红吗？此操作不可逆转！",funok);
+			                        }
+			                   },
+			                    "取消": {
+			                        className: "btn-danger",
+			                        callback: function () { }
+			                    }
+		                	}
+		            	});
+					},
+					error:function(xhr){
+						$.App.alert('danger','通讯失败！请重试！');
+					}
+			});
+		return false;
+	});
+</script>
+<!--/全选特效封装-->

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>推广佣金-{$_SESSION['WAP']['shopset']['name']}</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+</head>
+<body>
+	<section class="wrap-page wrap bg_f">
+		<div class="bd">
+			<div class="img pic_top">
+				<img src="__PUBLIC__/App/images/pic01.png" alt="" width="100%">
+			</div>
+			<div class="part01 share_wp">
+				<div class="img share-head-id">
+					<img src="{$data.headimgurl}" alt="{$data.nickname}">
+				</div>
+				<p class="name text_c fz_16">{$data.nickname}</p>
+				<p class="cRed text_c fz_16">邀请好友加入农牧源牧场</p>
+				<div class="yellow_bg mg_t20">
+					<p style="font-size:14px;">通过此页面邀请好友注册并关注农牧源牧场公众号可获得1元推广佣金，带来首次购买，首笔每1千元再奖励15元（佣金300封顶）</p>
+				</div>
+				<p class="text_c mg_t20" style="font-size:14px;">请主人点右上角分享吧！</p>
+			</div>
+		</div>
+	</section>
+	<include file="./Tpl/App/Shop_footer.html" />
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+	var share_url = "http://{$_SERVER['HTTP_HOST']}__ROOT__/App/Shop/index/ppid/{$_SESSION['WAP']['vipid']}/";
+	var share_title = "{$_SESSION['WAP']['shopset']['name']}";
+	var share_content = "{$_SESSION['SET']['wxsummary']}";
+	var share_img = "{$_SESSION['WAP']['shopset']['url']}{$_SESSION['WAP']['shopset']['sharepic']}";
+  wx.config({
+      debug: false,
+      appId: "{$jsapi['appId']}",
+	  timestamp: "{$jsapi['timestamp']}",
+	  nonceStr: "{$jsapi['nonceStr']}",
+	  signature: "{$jsapi['signature']}",
+      jsApiList: [
+        'checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'hideMenuItems',
+        'showMenuItems',
+        'hideAllNonBaseMenuItem',
+        'showAllNonBaseMenuItem'
+      ]
+  });
+  
+  wx.ready(function () {
+	  	//开启菜单
+	  	wx.showOptionMenu();
+	  	//隐藏菜单
+	  	//wx.hideOptionMenu();
+	    //分享给朋友
+	    wx.onMenuShareAppMessage({
+	      title: share_title,
+	      desc: share_content,
+	      link: share_url,
+	      imgUrl: share_img,
+	      trigger: function (res) {
+	        //alert('用户点击发送给朋友');
+	      },
+	      success: function (res) {
+	        //alert('已分享');
+	      },
+	      cancel: function (res) {
+	        //alert('已取消');
+	      },
+	      fail: function (res) {
+	        //alert(JSON.stringify(res));
+	      }
+	    });
+	    //分享到朋友圈
+	    wx.onMenuShareTimeline({
+	      title: share_title,
+	      link: share_url,
+	      imgUrl: share_img,
+	      trigger: function (res) {
+	        //alert('用户点击分享到朋友圈');
+	      },
+	      success: function (res) {
+	        //alert('已分享');
+	      },
+	      cancel: function (res) {
+	        //alert('已取消');
+	      },
+	      fail: function (res) {
+	        //alert(JSON.stringify(res));
+	      }
+	    });
+	    //分享到QQ
+	    wx.onMenuShareQQ({
+	      title: share_title,
+	      desc: share_content,
+	      link: share_url,
+	      imgUrl: share_img,
+	      trigger: function (res) {
+	        //alert('用户点击分享到QQ');
+	      },
+	      complete: function (res) {
+	        //alert(JSON.stringify(res));
+	      },
+	      success: function (res) {
+	        //alert('已分享');
+	      },
+	      cancel: function (res) {
+	        //alert('已取消');
+	      },
+	      fail: function (res) {
+	        //alert(JSON.stringify(res));
+	      }
+	    });
+  });
+  </script>
+</body>
+</html>

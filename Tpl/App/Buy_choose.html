@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>{$_SESSION['WAP']['shopset']['name']}</title>
+    <link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="bd">
+            <div class="zc_list">
+              <volist name='cate' id='vo'>
+					<div class="zc_detail bg_f" style="margin-bottom: 25px;">
+						<div class="weui_cell">
+							<div class="weui_cell_hd"><i class="iconfont color_green icon-qian1"></i>
+							</div>
+							<if condition="$vo.address eq 1">
+							<div class="weui_cell_bd weui_cell_primary">
+								<p>自提认养价格：￥{$info['price']*$num}</p>
+							</div>
+							<else/>
+							<div class="weui_cell_bd weui_cell_primary">
+								<p>按份认养价格：￥{$info['copies_price']*$num}</p>
+							</div>
+							</if>
+						</div>
+						<div class="weui_cell">
+							<div class="mg_t5">
+								<p>商品名称：{$info.name}</p>
+								<p>认养周期：{$info.cycle}天</p>
+								<neq name='vo.per' value='0'>
+									<p>年回报率：{$vo.per}%</p>
+								</neq>
+								<p>回报方式：{$vo.summary}</p>
+							</div>
+						</div>
+						<div class="weui_cell">
+							<div class="weui_cell_bd weui_cell_primary">
+								<div class="mg_t5">
+									<div class="ovfl mg_t5">
+										<notempty name='vo.content'><a href="{:U('App/Buy/success1',array('id'=>$vo['id'],'chooseurl'=>$chooseurl))}" class="fl color_green"> 了解详情</a>
+										</notempty> <a href="{:U('App/Buy/orderMake',array('id'=>$info['id'],'tcid'=>$vo['id'],'num'=>$num,'lasturl'=>$chooseurl))}" class="fr color_green">去认养</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+              </volist>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,18 @@
+<volist name="cache" id="vo">
+	<div class="bod_top pd_10">
+		<div class="c_float">
+			<p class="f_left">微信支付充值订单：<i>{$vo.opid}</i></p>
+			<p class="color_green f_right">{:number_format($vo['money'],2)}</p>
+		</div>
+		<div class="c_float fz_12 mg_t5 color_9">
+			<p class="f_left"><i class="mg_r10">{$vo.ctime|date="Y-m-d",###}</i><i>{$vo.ctime|date="H:i:s",###}</i></p>
+			<p class="f_right fz_14">
+				<switch name="vo.status">    
+					<case value="0">已取消</case>    
+					<case value="1">待处理</case> 
+					<case value="2">已完成</case>    
+				</switch>
+			</p>
+		</div>
+	</div>
+</volist>

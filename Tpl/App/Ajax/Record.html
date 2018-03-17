@@ -1,0 +1,17 @@
+ <volist name="cache" id="vo">
+	<div class="weui_media_box weui_media_text" onclick="window.location.href='{:U('App/Buy/recorddetails',array('id'=>$vo['id']))}'">
+        <h4 class="weui_media_title fz_16">{$vo.remark}</h4>
+        <div class="weui_media_desc">
+			<div class="weui_cell pd_0">
+		        <div class="weui_cell_bd weui_cell_primary">
+		            <p>{$vo.ctime|date="Y-m-d H:i:s",###}</p>
+		        </div>
+		        <if condition="$vo.money lt 0">
+		        	<div class="weui_cell_ft cRed">{$vo.money}</div>
+		        <else/>
+		        	<div class="weui_cell_ft color_green">{$vo.money}</div>
+		        </if>
+		    </div>
+        </div>
+    </div>
+</volist>

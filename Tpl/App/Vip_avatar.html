@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/base.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/frozen.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/avatar.css"/>
+<script type="text/javascript"  src="__PUBLIC__/App/js/rem.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+<title>上传头像-{$_SESSION['WAP']['shopset']['name']}</title>
+<style type="text/css">
+body, html {width: 100%;overflow: hidden;height: 100%;}
+.wrap-page{height:100%;}
+</style>
+</head>
+<body>
+<section class="wrap-page">
+	<div class="vm text-center">
+		<img id="avatar" src="{$data.headimgurl}" width="180" height="180"/>
+		<input type="hidden" id="newAvatar" value="">
+		<div class="btn_wp pd_10" style="margin-top: 20px;">
+		<a id="saveAvatar" href="javascript:;" class="weui_btn weui_btn_primary">上传</a>
+	</div>
+	</div>
+	<article class="htmleaf-container">
+	<header class="header" style="z-index: 99999;">
+		<a href="javascript:;" class="back" id="back"></a>
+		<div class="title" style="font-size:17px;">
+			移动和缩放
+		</div>
+	</header>
+	<div id="clipArea"></div>
+	<div class="foot-use">
+		<div class="uploader1 blue">
+			<button id="openfile">选择</button>
+			<input id="file" type="file"  accept="image/*" multiple  />
+		</div>
+		<button id="clipBtn" style="display:none;">确定</button>
+	</div>
+	<div id="view"></div>
+</article>
+</section>
+<script type="text/javascript" src="__PUBLIC__/App/js/hammer.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/iscroll-zoom.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery.photoClip.js"></script>
+<script src="__PUBLIC__/App/js/fastclick.js"></script>
+<script type="text/javascript">
+ $(function() {
+	  FastClick.attach(document.body);
+ });
+</script>
+<script>
+$(function(){
+var original_avatar = "{$data.headimgurl}";
+	$(".photo-clip-view").css('background',"url("+original_avatar+")");
+	$(".photo-clip-view").css('background-repeat',"no-repeat");
+	$(".photo-clip-view").css('background-size',"cover");
+	$(".photo-clip-view").css('background-position',"center center");
+});
+var obUrl = ''
+$("#clipArea").photoClip({
+	width: 180,
+	height: 180,
+	file: "#file",
+	view: "#view",
+	ok: "#clipBtn",
+	loadStart: function() {
+		$.showLoading("正在处理...");
+	},
+	loadComplete: function() {
+		$("#clipBtn").show();
+		$.hideLoading();  
+	},
+	clipFinish: function(dataURL) {
+	}
+});
+$(function(){
+		$("#back").click(function(){
+			location.href="{:U('App/Vip/edit')}";
+		})
+		$("#edit").click(function(){
+			$(".htmleaf-container").show();
+		})
+		$("#clipBtn").click(function(){
+			if(imgsource){
+				$('#newAvatar').val(imgsource);
+				$('#avatar').attr('src', imgsource);
+			}
+			$(".htmleaf-container").hide();
+		})
+	});
+$("#saveAvatar").click(function(){
+	var avatar = $("#newAvatar").val();
+	if(!avatar){
+		$.toptip('您没有上传头像！', 'error');
+		return;
+	}
+	$.ajax({
+	  	   type: "POST",
+	       url:"{:U('App/Vip/avatar')}",
+	       data:{'avatar':avatar},
+	       dataType:'json',
+	       error: function(request) {
+	    	   $.toptip('连接错误！', 'error');
+	       },
+	       beforeSend :function(){
+	    	   $.showLoading("正在提交...");
+	       },
+	       success: function(data) {
+               if(data.status==1) {
+            	   $.toast('操作成功',function(){
+            		   $.hideLoading();
+            		   location.href="{:U('App/Vip/edit')}";
+            	   });
+               } else {
+            	   $.toptip(data.info, 'error');
+            	   $.hideLoading();  
+               }
+			 },
+	      complete:function (){}     
+	   });
+});
+</script>
+</body>
+</html>

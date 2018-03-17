@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/base.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/frozen.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css?v=201707262245"/>
+<script type="text/javascript"  src="__PUBLIC__/App/js/rem.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/global.js"></script>
+<title>确认订单</title>
+<style type="text/css">
+*{font-size: 14px;}
+.way{ background-color: #fff; width: 100%;float: left;}
+.way li{width: 50%;text-align: center;float: left;padding: 15px 0;}
+.on{border-bottom: 1px solid #2abf4d}
+.no{border-bottom: 1px solid #ccc}
+.weui-select{width:30%;}
+.since{border-top: 1px dashed #ccc;margin-top: 15px;padding-top: 5px;}
+.sincediv{width: 100%;display: flex;display: -webkit-flex; }
+.sincediv select{width:33.33%;margin: 0 5px;border: 1px solid #dcdcdc;padding: 3px 8px;border-radius: 5px;border: 1px solid #dcdcdc;}
+.search_pickup{margin-top: 20px;font-size: 14px;width: 40%;height: 30px;line-height: 25px;}
+</style>
+</head>
+<body class="cart-body">
+<form action="" method="post" id="orderform">
+<input type="hidden" name="sid" value="{$sid}">
+<input type="hidden" name="paytype" value="<eq name='isyue' value='0'>money<else/>wxpay</eq>" id="paytype">
+<input type="hidden" name="vipid" value="{$vip.vipid}" id="ordervip">
+<input type="hidden" name="vipopenid" value="{$_SESSION['WAP']['vip']['openid']}">
+<input type="hidden" name="vipname" value="{$vip.name}">
+<input type="hidden" name="vipaddress" value="{$vip.address}">
+<input type="hidden" name="vipmobile" value="{$vip.mobile}">
+<input type="hidden" name="totalnum" value="{$totalnum}">
+<input type="hidden" name="totalprice" value="{$totalprice}">
+<input type="hidden" name="djqid" id="djqid" value="0">
+<input type="hidden" id="money" value="{$_SESSION['WAP']['vip']['money']}">
+<input type="hidden" id="yf" value="{$yf}">
+<input type="hidden" name="isact" value="{$_SESSION['isact']}">
+<input type="hidden" name="groupid" value="{$_SESSION['groupid']}">
+<input type="hidden" name="delivery" id="delivery" value="<eq name='cankd' value='0'>since<else />express</eq>">
+<input type="hidden" name="address" id="address" value="{$vip.id}">
+<input type="hidden" name="sinceid" id="sinceid" value="0">
+<input type="hidden" name="bid" value="{$bid}">
+<textarea name="items" style="display: none;">{$allitems}</textarea>
+<section class="wrap-page">
+			<notempty name='pickup'>
+			<if condition="$cankd eq 1">
+			<div class="weui_cells_title">
+					请选择收货方式：
+			</div>
+			<div style="width: 100%;">
+		        <ul class="way">
+						<li class="on kuaidi">快递</li><li class="no ziti">自提</li>
+		        </ul>
+		        <div style="clear:both"></div>
+		    </div>
+		    </if>
+		    </notempty>
+			<if condition="$cankd eq 1">
+				<div id='express'>
+						<div class="weui_cell ct-a bgf">
+							<a href="#" class="ads-chs" id="changeaddress" style="padding: 0;width: 100%">
+								<empty name="vip">
+									请选择收货地址<i class="iconfont fl_r fz14">&#xe6a3</i>
+									<else/>
+									<div class="clearfix">
+										<span class="left">收件人：{$vip.name}</span>
+										<span class="right">
+											{$vip.mobile}
+										</span>
+									</div>
+									<div class="ct-address">
+										</i>收货地址：{$vip.address}
+									</div>
+								</empty>
+							</a>
+						</div>
+				</div>
+			</if>
+			<notempty name="pickup">
+			<div id='since' class="ct-a bgf" <if condition="$cankd eq 1"> style="display: none"</if>>
+		          <div class="sincediv">
+			          <select class="weui-select location" name="province" id="province" onChange="get_city(this)">
+			             	<option value="0">省份</option>
+		                     <volist name="province" id="p">
+		                     <option value="{$p.id}">{$p.name}</option>
+		                     </volist>
+			          </select>
+			          <select class="weui-select location" name="city" id="city" onChange="get_area(this)">
+			          		<option value="0">城市</option>
+			          </select>
+			          <select class="weui-select location" name="district" id="district">
+			             	<option value="0">地区</option>
+			          </select>
+		          </div>
+		          <a href="javascript:;" class="weui_btn weui_btn_plain_primary search_pickup" id="search_pickup" style="top:0px">自提店查询</a>
+	     		  <ul class="since"></ul>
+	      </div>
+	      </notempty>
+		</div>
+	<div class="cu-div bgf">
+	<foreach name="cache" item="vo">
+		<div class="ct-b clearfix">
+			<img src="{$vo.pic}" class="img left" />
+			<div class="left infor">
+				<h2>{$vo.name}</h2>
+				<span class="cRed c-price" style="font-size: 12px;">￥{$vo.price}</span>
+				<div class="gw_num f24">
+				    X{$vo.num}
+				</div>
+			</div>
+		</div>
+		</foreach>
+	</div>
+	<div class="ct-c bgf">
+		<div class="ui-justify" id="kdf" <if condition="$cankd eq 0">style="display:none"</if>>
+			<div>
+				快递费 
+			</div>
+			<div>￥{$yf}</div>
+		</div>
+		<notempty name="djq">
+		<div class="ui-justify">
+			<div class="f20">
+				优惠券 <i class="i-yd">{$djq_count}</i>
+			</div>
+			<div class="f20">￥<span id="djq_money">0</span></div>
+		</div>
+		</notempty>
+	</div>
+	<notempty name="djq">
+	<ul class="quanlist cqsel">
+		<li class="on sitem" data-id="0" data-money="0" data-disable="0">不使用优惠券</li>
+		<foreach name="djq" item="vo">
+		<li class="sitem" data-id="{$vo.id}" data-money="{$vo.money}" data-disable="<if condition="$vo['left'] gt 0">1<else/>0</if>">{$vo.money}元代金券（满{$vo.usemoney}元使用）<if condition="$vo['left'] gt 0"><span class="cRed">还差（{$vo.left}元）</span></if></li>
+		</foreach>
+	</ul>
+	</notempty>
+	<div class="cu-div bgf ct-d">
+		<input type="text" name="msg" placeholder="给我们留言" class="ct-put" />
+		<div class="ui-justify cd-jbu">
+			<div class="f20">
+				<a href="{:U('App/Shop/home')}" class="go-btn">继续购买</a> 共{$totalnum}件商品
+			</div>
+			<div class="f20">总价：¥<span id="totalprice">{$totalprice}</span></div>
+		</div>
+	</div>
+	<div class="payway">
+	<h2>请选择付款方式：</h2>
+	<ul class="f20 ads_pay">
+		<li class="wayitem <eq name='isyue' value='0'>active</eq>" data-paytype = "money" data-disable="{$isyue}">
+			<span><img src="__PUBLIC__/App/images/i_p1.png" alt=""></span>
+			余额支付（余额{$_SESSION['WAP']['vip']['money']}）
+		</li>
+		<li class="wayitem <eq name='isyue' value='1'>active</eq>" data-paytype = "wxpay" data-disable="0">
+			<span><img src="__PUBLIC__/App/images/i_p2.png" alt=""></span>
+			微信支付
+		</li>
+		<li id="pay_pwd" <eq name='isyue' value='1'>style="display:none"</eq>>
+			<i style="margin-right:10px">支付密码</i> <input name="password" id="pay_password" type="tel" placeholder="请输入6位数字支付密码" value="" class="it-pwd password" />
+		</li>
+	</ul>
+</div>
+</section>
+</form>
+<div class="h60"></div>
+<footer class="footer">
+	<a href="javascript:;" class="zbtn right" id="orderconfirm">确认支付</a>
+	<div class="right">
+		实付款：<span class="cRed">￥<span id="payprice">{$payprice}</span></span>
+	</div>
+</footer>
+ <script src="__PUBLIC__/App/js/fastclick.js"></script>
+ <script type="text/javascript">
+ $(function() {
+	  FastClick.attach(document.body);
+ });
+</script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+var sid="{$sid}";
+var lasturlencode="{$lasturlencode}";
+var paytype=$('#paytype');
+$('#changeaddress').on('click',function(){
+	var tourl="{:U('App/Shop/orderAddress',array('sid'=>$sid,'lasturl'=>$lasturlencode))}";
+	window.location.href=tourl;
+});
+$('.ads_pay li:lt(2)').click(function(){
+	var isdis=$(this).data('disable');
+	if(isdis==0){
+		if($(this).data('paytype')=='money') {
+			scrollToEnd();
+			$('#pay_pwd').show();
+		} else {
+			$('#pay_pwd').hide();
+		}
+		$('.ads_pay li:lt(3)').removeClass('active');
+		$(this).addClass('active')
+		$(paytype).val($(this).data('paytype'));
+	}else{
+		$.toptip('请使用其它方式！', 'error');
+	}
+});
+$('#orderconfirm').on('click',function(){
+	<if condition="($cankd eq 1 and empty($pickup))==true">
+	if(!$('#ordervip').val()){
+		$.toptip('请选择收货地址！', 'error');
+		return false;
+	}
+	</if>
+	<if condition="($cankd eq 0 and !empty($pickup))==true">
+	if($('#sinceid').val()==0){
+		$.toptip('请选择自提点！', 'error');
+		return false;
+	}
+	</if>
+	<if condition="($cankd eq 1 and !empty($pickup))==true">
+	if($('#sinceid').val()==0 && !$('#ordervip').val()){
+		$.toptip('请选择收货地址或自提点！', 'error');
+		return false;
+	}
+	</if>
+	if(!$('#paytype').val()){
+		$.toptip('请选择支付方式！', 'error');
+		return false;
+	}
+	if($('#paytype').val()=='money') {
+		var pay_password = $('#pay_password').val()
+		if(pay_password=='' || pay_password.length!=6){
+			$.toptip('请输入6位数字支付密码！', 'error');
+			scrollToEnd();
+			return false;
+		}
+		$.ajax({
+			type:'post',
+			data:{'password':pay_password},
+			url:"{:U('App/Shop/checkPayPassword')}",
+			dataType:'json',				
+			async:false,
+			success:function(e){
+				if (e.status==1) {
+					okfun();
+				} else {
+					if(e.nopwd==1) {
+						$.confirm(e.info, function() {
+							window.location.href=e.url;
+						}, function() {
+							return false;
+						});
+					} else {
+						$.toptip(e.info, 'error');
+						return false;
+					}
+				}
+			},
+			error:function(){
+			    $.toptip('通讯失败！', 'error');
+				return false;
+			}
+		});	
+	} else {
+		okfun();
+	}
+});
+var okfun=function(){$('#orderform').submit();}		
+//代金券特效
+var totalprice=$('#totalprice');
+var nowtotal="{$totalprice}";
+$('.cqsel .sitem').click(function(){
+	if($(this).data('disable') == 0) {
+		$(this).addClass('on').siblings().removeClass('on');
+		var newmoney = Number(nowtotal)-$(this).data('money');
+		newmoney = Math.round(newmoney*100)/100;
+		$('#djqid').val($(this).data('id'));
+		$('#djq_money').text($(this).data('money'));
+		// 初始支付限制
+		$('.ads_pay li').data('disable',0);
+		$('.ads_pay li').removeClass('active')
+		$('#paytype').val('');
+		// 判断当前的是否小于0，小于0设置为0
+		if(newmoney<=0){
+			newmoney=0;
+			$('.ads_pay li').each(function(){
+				// 允许只允许使用余额支付
+				if($(this).data('paytype')=='wxpay'){
+					$(this).data('disable',1);
+				}
+			});
+		}
+		// 判断可否使用余额支付
+		var money = Number($('#money').val());
+		if(newmoney>money){
+			$('.ads_pay li').each(function(){
+				if($(this).data('paytype')=='money'){
+					$(this).data('disable',1);
+				}
+			});
+		}
+		$(totalprice).html(newmoney);
+		var yf = $('#yf').val();
+		$('#payprice').html((Number(parseFloat(newmoney)+parseFloat(yf))).toFixed(2));
+	}
+});
+function scrollToEnd(){
+	var h = $(document).height()-$(window).height();
+	$(document).scrollTop(h); 
+}
+wx.config({
+	debug: false,
+	appId: "{$jsapi['appId']}",
+	timestamp: "{$jsapi['timestamp']}",
+	nonceStr: "{$jsapi['nonceStr']}",
+	signature: "{$jsapi['signature']}",
+	jsApiList: [
+	'getLocation'
+	]
+});
+$('.ziti').on('click',function(){
+	$('.way li').attr('class','no');
+	$(this).attr('class','on');
+	$('#kdf').hide();
+	$('#since').show();
+	$('#express').hide();
+	$('#delivery').val('since');
+	$('#address').val('');
+	$('#kuaidi').hide();
+	$('#ziti').show();
+    $('#payprice').html((Number(parseFloat($("input[name='totalprice']").val()))).toFixed(2));
+});
+var pickups = '{$pickups}';
+$('#search_pickup').click(function(){
+	var province = $('#province').val();
+	var city = $('#city').val();
+	var district = $('#district').val();
+	if(province==0) {
+		$.toptip('请选择省份', 'error');
+		return false;
+	}
+	$.showLoading("加载自提点中...");
+	wx.getLocation({
+	    type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+	    success: function (res) {
+	        var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+	        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+	        var speed = res.speed; // 速度，以米/每秒计
+	        var accuracy = res.accuracy; // 位置精度
+	       	var pickups = '{$pickups}';
+
+	       	if(pickups != '') {
+		        $.ajax({
+					type: "post",
+					url: "{:U('App/Ajax/pickup')}",
+					data: {'latitude':latitude,'longitude':longitude,'province':province,'city':city,'district':district,'pickups':pickups},
+					dataType: "json",
+					success: function(data){
+						if(data.status==1) {
+			    		   if(data.info) {	    			   
+			                   $(".since").html(data.info);
+			    	   	   }           		   
+			    	   }
+						$.hideLoading();
+					}
+		        });
+	       	}
+	    }
+	});
+});
+$('.kuaidi').on('click',function(){
+	$('.way li').attr('class','no');
+	$(this).attr('class','on');
+	$('#express').show();
+	$('#since').hide();
+	$('#delivery').val('express');
+	$('#sinceid').val(0);
+	$('#address').val('{$vipaddress.id}');
+	$('#ziti').hide();
+	$('#kuaidi').show();
+	$('#kdf').show();
+	var yf = $('#yf').val();
+	if(yf>0){
+		$('#payprice').html((Number(parseFloat($("input[name='totalprice']").val())+parseFloat(yf))).toFixed(2));
+	}
+});
+$('.since').on('click','li',function(){
+
+	var sinli = $(this).index();
+	if(sinli == 0){
+		return false;
+	}
+	$('.since li').removeClass('active');
+	$(this).addClass('active');
+	var address = $(this).attr('data-address');
+	var sinceid = $(this).data('id');
+	$('#address').val(address);
+	$('#sinceid').val(sinceid);
+	var yf = $('#yf').val();
+	if(yf>0){
+		$('#payprice').html((Number(parseFloat($('#payprice').html())-parseFloat(yf)).toFixed(2)));
+	}
+});
+</script>
+</body>
+</html>

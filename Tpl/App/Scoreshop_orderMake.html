@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/base.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/frozen.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/style.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+<script type="text/javascript"  src="__PUBLIC__/App/js/rem.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+<title>确认订单</title>
+</head>
+<body class="cart-body">
+<form action="" method="post" id="orderform">
+<input type="hidden" name="address_id" value="{$address.id}" id="address_id">
+<input type="hidden" name="score_id" value="{$cache.id}">
+<section class="wrap-page">
+	<!-- 有填写收货地址 -->
+	<div class="ct-a bgf" style="margin:0">
+		<a href="#" class="ads-chs" id="changeaddress">
+			<empty name="address">
+				<i class="icon i-address"></i>请选择收货地址
+				<span class="iconfont fr icon-r">&#xe6a3</span>
+				<else/>
+				<div class="clearfix">
+					<span class="left">收件人：{$address.name}</span>
+					<span class="right">
+						{$address.mobile}
+					</span>
+				</div>
+				<div class="ct-address">
+					<i class="icon i-address"></i>收货地址：{$address.address}
+				</div>
+			</empty>
+		</a>
+	</div>
+	<div class="cu-div bgf">
+		<div class="ct-b clearfix">
+			<img src="{$cache.imgurl}" class="img left" />
+			<div class="left infor">
+				<h2>{$cache.name}</h2>
+				<span class="cRed c-price">{$cache.score}积分</span>
+				<div class="gw_num f24">
+				    X1
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="cu-div bgf ct-d">	
+		<input type="text" name="remark" placeholder="给我们留言" class="ct-put" />	
+	</div>
+</div>
+</section>
+</form>
+<div class="h45"></div>
+<footer class="footer">
+	<a href="javascript:;" class="zbtn right" id="orderconfirm">确认兑换</a>
+	<div class="right">
+		消耗积分：<span class="cRed">{$cache.score}</span></span>
+	</div>
+</footer>
+ <script src="__PUBLIC__/App/js/fastclick.js"></script>
+ <script type="text/javascript">
+ $(function() {
+	  FastClick.attach(document.body);
+ });
+</script>
+<script type="text/javascript">
+		$('#changeaddress').on('click',function(){
+			var tourl="{:U('App/Scoreshop/orderAddress',array('id'=>$cache['id']))}";
+			window.location.href=tourl;
+		});
+		$('#orderconfirm').on('click',function(){
+			if(!$('#address_id').val()){
+				$.toptip('请选择收货地址！', 'error');
+				return false;
+			}
+			okfun();
+		});
+		var okfun=function(){$('#orderform').submit();}		
+	</script>
+</body>
+</html>

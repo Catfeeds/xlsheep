@@ -1,0 +1,179 @@
+<style type="text/css">
+.report-nav{padding:15px 5px;background: #ffffff;border-bottom: 1px solid #eeeeee;}
+.report-nav a {background-color: #2dc3e8;color:#fff;font-size:14px;padding: 5px 12px;border-radius: 5px;margin-right:15px;text-decoration: none;}
+.report-nav a:hover,.report-nav a.active{background-color: #fb6e52;}
+</style>
+<div class="report-nav">
+	<a <if condition="$type eq ''">class="active"</if> href="{:U('Admin/Finance/orderFahuoList')}" data-loader="App-loader" data-loadername="实物发货订单(全部)">实物发货订单(全部)</a> 
+	<a <if condition="$type eq '1'">class="active"</if> href="{:U('Admin/Finance/orderFahuoList',array('type'=>1))}" data-loader="App-loader" data-loadername="实物发货订单(待发货)">实物发货订单(待发货)</a> 
+	<a <if condition="$type eq '2'">class="active"</if> href="{:U('Admin/Finance/orderFahuoList',array('type'=>2))}" data-loader="App-loader" data-loadername="实物发货订单(已发货)">实物发货订单(已发货)</a>
+</div>
+<div class="row">
+	<div class="col-xs-12 col-md-12">
+		<div class="widget">
+			<div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i>
+				<span class="widget-caption">实物发货订单</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize">
+						<i class="fa fa-expand"></i>
+					</a>
+					<a href="#" data-toggle="collapse">
+						<i class="fa fa-minus"></i>
+					</a>
+					<a href="#" data-toggle="dispose">
+						<i class="fa fa-times"></i>
+					</a>
+				</div>
+			</div>
+			<div class="widget-body">
+				<table id="App-table" class="table table-bordered table-hover">
+					<thead class="bordered-darkorange">
+						<tr role="row">
+							<th width="30px"><div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+									<label style="padding-left: 4px;"> <input type="checkbox" class="App-checkall colored-blue">
+                                     <span class="text"></span>
+									</label>                                    
+                                </div></th>
+							<th>ID</th>
+							<th>会员ID</th>
+							<th>订单号</th>
+							<empty name="status">
+							<th>状态</th>
+							</empty>
+							<th>订单总额</th>
+							<th>姓名</th>
+							<th>电话</th>
+							<th>支付金额</th>
+							<th>支付方式</th>
+							<th>创建时间</th>
+							<th>到期日期</th>
+							<if condition="$type eq '2'">
+							<th>快递公司</th>
+							<th>快递单号</th>
+							</if>
+							<th width="150">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="cache" id="vo">
+							<tr id="item{$vo.id}">
+								<td>
+									<div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+										<label style="padding-left: 4px;"> <input name="checkvalue" type="checkbox" class="colored-blue App-check" value="{$vo.id}">
+	                                     <span class="text"></span>
+										</label>                                    
+	                                </div>
+								</td>
+								<td class=" sorting_1">{$vo.id}</td>
+								<td class=" ">{$vo.vipid}</td>
+								<td class=" ">{$vo.oid}</td>
+								<empty name="status">
+								<td class=" "><switch name="vo.fahuostatus">
+									<case value="0">未发货</case>
+									<case value="1">已发货</case>
+								</switch>
+								</td>
+								</empty>
+								<td class=" ">{$vo.totalprice}</td>
+								<td class=" ">{$vo.vipname}</td>
+								<td class=" ">{$vo.vipmobile}</td>
+								<td class=" ">{$vo.payprice}</td>
+								<td class=" "><switch name="vo.paytype">
+									<case value="money">余额</case>
+									<case value="alipaywap">支付宝WAP</case>
+									<case value="wxpay">微信支付</case>
+								</switch></td>
+								<td class=" ">{$vo.ctime|date='Y/m/d H:i',###}</td>		
+								<td class=" ">{$vo.rtime|date='Y/m/d',###}</td>	
+								<if condition="$type eq '2'">
+								<td class=" ">{$vo.fahuokd}</td>
+								<td class=" ">{$vo.fahuokdnum}</td>
+								</if>		
+								<td class="center ">
+									<button class="btn btn-azure  btn-xs orderfhkd" data-id = "{$vo.id}"><i class="glyphicon glyphicon-tags"></i> 快递</button>&nbsp;&nbsp;
+									<a href="{:U('Admin/Finance/orderDetail/',array('id'=>$vo['id'],'status'=>$status))}" class="btn btn-primary btn-xs" data-loader="App-loader" data-loadername="订单详情"><i class="fa fa-eye"></i> 详情</a>
+								</td>
+							</tr>
+						</volist>
+												
+					</tbody>
+				</table>
+				<div class="row DTTTFooter">
+					{$page}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+	setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->
+<script type="text/javascript">
+var btnfhkd=$('.orderfhkd');
+$(btnfhkd).on('click',function(){
+		var id=$(this).data('id');
+		$.ajax({
+				type:"post",
+				url:"{:U('Admin/Finance/orderFhkd')}",
+				data:{'id':id},
+				dataType: "json",
+				//beforeSend:$.App.loading(),
+				success:function(mb){
+					//$.App.loading();
+					bootbox.dialog({
+                	message: mb,
+                	title: "填写发货快递",
+                	className: "modal-darkorange",
+                	buttons: {
+                		   success: {
+		                        label: "确定",
+		                        className: "btn-blue",
+		                        callback: function () {
+		                        	var dtfhkd=$('#AppOrderFahuokd option:selected').text();
+		                        	var dtfhkdcode=$('#AppOrderFahuokd').val();
+		                        	var dtfhkdnum=$('#AppOrderFahuokdnum').val();
+		                        	var oid = $('#orderid').val();
+		                        	if(!dtfhkd || !dtfhkdnum){
+		                        		alert('请完整填写必添字段!');
+		                        		return false;
+		                        	}
+		                        	$.ajax({
+		                        		type:"post",
+		                        		url:"{:U('Admin/Finance/orderFhkdSave')}",
+		                        		data:{"id": oid,"fahuokd":dtfhkd, "fahuokdcode":dtfhkdcode, "fahuokdnum":dtfhkdnum},
+		                        		dataType:"json",
+		                        		async:false,
+		                        		success:function(info){
+		                        			if(info['status']){
+		                        				$.App.alert('success',info['msg']);
+		                        				$('#App-reloader').trigger('click');
+		                        			}else{
+		                        				$.App.alert('danger',info['msg']);
+		                        			}
+		                        			return false;
+		                        		},
+		                        		error:function(xhr){
+											$.App.alert('danger','通讯失败！请重试！');
+											return false;
+										}
+		                        	});
+		                        }
+		                   },
+		                    "取消": {
+		                        className: "btn-danger",
+		                        callback: function () { }
+		                    }
+	                	}
+	            	});
+				},
+				error:function(xhr){
+					$.App.alert('danger','通讯失败！请重试！');
+				}
+		});
+	return false;
+});
+</script>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>申请提现-{$_SESSION['WAP']['shopset']['name']}</title>
+		<meta charset="utf-8" />
+		<!--页面优化-->
+		<meta name="MobileOptimized" content="320">
+		<!--默认宽度320-->
+		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<!--viewport 等比 不缩放-->
+		<meta http-equiv="cleartype" content="on">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!--删除苹果菜单-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<!--默认颜色-->
+		<meta name="apple-mobile-web-app-title" content="yes">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<!--加载全部后 显示-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--不识别电话-->
+		<meta content="email=no" name="format-detection" />
+
+		<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<!-- <script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script> -->
+
+	
+		<link rel="stylesheet" href="__PUBLIC__/App/css/style.css?v=2" />
+		<script type="text/javascript" src="__PUBLIC__/App/js/zepto.min.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/App/gmu/gmu.min.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/App/gmu/app-basegmu.js"></script>
+		<style type="text/css">
+			.debits a{color: #606060;font-size: 12px;}
+			.withdrawals h2 a{float:right;font-size:14px;color:#f05213;}
+		</style>
+	</head>
+	<body>
+		<section class="mui-inner-wrap" style=" padding-bottom: 50px;">
+			<section class="mui-content">
+				<form action="" method="post" id="AppForm" style="padding: 0;">
+					<div class="debits">账户余额：<strong class="color_red" id='txvm'>{$vip.money}</strong>元</div>
+
+
+
+				<section class="cz-ul" id="Vip_czway">
+					<p>提现方式</p>
+					<ul class="zfpaynav">
+						<li class="" onclick="checkType('BankCard')" style="border-top: 1px solid #d9d9d9;border-bottom: 1px solid #d9d9d9;"> 
+							<em class="active"></em>
+							<input type="radio" style="display: none;" data-value="{$vip.istxcard}" name="type" id="BankCard" checked="true" value="BankCard">
+							<span  class="icon iconfont icon-weixin"></span>银行卡
+						</li>
+						
+
+						<li class="" onclick="checkType('Weui')" style="order-top: 1px solid #d9d9d9;border-bottom: 1px solid #d9d9d9;">
+							<input type="radio" style="display: none;" data-value="{$vip.isopenid}" name="type" id="Weui" value="Weui">
+							<span  class="icon iconfont icon-weixin"></span>微信
+						</li>
+					</ul>
+					<!-- <p>
+						<button type="button" class="fr ads-btn" id="surebtn" style="font-size:14px;">立即提现</button>
+					</p>
+				
+ -->
+
+
+				<if condition="$vip.txcard eq ''">
+					<div class="debits" id="BankCardSet" style="display: none;border-bottom: 0px solid #d7d7d7;">
+						<p class="color_red"><i>注意：您还没有绑定银行卡信息！</i><a href="{:U('App/Vip/bind',array('type'=>4))}">马上去设置</a></p>
+					</div>
+				<else/>
+					<div class="withdrawals" id="BankCardSet" style="display: none;border-bottom: 0px solid #d7d7d7;"">
+						<h2>提现账号<a href="{:U('App/Vip/bind',array('type'=>4))}">修改银行卡</a></h2>
+						<p id="username">姓名：{$vip.txname}</p>
+						<p id="phone">手机：{$vip.txmobile}</p>
+						<p id="bank">银行：{$vip.txyh}</p>
+						<p>所属分行：{$vip.txfh}</p>
+						<p>开户行所在地：{$vip.txszd}</p>
+						<p id="idcard">卡号：{$vip.txcard}</p>
+
+					</div>
+				
+				</if>
+
+
+				<if condition="$vip['openid'] eq ''">
+				
+					<div  class="debits"  id="WeuiSet" style="display: none;border-bottom: 0px solid #d7d7d7;">
+						<p class="color_red"><i>注意：您还没有授权登录微信公众号农牧源！</i>请关注并登录微信公众号农牧源才能使用此功能</p>
+					</div>
+				
+				</if>
+
+
+				<if condition="$vip['openid'] neq '' or  $vip.txcard neq ''">
+					<div class="debits" id="cash" >
+						<div class="cash_money"><span>提现金额：</span><input type="text" name="txprice" value="" placeholder="请输入提现金额" id="txprice"></div>
+						<p class="color_red">注意:提现必须大于{$_SESSION['WAP']['vipset']['tx_money']}</p>
+					</div>
+					<a href="javascript:;" class="fr ads-btn fonts9 back3 text-c" id="txbtn">提现</a>
+				</if>
+				<input id="txtype" type="hidden" name="txtype" value="0">
+
+
+			</form>
+			
+			
+			
+			</section>			
+		</section>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</body>
+	
+<script>
+$('.ads-btn').click(function() {
+	
+	var txvm = Number($('#txvm').html());
+	var txmin = {$_SESSION['WAP']['vipset']['tx_money']};
+	var txprice = Number($('#txprice').val());
+	if(!txprice) {
+		App_gmuMsg('请填写提现金额！');
+		return false;
+	}
+	if(txprice > txvm) {
+		App_gmuMsg('提现金额不能大于会员帐户余额！');
+		return false;
+	}
+	if(txprice < txmin) {
+		App_gmuMsg('提现金额不能小于最低提现金额！');
+		return false;
+	}
+	// console.log($("#AppForm").serialize());return false;
+	$.ajax({
+		type: 'post',
+		data: $("#AppForm").serialize(),
+		url: "{:U('App/Vip/txorder')}",
+		dataType: 'json',
+		success: function(e) {
+			if(e.status == 1) {
+				var fun = function() {
+					window.location.href = "{:U('App/Buy/record')}";
+				}
+				App_gmuMsg(e.info, fun);
+				return false;
+			} else {
+				zbb_msg(e.info);
+				return false;
+			}
+		},
+		error: function() {
+			zbb_alert('通讯失败！');
+			return false;
+		}
+	});
+})
+</script>
+
+</html>
+<script type="text/javascript">
+
+$(function(){
+	
+
+	if($('#BankCard').attr('checked')){
+		
+		$('#BankCardSet').show();
+	}
+
+	if($('#BankCard').data('value')){
+		$('#cash').show();
+		$('#txbtn').show();
+	}else{
+		$('#cash').hide();
+		$('#txbtn').hide();
+	}
+	
+
+});
+
+
+	function checkType(name){
+		if(name=="BankCard"){
+			$('#BankCardSet').show();
+		}else{
+			$('#BankCardSet').hide();
+		}
+
+
+
+		if(name=='Weui'){
+			$('#WeuiSet').show();
+		}else{
+			$('#WeuiSet').hide();
+		}
+		// alert($('#' + name).data('value'));
+		if($('#' + name).data('value') ){
+			$('#cash').show();
+			$('#txbtn').show();
+		}else{
+			$('#cash').hide();
+			$('#txbtn').hide();
+		}
+
+		switch(name){
+			case 'BankCard':
+				var txtype = 0;
+				break;
+			case 'Weui':
+				var txtype = 1;
+				break;
+		}
+		
+		
+		$('#txtype').val(txtype);
+		var $id = $('#' + name);
+		if(!$id.attr('checked')){
+			$('input[name="type"]').prev().remove();
+			$id.before('<em class="active"></em>');
+			$('input[name="type"]').removeAttr('checked');
+			$id.attr('checked',true);
+		}
+	}
+
+	
+</script>

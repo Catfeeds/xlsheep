@@ -1,0 +1,222 @@
+<div class="row">
+	<div class="col-xs-12 col-md-12">
+		<div class="widget">
+			<div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i>
+				<span class="widget-caption">商城订单</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize">
+						<i class="fa fa-expand"></i>
+					</a>
+					<a href="#" data-toggle="collapse">
+						<i class="fa fa-minus"></i>
+					</a>
+					<a href="#" data-toggle="dispose">
+						<i class="fa fa-times"></i>
+					</a>
+				</div>
+			</div>
+			<div class="widget-body">
+				<div class="table-toolbar" style="height:52px">
+					<div class="pull-right">
+						<form id="App-search">
+							<label style="margin-bottom: 0px;">
+								<input name="name" type="search" class="form-control input-sm" placeholder="输入订单号" value="{$name}">
+							</label>
+							<a href="{:U('Admin/Score/order/')}" class="btn btn-success" data-loader="App-loader" data-loadername="积分商城订单" data-search="App-search">
+								<i class="fa fa-search"></i>搜索
+							</a>
+						</form>
+					</div>
+				</div>
+
+				<table id="App-table" class="table table-bordered table-hover">
+					<thead class="bordered-darkorange">
+						<tr role="row">
+							<th>ID</th>
+							<th>会员ID</th>
+							<th>订单号</th>
+							<th>联系人</th>
+							<th>消耗积分</th>
+							<th>订单状态</th>
+							<th>兑换商品</th>
+							<th>备注</th>							
+							<th>时间</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="cache" id="vo">
+							<tr id="item{$vo.id}">
+								<td class=" sorting_1">{$vo.id}</td>
+								<td class=" ">{$vo.user_id}</td>
+								<td class=" ">{$vo.orderid}</td>
+								<td class=" ">  <div class="btn-group" style="margin: 0px;">
+                                    <button class="btn btn-primary-outline dropdown-toggle" data-toggle="dropdown">
+                                        {$vo.contact.name}<span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="#">联系方式：{$vo.contact.mobile}</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">联系地址：{$vo.contact.address}</a>
+                                        </li>
+                                    </ul>
+                                </div></td>
+								<td class=" ">{$vo.totalscore}</td>
+								<td class=" ">  <if condition="$vo.status eq -1">已取消
+                                    <elseif condition="$vo.status eq 0"/>
+                                    <font color="red">未处理</font>
+                                    <elseif condition="$vo.status eq 1"/>
+                                    <font color="blue">等待发货</font>
+                                    <elseif condition="$vo.status eq 2"/>
+                                    <font color="blue">已发货</font>
+                                    <else/>
+                                   		 已完成
+                                </if></td>
+								<td class=" ">{$vo.goods.name}</td>
+								<td class=" ">{$vo.remark}</td>					
+								<td class=" ">{$vo.time|date='Y/m/d H:i',###}</td>
+								<td class="center ">		
+										<button class="btn btn-azure  btn-xs orderfhkd" data-id = "{$vo.id}"><i class="glyphicon glyphicon-tags"></i> 快递</button>													
+										<eq name='vo.status' value='1'>
+											&nbsp;&nbsp;<button class="btn btn-success btn-xs orderdeliver" data-id = "{$vo.id}"><i class="fa fa-ambulance"></i> 发货</button>
+										</eq>
+										<eq name='vo.status' value='2'>
+											&nbsp;&nbsp;<button class="btn btn-success btn-xs ordersuccess" data-id = "{$vo.id}"><i class="glyphicon glyphicon-ok"></i> 完成</button>
+										</eq>									
+								</td>
+							</tr>
+						</volist>
+												
+					</tbody>
+				</table>
+				<div class="row DTTTFooter">
+					{$page}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+	setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->
+<!--订单特效-->
+<script type="text/javascript">
+//发货快递
+var btnfhkd=$('.orderfhkd');
+	$(btnfhkd).on('click',function(){
+			var id=$(this).data('id');
+			$.ajax({
+					type:"post",
+					url:"{:U('Admin/Score/orderFhkd')}",
+					data:{'id':id},
+					dataType: "json",
+					//beforeSend:$.App.loading(),
+					success:function(mb){
+						//$.App.loading();
+						bootbox.dialog({
+	                	message: mb,
+	                	title: "填写发货快递",
+	                	className: "modal-darkorange",
+	                	buttons: {
+	                		   success: {
+			                        label: "确定",
+			                        className: "btn-blue",
+			                        callback: function () {
+			                        	var dtfhkd=$('#AppOrderFahuokd').val();
+			                        	var dtfhkdnum=$('#AppOrderFahuokdnum').val();
+			                        	if(!dtfhkd || !dtfhkdnum){
+			                        		alert('请完整填写必添字段!');
+			                        		return false;
+			                        	}
+			                        	var dt=$('#AppOrderFhkd').serialize();
+			                        	$.ajax({
+			                        		type:"post",
+			                        		url:"{:U('Admin/Score/orderFhkdSave')}",
+			                        		data:dt,
+			                        		dataType:"json",
+			                        		async:false,
+			                        		success:function(info){
+			                        			if(info['status']){
+			                        				$.App.alert('success',info['msg']);
+			                        				$('#App-reloader').trigger('click');
+			                        			}else{
+			                        				$.App.alert('danger',info['msg']);
+			                        			}
+			                        			return false;
+			                        		},
+			                        		error:function(xhr){
+												$.App.alert('danger','通讯失败！请重试！');
+												return false;
+											}
+			                        	});
+			                        }
+			                   },
+			                    "取消": {
+			                        className: "btn-danger",
+			                        callback: function () { }
+			                    }
+		                	}
+		            	});
+					},
+					error:function(xhr){
+						$.App.alert('danger','通讯失败！请重试！');
+					}
+			});
+		return false;
+	});
+	
+	//订单发货
+	var btndeliver=$('.orderdeliver');
+	$(btndeliver).on('click',function(){
+		var id=$(this).data('id');
+		$.ajax({
+			type:"post",
+			url:"{:U('Admin/Score/orderDeliver')}",
+			async:false,
+			data:{'id':id},
+			success:function(info){
+			    if(info['status']){
+			           $.App.alert('success',info['msg']);
+			           $('#App-reloader').trigger('click');
+			    }else{
+			           $.App.alert('danger',info['msg']);
+			         }
+			         return false;
+			   },
+			error:function(xhr){
+				$.App.alert('danger','通讯失败！请重试！');
+				return false;
+			}
+		});
+	});
+		
+	//订单完成
+	var btnsuccess=$('.ordersuccess');
+	$(btnsuccess).on('click',function(){
+		var id=$(this).data('id');
+		$.ajax({
+			type:"post",
+			url:"{:U('Admin/Score/ordersuccess')}",
+			async:false,
+			data:{'id':id},
+			success:function(info){
+			    if(info['status']){
+			           $.App.alert('success',info['msg']);
+			           $('#App-reloader').trigger('click');
+			    }else{
+			           $.App.alert('danger',info['msg']);
+			         }
+			         return false;
+			   },
+			error:function(xhr){
+				$.App.alert('danger','通讯失败！请重试！');
+				return false;
+			}
+		});
+	});
+</script>	

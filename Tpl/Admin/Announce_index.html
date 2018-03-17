@@ -1,0 +1,137 @@
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <div class="widget">
+            <div class="widget-header bg-blue">
+                <i class="widget-icon fa fa-arrow-down"></i>
+                <span class="widget-caption">公告管理</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body">
+             <div class="table-toolbar">
+                    <a href="{:U('Admin/Announce/add')}" class="btn btn-primary" data-loader="App-loader" data-loadername="设置分组">
+                        <i class="fa fa-plus"></i>新增公告
+                    </a>
+                    <div class="pull-right">
+                        <form id="App-search">
+                            <label style="margin-bottom: 0px;">
+                                <input name="name" type="search" class="form-control input-sm" placeholder="请输入公告标题" value="{$name}">
+                            </label>
+                            <a href="{:U('Admin/Announce/index/')}" class="btn btn-success" data-loader="App-loader" data-loadername="公告列表" data-search="App-search">
+                                <i class="fa fa-search"></i>搜索
+                            </a>
+                        </form>
+                    </div>
+                </div>
+                <table id="App-table" class="table table-bordered table-hover">
+                    <thead class="bordered-darkorange">
+                        <tr role="row">
+                            <th width="20px">
+                                <div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+                                    <label style="padding-left: 4px;">
+                                        <input type="checkbox" class="App-checkall colored-blue">
+                                        <span class="text"></span>
+                                    </label>
+                                </div>
+                            </th>
+                            <th width="80px">ID</th>
+                            <th width="80px">标题</th>
+                            <th width="80px">是否外链</th>
+                            <th width="100px">链接</th>
+                            <th width="100px">时间</th>
+                            <th width="100px">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <volist name="announce" id="announce">
+                            <tr id="item{$vo.id}">
+                                <td>
+                                    <div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+                                        <label style="padding-left: 4px;">
+                                            <input name="checkvalue" type="checkbox" class="colored-blue App-check" value="{$vo.id}">
+                                            <span class="text"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    {$announce.id}
+                                </td>
+                                <td>
+                                    {$announce.title}
+                                </td>
+                                <td>
+                                    <eq name="announce.islink" value="1">是<else/>否</eq>
+                                </td>
+                                <td>
+                                    <div class="btn-group" style="margin: 0px">
+                                        <button class="btn btn-primary-outline dropdown-toggle" data-toggle="dropdown">
+                                            链接<span class="caret"></span></button>
+                                        <div class="dropdown-menu" style="padding: 10px;max-width: none;">
+                                            <eq name="announce.islink" value="1">{$announce.url}<else />{$url}{:U('App/Announce/index' , array('id'=>$announce['id']))}</eq>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {$announce.time|date="Y-m-d H:i:s",###}
+                                </td>
+                                <td>
+                                    <style type="text/css">
+                                        .action-buttons > a {
+                                            margin-left: 5px;
+                                        }
+                                    </style>
+                                    <div class="action-buttons" style="cursor: pointer;">
+                                        <a class="table-actions" data-loader="App-loader" data-loadername="公告管理" href="{:U('Admin/Announce/add',array('id' => $announce['id']))}">修改</a>
+                                        <a class="table-actions" data-loader="App-loader" data-loadername="公告管理" data-type="del" data-ajax="{:U('Admin/Announce/del',array('id' => $announce['id']))}">删除</a>
+                                    </div>
+                                </td>
+
+                            </tr>
+                        </volist>
+                    </tbody>
+                </table>
+                <div class="row DTTTFooter">
+                    {$page}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+setBread($('#tmpbread').html());
+</script>
+
+<!--/面包屑导航封装-->
+<!--全选特效封装/全部删除-->
+<script type="text/javascript">
+//全选
+var checkall = $('#App-table .App-checkall');
+var checks = $('#App-table .App-check');
+var trs = $('#App-table tbody tr');
+$(checkall).on('click', function() {
+    if ($(this).is(":checked")) {
+        $(checks).prop("checked", "checked");
+    } else {
+        $(checks).removeAttr("checked");
+    }
+});
+$(trs).on('click', function() {
+    var c = $(this).find("input[type=checkbox]");
+    if ($(c).is(":checked")) {
+        $(c).removeAttr("checked");
+    } else {
+        $(c).prop("checked", "checked");
+    }
+});
+</script>

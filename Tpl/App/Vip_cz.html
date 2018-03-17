@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>充值-{$_SESSION['WAP']['shopset']['name']}</title>
+		<meta charset="utf-8" />
+		<!--页面优化-->
+		<meta name="MobileOptimized" content="320">
+		<!--默认宽度320-->
+		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<!--viewport 等比 不缩放-->
+		<meta http-equiv="cleartype" content="on">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!--删除苹果菜单-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<!--默认颜色-->
+		<meta name="apple-mobile-web-app-title" content="yes">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<!--加载全部后 显示-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--不识别电话-->
+		<meta content="email=no" name="format-detection" />
+		<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css">
+		<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+		<link rel="stylesheet" href="__PUBLIC__/App/css/style.css">
+		<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+		<script src="__PUBLIC__/App/js/jquery-weui.min.js"></script>		
+	</head>
+	<body>
+		<section class="mui-inner-wrap" id="Vip_cz">
+			<div class="mui-content" id="Vip_cztab">
+				<section class="cz-ul">
+					<p class="zx">充值金额(元)</p>
+					<input type="text" placeholder="请输入充值金额" class="cz-ipt" id="money" />
+				</section>
+				<section class="cz-ul" id="Vip_czway">
+					<p>支付方式</p>
+					<ul class="zfpaynav">
+						<input type="hidden" id="zxtype" value="2">
+						<!--<li class="" type="1"><em class="active"></em><span class="icon iconfont icon-weixin"></span>支付宝</li>-->
+						<li class="" type="2"><em class="active"></em><span class="icon iconfont icon-weixin"></span>微信</li>
+					</ul>
+					<p>
+						<button type="button" class="fr ads-btn" id="surebtn" style="font-size:14px;">立即充值</button>
+					</p>
+				</section>
+			</div>
+			<include file="./Tpl/App/Shop_footer.html" />
+		</section>
+		<script type="text/javascript">
+			//在线充值
+			$('#zx').click(function() {
+				$('.czk').hide();
+				$('.zx').show();
+			});
+			//提交
+			$('.ads-btn').click(function() {
+				//在线充值
+				var zxtype = $('#zxtype').val();
+				var money = $('#money').val();
+				var num = "{$num}";
+				var goodsid = "{$goodsid}";
+				if(money == '') {
+					$.toptip('请输入充值金额！', 'error');
+					return;
+				}
+				if(!(/(^[1-9]\d*$)/.test(money))) {　
+					$.toptip('充值金额必须是正整数！', 'error');　　　　　　　
+					return;　　　　
+				}
+				if(zxtype == '') {
+					$.toptip('请选择在线付款方式！', 'error');
+					return;
+				} else {
+					var tourl = "{:U('App/Vip/zxczSet')}/type/" + zxtype + "/money/" + money;
+					if(num&&goodsid){
+						tourl = tourl + "/num/" + num + "/goodsid/" + goodsid;
+					}
+					location.href = tourl;
+				}
+			});
+
+			//充值方式选择
+			$(".zfpaynav li").click(function() {
+				console.log($(this).attr('type'));
+				$('#zxtype').val($(this).attr('type'));
+				$('.zfpaynav li em').addClass("active");
+				$(this).siblings().find('em').removeClass('active');
+			});
+		</script>
+	</body>
+
+</html>

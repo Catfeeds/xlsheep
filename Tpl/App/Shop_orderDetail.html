@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<title>订单详情</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+</head>
+<body>
+<div class="wrap">
+	<div class="bd">
+		<div class="weui_cells fz_14 mg_0 pay_msg_list">
+			    <a href="{:U('App/Shop/orderList')}" 
+			    class="weui_btn weui_btn_mini weui_btn_default" style=" margin: 10px;border: 1px solid #d9d9d9;">返回列表</a>
+			<div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p class="fz_20">订单信息</p>
+                </div>
+                <div class="weui_cell_ft"></div>
+            </div>
+            <div class="">
+				<div class="weui_cells_title color_0">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p class="">订单状态:<i class="color_red">
+	                    	<switch name="cache.status">
+								<case value="0">已取消</case>
+								<case value="1">待付款</case>
+								<case value="2">待发货</case>
+								<case value="3">待收货</case>
+								<case value="4">退货中</case>
+								<case value="8">退款中</case>
+								<case value="5">已完成-{$cache.etime|date="Y/m/d",###}</case>
+								<case value="6">已关闭-{$cache.closetime|date="Y/m/d",###}</case>
+							</switch>
+	                    </i></p>
+	                </div>
+	            </div>
+				<div class="weui_cells_title color_0">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p class="">实付总额:<i class="">{$cache.payprice}</i>元</p>
+	                </div>
+	            </div>
+				<div class="weui_cells_title color_0">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p class="">订单编号:<i>{$cache.oid}</i></p>
+	                </div>
+	                
+	            </div>
+				<div class="weui_cells_title color_0">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p class="">创建时间:<i>{$cache.ctime|date="Y/m/d H:i:s",###}</i></p>
+	                </div>
+	                
+	            </div>
+				<div class="weui_cells_title color_0">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p class="">收件人:<i>{$cache.vipname}</i></p>
+	                </div>
+	                
+	            </div>
+				<div class="weui_cells_title color_0">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p class="">联系方式:<i>{$cache.vipmobile}</i></p>
+	                </div>
+	                
+	            </div>
+				<div class="weui_cells_title color_0">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p class="">收货地址:<i><eq name="cache.delivery" value="since">【自提点】</eq>{$cache.vipaddress}</i></p>
+	                </div>
+	                
+	            </div>
+				<div class="weui_cells_title color_0">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p class="">邮费:<i></i>{$cache.yf}元</p>
+	                </div>
+	                
+	            </div>
+				<div class="weui_cells_title color_0">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p class="">代金卷:<i><notempty name='djq'>{$djq.money}元代金卷<else/>未使用</notempty></i></p>
+	                </div>
+
+	            </div>
+				<div class="weui_cells_title color_0">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p class="">备注:<i>{$cache.msg}</i></p>
+	                </div>
+	                
+	            </div>
+            </div>
+		</div>
+		<div class="weui_cells progress_btn">
+			<a class="weui_cell weui_cell_access" href="javascript:;">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p class="fz_16 color_6">订单进度</p>
+                </div>
+                <div class="weui_cell_ft">
+                </div>
+            </a>
+		</div>
+		<div class="progress_wp" style="display:block">
+			<div class="weui_cells mg_0 fz_14">
+				<div class="weui_cell">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p>{$cache.ctime|date="Y/m/d H:i",###} 订单生成</p>
+	                </div>
+	                <div class="weui_cell_ft"></div>
+	            </div>
+	        </div> 
+	        <eq name="cache.status" value="0">
+	        <div class="weui_cells mg_0 fz_14">
+				<div class="weui_cell">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p>订单已取消，不再跟踪状态。</p>
+	                </div>
+	                <div class="weui_cell_ft"></div>
+	            </div>
+	        </div>
+			</eq>
+	        <foreach name="log" item="vo">
+			<div class="weui_cells mg_0 fz_14">
+				<div class="weui_cell">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p>{$vo.ctime|date="Y/m/d H:i",###} {$vo.msg}</p>
+	                </div>
+	                <div class="weui_cell_ft"></div>
+	            </div>
+	        </div> 
+	        </foreach>  
+		</div>
+		<notempty name="cache.fahuokd">
+		<div class="weui_cells progress_btn">
+			<a class="weui_cell weui_cell_access" href="javascript:;">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p class="fz_16 color_6">发货物流</p>
+                </div>
+                <div class="weui_cell_ft">
+                </div>
+            </a>
+		</div>
+	   <div class="weui_cells mg_0 fz_14">
+			<div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>快递公司：{$cache.fahuokd}</p>
+					<p>快递单号：{$cache.fahuokdnum}</p>
+                </div>
+                <div class="weui_cell_ft"></div>
+            </div>
+        </div>
+        </notempty>
+		<div class="wait_list">
+			<div class="weui_cells">
+				<div class="weui_cell">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p>商品明细</p>
+	                </div>
+	            </div>
+	            <div class="weui_cells mg_0">
+	            <volist name="cache.items" id="vt">
+		            <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg bz_wrap">
+	                    <div class="weui_media_hd">
+	                        <img class="weui_media_appmsg_thumb" src="{$vt.pic}" alt="">
+	                    </div>
+	                    <div class="weui_media_bd fz_14">
+	                        <p>{$vt.name}</p>
+	                        <notempty name="vt.skuattr">
+							<p >{$vt.skuattr}</p>
+							</notempty>
+	                    </div>
+	                    <div class="">
+                            <p><i class="color_red">￥{$vt.price}</i></p>
+                            <p class="text_r fonts85">X{$vt.num}</p>
+                        </div>
+	                </a>
+	                </volist>
+                </div>
+
+                <div class="weui_cell fz_14">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <p>共<i>{$cache.totalnum}</i>件商品</p>
+	                </div>
+	                <div class="weui_cell_ft">实付：￥<i class="color_red">{$cache.payprice}</i></div>
+	            </div>
+	            <eq name='cache.status' value='1'>
+	            <div class="ads_lst border_t1 border_b1 ovf_leftw mr_b back2 mg_0">
+           			<p class="ads_tt weui_panel_hd border_b1">支付方式</p>
+      					<div class="ads_pay pd_10 fz_14 ovf_leftw ads_border_dashed" data-paytype="money" data-disable="0">
+      						<div class="weui_cells_checkbox">
+      				            <label class="weui_cell weui_check_label" for="s11">
+      				                <div class="weui_cell_hd">
+      				                    <input type="radio" class="weui_check" name="radio" id="s11">
+      				                    <i class="weui_icon_checked"></i>
+      				                </div>
+      				                <div class="weui_cell_bd weui_cell_primary">
+      									<div class="ads_orimg f_left dtl_mar1">
+      										<img class="img" src="__PUBLIC__/App/images/tue.jpg">
+      									</div>
+      									<p class="ads_pay_p1 ads_pay_lineh1">余额：<i id="money" class="color_red" data_money="{$_SESSION['WAP']['vip']['money']}">￥{$_SESSION['WAP']['vip']['money']}</i></p>
+      									<p class="ads_pay_p2 ads_pay_lineh1 color10 ads_font_size2">余额不足由其他方式支付</p>
+      				                </div>
+      				            </label>
+      				        </div>
+      					</div>	
+      					<div class="ads_pay pd_10 fz_14 ovf_leftw" data-paytype="wxpay" data-disable="0">
+      						<div class="weui_cells_checkbox">
+      				            <label class="weui_cell weui_check_label" for="s12">
+      				                <div class="weui_cell_hd">
+      				                    <input type="radio" class="weui_check" name="radio" id="s12">
+      				                    <i class="weui_icon_checked"></i>
+      				                </div>
+      				                <div class="weui_cell_bd weui_cell_primary">
+      				                   	<div class="ads_orimg f_left dtl_mar1">
+      										<img class="img" src="__PUBLIC__/App/images/wxpay.jpg">
+      									</div>
+      									<p class="ads_pay_lineh">微信安全支付</p>
+      				                </div>
+      				            </label>
+      				        </div>
+      					</div>
+           		</div>
+           		</eq>
+    			<div class="weui_cell ">
+                    <div class="weui_cell_bd weui_cell_primary fz_14">
+                    </div>
+                    <div class="weui_cell_ft">
+                    	<a href="{:U('App/Shop/orderList')}" 
+                    	class="weui_btn weui_btn_mini weui_btn_default" 
+                    	style=" border: 1px solid #d9d9d9;">返回列表</a>
+                    	<eq name="cache.status" value='1'>
+                    	<a href="{:U('App/Shop/orderCancel',array('sid'=>0,'orderid'=>$cache['id']))}" class="weui_btn weui_btn_mini weui_btn_default">取消订单</a>						
+						<a href="javascript:;" id="paybtn" data-paytype="{$cache.paytype}" class="weui_btn weui_btn_mini weui_btn_warn">立即付款</a>
+						</eq>
+                    </div>
+                </div>
+			</div>				
+		</div>        
+	</div>
+</div>
+</body>
+<script>
+	$('.progress_btn').click(function() {
+		$('.progress_wp').animate({"height":'toggle',"opacity": 'toggle'}, "fadeIn");
+	})
+</script>
+<!--未支付时的支付方式-->
+<eq name='cache.status' value='1'>
+	<script type="text/javascript">
+		var nowtype="{$cache.paytype}";
+		var paybtn=$('#paybtn');
+		var oid="{$cache.oid}";
+		$('.ads_pay').click(function(){
+			var isdis=$(this).data('disable');
+			if(isdis==0){
+				$(paybtn).data('paytype',$(this).data('paytype'));
+			}else{
+				alert('您的余额不足，请使用其它方式！');
+			}				
+		});
+		$(paybtn).on('click',function(){
+			var pt=$(paybtn).data('paytype');
+			var tourl="{:U('App/Shop/pay',array('sid'=>0,'price'=>$cache['payprice'],'orderid'=>$cache['id']))}"+'/type/'+pt;
+			window.location.href=tourl;
+		});
+	</script>
+</eq>
+</html>

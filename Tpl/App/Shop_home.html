@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>农牧源商城</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/swiper.min.css">
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/swiper.min.css">
+	<style type="text/css">
+	.allgoods_list .goods .goods_msg .weui_media_desc {
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    display: -webkit-box;
+	    -webkit-box-orient: vertical;
+	    -webkit-line-clamp: 2;
+	    max-height: 38px;
+	    white-space: normal;
+	    word-wrap: break-word;
+	}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd live_store">
+			<div class="banner">
+				<div class="swiper-container">
+				  <div class="swiper-wrapper">
+					<adv pid ="2" limit="5" item="v">
+			            <div class="swiper-slide">
+						<a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if> >
+			              	<img src="{$v[imgurl]}" title="{$v[title]}"width="100%" style="{$v[style]}"/>
+			             </a>
+				    	</div>
+			        </adv>	
+				  </div>
+				   <div class="swiper-pagination"></div>
+				</div>
+			</div>
+			<div class="weui_cells mg_0">
+				<ul class="index_icon_list bd_ul">
+		 				<li class="">
+					    	<a href="{:U('App/Shop/category')}">
+								<img src="__PUBLIC__/App/images/icon1.png" alt="">
+								<p class="color_org">同城配送</p>
+							</a>
+					    </li>
+					    <li class="">
+					    	<a href="{:U('App/Activity/actlist')}">
+								<img src="__PUBLIC__/App/images/icon2.png" alt="">
+								<p class="color_org">拼团促销</p>
+							</a>
+					    </li>
+					    <li class="">
+					    	<a href="{:U('App/Activity/barlist')}">
+								<img src="__PUBLIC__/App/images/icon3.png" alt="">
+								<p class="color_org">砍价活动</p>
+							</a>
+					    </li>
+					    <li class="">
+					    	<a href="{:U('App/Scoreshop/index')}">
+								<img src="__PUBLIC__/App/images/icon4.png" alt="">
+								<p class="color_org">积分商城</p>
+							</a>
+					    </li>
+			    </ul>
+			</div>
+			<div class="weui_cells mg_0">
+				<p class="line_bg title_hot">新品推荐</p>
+				<div class="banner">
+					<div class="swiper-container">
+					  <div class="swiper-wrapper">
+						<adv pid ="3" limit="5" item="v">
+				                 <div class="swiper-slide">
+							<a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if> >
+				              	<img src="{$v[imgurl]}" title="{$v[title]}"width="100%" style="{$v[style]}"/>
+				             </a>
+					    </div>
+				        </adv>	
+					  </div>
+					   <div class="swiper-pagination"></div>
+					</div>
+					<img class="hot_title_icon img" src="__PUBLIC__/App/images/hot01_icon.png" alt="">				
+				</div>
+			</div>
+			<div class="weui_cells">
+				<div class="banner">
+					<div class="swiper-container">
+					  <div class="swiper-wrapper">
+						<adv pid ="4" limit="5" item="v">
+				                 <div class="swiper-slide">
+							<a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if> >
+				              	<img src="{$v[imgurl]}" title="{$v[title]}"width="100%" style="{$v[style]}"/>
+				             </a>
+					    </div>
+				        </adv>	
+					  </div>
+					   <div class="swiper-pagination"></div>
+					</div>
+					<img class="hot_title_icon img" src="__PUBLIC__/App/images/hot02_icon.png" alt="">
+				</div>
+			</div>
+			<div class="weui_cells allgoods_list">
+				<p class="line_bg title_hot">优选商品</p>
+				<div class="goods_list01_bd bd_ul flex_wp">
+				<volist name="cache" id="vo">
+					<div class="goods">
+						<a href="{:U('App/Shop/goods',array('id'=>$vo['id']))}">
+							<img src="{$vo.imgurl}" class="goods_img">
+						</a>
+						<div class="goods_msg">
+							<p>{$vo.name}</p>
+							<!-- <p class="fz_12 color_9 weui_media_desc">{$vo.summary|msubstr=0,10}</p> -->
+							<div class="c_float mg_t10 weui_media_box pd_0 bd_ul">
+								<div class="f_left">
+									<p class="color_org">{$vo.price}元/{$vo.unit}</p>
+									<p class="old_price">正价：{$vo.oprice}元</p>
+								</div>
+								<div class="f_right">
+									<a href="{:U('App/Shop/goods',array('id'=>$vo['id']))}" class="add_icon"><img src="__PUBLIC__/App/images/add_icon.png" alt=""></a>
+								</div>
+							</div>
+						</div>
+					</div>
+					</volist>
+				</div>
+				<div class="video_online">
+					<p class="line_bg title_hot">好产品 上农牧源商城</p>
+					<div class="banner">
+					<div class="swiper-container">
+					  <div class="swiper-wrapper">
+						<adv pid ="6" limit="5" item="v">
+			                 <div class="swiper-slide">
+							<a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if> >
+			              	<img src="{$v[imgurl]}" title="{$v[title]}"width="100%" style="{$v[style]}"/>
+				             </a>
+					    </div>
+				        </adv>	
+				        </div>
+				        <div class="swiper-pagination"></div>
+				        </div>
+						<p class="for_real">实景拍摄</p>
+					</div>
+					<ul class="index_icon_list bd_ul">
+					    <li class="org_btn weui_btn" onclick="window.location.href='{:U('App/Shop/category')}'">
+							<img src="__PUBLIC__/App/images/ic010.png" alt="">
+							<p class="color_org">产品在线购</p>
+					    </li>
+					    <li class="org_btn weui_btn" onclick="window.location.href='{:U('App/Video/lists')}'">
+							<img src="__PUBLIC__/App/images/ic011.png" alt="">
+							<p class="color_org">农场在线看</p>
+					    </li>
+					    <li class="org_btn weui_btn" onclick="window.location.href='{:U('App/Buy/orderList')}'">
+							<img src="__PUBLIC__/App/images/ic012.png" alt="">
+							<p class="color_org">参与创业收益</p>
+					    </li>
+				    </ul>
+				</div>
+			</div>
+			
+			<!-- 
+			<a class="float_car" href="{:U('App/Shop/basket',array('sid'=>0,'lasturl'=>$footlasturl))}">
+				<i class="iconfont icon-gouwuche fz_25"></i>
+			</a>
+			 -->
+			
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+	<script src="__PUBLIC__/App/js/swiper.min.js"></script>
+	<script>
+		var mySwiper = new Swiper('.swiper-container', {
+			autoplay: 5000,//可选选项，自动滑动
+			pagination : '.swiper-pagination',
+		})
+	</script>
+
+
+
+</body>
+</html>

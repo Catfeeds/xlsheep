@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/base.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/frozen.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css?v=201707262245"/>
+<script type="text/javascript"  src="__PUBLIC__/App/js/rem.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/global.js"></script>
+<title>支付</title>
+<style>
+.way{ background-color: #fff; width: 100%;float: left;}
+.way li{width: 50%;text-align: center;float: left;padding: 15px 0;}
+.on{border-bottom: 1px solid #2abf4d}
+.no{border-bottom: 1px solid #ccc}
+.weui-select{width:30%;}
+.since li{padding: 15px;background-color: #fff;border: 1px solid #fff;}
+#sinceon{border:1px solid #2abf4d;}
+.since{border-top: 1px dashed #ccc;margin-top: 15px;padding-top: 5px;background: #fff;}
+.sincediv{width: 100%;display: flex;display: -webkit-flex; }
+.sincediv select{width:33.33%;margin: 0 5px;border: 1px solid #dcdcdc;padding: 3px 8px;border-radius: 5px;border: 1px solid #dcdcdc;}
+.search_pickup{margin-top: 20px;font-size: 14px;width: 40%;height: 30px;line-height: 25px;}
+</style>
+</head>
+<body>
+<form action="" method="post" id="orderform">
+<input type="hidden" name="paytype" value="money" id="paytype">
+<input type="hidden" name="vipid" value="{$_SESSION['WAP']['vip']['id']}">
+<input type="hidden" name="vipopenid" value="{$_SESSION['WAP']['vip']['openid']}">
+<input type="hidden" name="vipname" value="{$_SESSION['WAP']['vip']['nickname']}">
+<input type="hidden" name="vipmobile" value="{$_SESSION['WAP']['vip']['mobile']}">
+<input type="hidden" name="totalnum" id="totalnum" value="{$totalnum}">
+<input type="hidden" name="totalprice" id="totalprice" value="{$totalprice}">
+<input type="hidden" name="tcid" id="tcid" value="{$tcid}">
+<input type="hidden" name="goodsid" value="{$cache.id}">
+<input type="hidden" name="name" id="name" value="{$vipaddress.name}">
+<input type="hidden" name="mobile" id="mobile" value="{$vipaddress.mobile}">
+<input type="hidden" name="address" id="address" value="{$vipaddress.id}">
+<input type="hidden" name="goods-price" id="goods-price" value="{$cache.price}">
+<input type="hidden" name="money" id="money" value="{$_SESSION['WAP']['vip']['money']}">
+<input type="hidden" name="delivery" id="delivery" value="<if condition="$isaddress eq 1 and $fahuo eq 2">since<else/>express</if>">
+<input type="hidden" name="sinceid" id="sinceid" value="0">
+<div class="wrap">
+	<div class="bd">
+
+		<eq name='isaddress' value='1'>
+			<div class="weui_cells_title">
+				<eq name='fahuo' value='3'>
+					请选择收货方式：
+				<else/>
+					<eq name='fahuo' value='2'>
+						请选择自提地点：
+					<else/>
+						请选择快递地点：
+					</eq>
+				</eq>
+			</div>
+			<div style="width: 100%;">
+		        <ul class="way" style=" padding-bottom: 15px;">
+					<eq name='fahuo' value='3'>
+						<li class="on kuaidi">快递</li><li class="no ziti">自提</li>
+					</eq>
+		        </ul>
+		    </div>
+			<neq name='fahuo' value='2'>
+				<div id='express'>
+					<eq name='isaddress' value='1'>
+						<div class="weui_cell" style='background-color: #fff;padding-top: 0;'>
+							<a href="#" class="ads-chs" id="changeaddress" style="padding: 0;width: 100%">
+								<empty name="vipaddress">
+									请选择收货地址<i class="iconfont fl_r fz14">&#xe6a3</i>
+									<else/>
+									<div class="clearfix">
+										<span class="left">收件人：{$vipaddress.name}</span>
+										<span class="right">
+											{$vipaddress.mobile}
+										</span>
+									</div>
+									<div class="ct-address">
+										</i>收货地址：{$vipaddress.address}
+									</div>
+								</empty>
+							</a>
+						</div>
+					</eq>
+				</div>
+			</neq>
+			<div id='since' class="ct-a bgf" <neq name='fahuo' value='2'>style="display: none"</neq> >
+				<div class="sincediv">
+			          <select class="weui-select location" name="province" id="province" onChange="get_city(this)">
+			             	<option value="0">省份</option>
+		                     <volist name="province" id="p">
+		                     <option value="{$p.id}">{$p.name}</option>
+		                     </volist>
+			          </select>
+			          <select class="weui-select location" name="city" id="city" onChange="get_area(this)">
+			          		<option value="0">城市</option>
+			          </select>
+			          <select class="weui-select location" name="district" id="district">
+			             	<option value="0">地区</option>
+			          </select>
+		          </div>
+		          <a href="javascript:;" class="weui_btn weui_btn_plain_primary search_pickup" id="search_pickup" style="top:0px">自提店查询</a>
+	     		  <ul class="since"></ul>
+			</div>
+
+		</eq>
+		<div class="weui_cells">
+	         <div class="weui_cell">
+	            <div class="weui_cell_hd"><label class="weui_label" style="padding-top: 2px;width: 45px">备注</label></div>
+	            <div class="weui_cell_bd weui_cell_primary">
+	            	<input id="message" name="message"  class="weui_input" type="text" placeholder="如有备注请填写">
+	            </div>
+	        </div>
+		</div>
+		<div class="weui_cells mg_0">
+			<div class="weui_cell">
+				<neq name='isaddress' value='1'>
+					<div class="weui_cell_bd weui_cell_primary">
+						<p>支付金额: <i>{$totalprice}元</i></p>
+					</div>
+				<else/>
+					<div class="weui_cell_bd weui_cell_primary" id='ziti' <neq name='fahuo' value='2'>style="display: none"</neq>>
+						<p>支付金额: <i>{$totalprice}元</i></p>
+					</div>
+					<div class="weui_cell_bd weui_cell_primary" id='kuaidi' <eq name='fahuo' value='2'>style="display: none"</eq>>
+						<p>商品金额: <i>{$totalprice}元</i></p>
+						<p>邮费: <i>{$postage}元</i></p>
+						<p>支付金额: <i>{$totalprice+$postage}元</i></p>
+					</div>
+				</neq>
+	          	<div class="weui_cell_ft"></div>
+	        </div>
+		</div>
+		<div class="weui_cells_title">请选择付款方式：<a href="{:U('App/Artical/index',array('id'=>5))}" style='color:#888;cursor: pointer;font-size: 18px;color: #f00;'>(余额说明)</a></div>
+		<div class="weui_cells weui_cells_radio">
+	        <label class="weui_cell weui_check_label" for="x11">
+	          <div class="weui_cell_bd weui_cell_primary">
+	            <div class="weui_cell pd_0">
+                  	<div class="weui_cell_hd" style="margin-right:10px;"><img src="__PUBLIC__/App/images/icons07.png" alt="" width="20"></div>
+                  	<div class="weui_cell_bd weui_cell_primary">
+                   	 	<p>余额支付（<i>￥{$_SESSION['WAP']['vip']['money']}</i>）</p>
+                  	</div>
+                  	<div class="weui_cell_ft"></div>
+                </div>
+	          </div>
+	          <div class="weui_cell_ft">
+	            <input type="radio" class="weui_check" name="radio1" id="x11" data-paytype="money" data-disable="{$isyue}" <eq name='isyue' value='0'>checked="checked"</eq>>
+	            <span class="weui_icon_checked"></span>
+	          </div>
+	        </label>
+
+
+	        <eq name='iswx' value='3'>
+				<!-- 1修改为3 关闭微信支付 2017年11月15日17:57:12 小石头 -->
+	        	<label class="weui_cell weui_check_label" for="x12">
+		          <div class="weui_cell_bd weui_cell_primary">
+		            <div class="weui_cell pd_0">
+	                  	<div class="weui_cell_hd" style="margin-right:10px;"><img src="__PUBLIC__/App/images/wexin.png" alt="" width="20"></div>
+	                  	<div class="weui_cell_bd weui_cell_primary">
+	                   	 	<p>微信支付</p>
+	                  	</div>
+	                  	<div class="weui_cell_ft"></div>
+	                </div>
+		          </div>
+		          <div class="weui_cell_ft">
+		            <input type="radio" class="weui_check" name="radio1" id="x12" data-paytype = "wxpay" data-disable="0">
+		            <span class="weui_icon_checked"></span>
+		          </div>
+		        </label>
+	        </eq>
+
+
+	        <div class="weui_cell" id="pay_pwd" <eq name='isyue' value='1'>style="display:none"</eq>>
+                <div class="weui_cell_hd"><label class="weui_label">支付密码</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                  <input class="weui_input password" type="tel" style="-webkit-text-security:disc" id="pay_password" placeholder="<notempty name='ispassword'>请输入6位数字支付密码！<else/>请输入6位数作为您的支付密码</notempty>">
+                </div>
+            </div>
+        </div>
+        <div class="weui_btn_area">
+            <a class="weui_btn weui_btn_primary fz_16" href="javascript:" id="orderconfirm">立即支付</a>
+            <a class="weui_btn weui_btn_primary fz_16" href="{:U('App/Vip/cz')}" id="cz">余额充值</a>
+        </div>
+	</div>
+</div>
+</form>
+ <script src="__PUBLIC__/App/js/fastclick.js"></script>
+ <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+ <script type="text/javascript">
+ $(function() {
+	  FastClick.attach(document.body);
+ });
+</script>
+<script type="text/javascript">
+wx.config({
+	debug: false,
+	appId: "{$jsapi['appId']}",
+	timestamp: "{$jsapi['timestamp']}",
+	nonceStr: "{$jsapi['nonceStr']}",
+	signature: "{$jsapi['signature']}",
+	jsApiList: [
+	'getLocation'
+	]
+});
+var lasturlencode="{$lasturlencode}";
+$('#changeaddress').on('click',function(){
+	var tourl="{:U('App/Buy/orderAddress',array('lasturl'=>$orderurl))}";
+	window.location.href=tourl;
+});
+var paytype=$('#paytype');
+$('.weui_check').change(function(){
+	var isdis=$(this).data('disable');
+	if(isdis==0){
+		if($(this).data('paytype')=='money') {
+			$('#pay_pwd').show();
+			$('#cz').show();
+		} else {
+			$('#pay_pwd').hide();
+			$('#cz').hide();
+		}
+		$(paytype).val($(this).data('paytype'));
+	}else{
+		$('.weui_check').removeAttr("checked");
+		$.toptip('余额不足！', 'error');
+	}
+});
+var okfun=function(){$('#orderform').submit();}
+$('#orderconfirm').on('click',function(){
+	if(!$('#paytype').val()){
+		$.toptip('请选择支付方式！', 'error');
+		return false;
+	}
+	var address = '{$isaddress}';
+	if(address==1 && $('#delivery').val()=='express'){
+		if($('#address').val()==''){
+			$.toptip('请选择地址', 'error');
+			return false;
+		}
+	}
+	if($('#delivery').val()=='since'){
+		if($('#sinceid').val()==0){
+			$.toptip('请选择自提点', 'error');
+			return false;
+		}
+	}
+	if($('#paytype').val()=='money') {
+		var isdis=$('.weui_check').data('disable');
+		if(isdis==0){
+			var pay_password = $('#pay_password').val()
+			if(pay_password=='' || pay_password.length!=6){
+				$.toptip('请输入6位数字支付密码！', 'error');
+				return false;
+			}
+			$.ajax({
+				type:'post',
+				data:{'password':pay_password},
+				url:"{:U('App/Shop/checkPayPassword')}",
+				dataType:'json',
+				async:false,
+				success:function(e){
+					if (e.status==1) {
+						okfun();
+					} else {
+						if(e.nopwd==1) {
+							$.confirm(e.info, function() {
+								window.location.href=e.url;
+							}, function() {
+								return false;
+							});
+						} else {
+							$.toptip(e.info, 'error');
+							return false;
+						}
+					}
+				},
+				error:function(){
+				    $.toptip('通讯失败！', 'error');
+					return false;
+				}
+			});
+		}else{
+			$('.weui_check').removeAttr("checked");
+			$.toptip('余额不足！', 'error');
+		}
+	}else{
+		var set = "{$iswx}";
+		if(set==1){
+			okfun();
+		}else{
+			return false;
+		}
+	}
+});
+$('.ziti').on('click',function(){
+	$('.way li').attr('class','no');
+	$(this).attr('class','on');
+	$('#since').show();
+	$('#express').hide();
+	$('#delivery').val('since');
+	$('#address').val('');
+	$('#kuaidi').hide();
+	$('#ziti').show();
+	
+});
+$('.kuaidi').on('click',function(){
+	$('.way li').attr('class','no');
+	$(this).attr('class','on');
+	$('#express').show();
+	$('#since').hide();
+	$('#delivery').val('express');
+	$('#address').val('{$vipaddress.id}');
+	$('#ziti').hide();
+	$('#kuaidi').show();
+});
+$('#search_pickup').click(function(){
+	var province = $('#province').val();
+	var city = $('#city').val();
+	var district = $('#district').val();
+	if(province==0) {
+		$.toptip('请选择省份', 'error');
+		return false;
+	}
+	$.showLoading("加载自提点中...");
+	wx.getLocation({
+	    type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+	    success: function (res) {
+	        var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+	        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+	        var speed = res.speed; // 速度，以米/每秒计
+	        var accuracy = res.accuracy; // 位置精度
+	    	var goodsid = '{$cache.id}';
+	        $.ajax({
+				type: "post",
+				url: "{:U('App/Ajax/since')}",
+				data: {'latitude':latitude,'longitude':longitude,'goodsid':goodsid,'province':province,'city':city,'district':district},
+				dataType: "json",
+				success: function(data){
+					if(data.status==1) {
+		    		   if(data.info) {	    			   
+		                   $(".since").html(data.info);
+		    	   	   }           		   
+		    	   }
+					$.hideLoading();
+				}
+	        });
+	    }
+	});
+});
+$('.since').on('click','li',function(){
+	var sinli = $(this).index();
+	if(sinli == 0){
+		return false;
+	}
+	$('.since li').removeClass('active');
+	$(this).addClass('active');
+	var address = $(this).attr('data-address');
+	var sinceid = $(this).data('id');
+	$('#sinceid').val(sinceid);
+});
+</script>
+</body>
+</html>

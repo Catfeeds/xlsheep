@@ -1,0 +1,209 @@
+<!doctype html>
+<html>
+
+	<head>
+		<title>农牧源牧场-{$vipCoupon[title]}</title>
+		<meta charset="utf-8" />
+		<!--页面优化-->
+		<meta name="MobileOptimized" content="320">
+		<!--默认宽度320-->
+		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<!--viewport 等比 不缩放-->
+		<meta http-equiv="cleartype" content="on">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!--删除苹果菜单-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<!--默认颜色-->
+		<meta name="apple-mobile-web-app-title" content="yes">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<!--加载全部后 显示-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--不识别电话-->
+		<meta content="email=no" name="format-detection" />
+		<link href="__PUBLIC__/App/images/qiaonongge.ico" type="image/x-icon" rel="shortcut icon">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/style.css" />
+		<!--组件依赖js begin-->
+		<script src="/Public/App/js/zepto.min.js"></script>
+		<!--组件依赖js end-->
+		<script type="text/javascript" src="/Public/App/gmu/gmu.min.js"></script>
+		<script type="text/javascript" src="/Public/App/gmu/app-basegmu.js"></script>
+		
+	</head>
+
+	<body class="color6 Bg-green">
+		<section id="news-content">
+			<section class="tc logoimg"><img src="__PUBLIC__/App/images/logo.png" title="俏农哥" alt="俏农哥">
+			</section>
+			<form action="" method="post" id="orderform">
+				<section class="newsgift">
+					<p class="color3 fonts85">【{$vipCoupon[title]}】</p>
+					<?php 
+						$time = date('Y.m.d',$vipCoupon[create_time]); 
+						$e_time = date('Y.m.d',$vipCoupon[e_time]); 
+					?>
+					<p class="color2">可用时间：{$time}-{$e_time}</p>
+					<p class="color2">周一至周日全天</p>
+					<p class="color3 fonts85">【新人福利】</p>
+					<p class="color2">只需付10元邮费</p>
+					<p class="color2">即可免费领取</p>
+					<p class="color2">价值{$zporder[oprice]}元10枚装土鸡蛋一份</p>
+				</section>
+				<!-- 地址  -->
+				<div class="ads-hd border-b1 back2 ovflw">
+					<table class="Addressee" cellpadding="0" cellspacing="0" border="0" width="100%">
+						<tr>
+							<td width="25%" class="tr">收件人</td>
+							<td width="75%" class="tl"><input type="text" name="name" id="name" value="{$address.name}"></td>
+						</tr>
+						<tr>
+							<td class="tr">联系方式</td>
+							<td class="tl"><input type="text" name="mobile" id="mobile" value="{$address.mobile}"></td>
+						</tr>				
+						<tr>
+							<td class="tr">收货地址</td>
+							<td class="tl"><input type="text" name="address" id="address" value="{$address.address}"></td>
+						</tr>				
+					</table>
+					<input type="hidden" name="sid" id="sid" value="{$sid}">
+					<input type="hidden" name="paytype" value="<if condition="$isyue eq 0">money<else />wxpay</if>" id="paytype">
+					<input type="hidden" name="vipid" value="{$data.id}" id="ordervip">
+					<input type="hidden" name="vipopenid" value="{$_SESSION['WAP']['vip']['openid']}" id="vipopenid">
+					<input type="hidden" name="totalnum" value="{$totalnum}" id="totalnum">
+					<input type="hidden" name="totalprice" value="{$totalprice}" id="totalprice">
+					<input type="hidden" name="goodstype" value="{$goodstype}" id="goodstype">
+					<textarea name="items" style="display: none;" id="items">{$allitems}</textarea>
+				</div>
+				<!-- 商品明细  -->
+				<div class="ads-lst border-t1 border-b1 ovflw back2">
+					<p class="ads-tt border-b1">赠送商品明细</p>
+					<div class="ads_orinfo ads_padding3 ovflw border-b1">
+						<div class="ads_orinfol ovflw fl">
+							<div class="ads_or_img fl">
+								<!-- 图片大小为147*101 -->
+								<img src="{$apppic[imgurl]}"/>
+							</div>
+							<h3>农牧源牧场 {$zporder[name]}</h3>
+							<p class="color3 fonts2"></p>
+						</div>
+						<div class="ads_orprice ovflw">
+							<p><del>原价￥{$zporder[oprice]}</del></p>
+							<p class="ads_ornum fonts85"><em class="color3 fl">￥{$zporder[price]}</em>X1份</p>
+						</div>
+					</div>
+					<p class=" ads_ortt3 fonts85 ovflw"><span class="fr ">共1件商品&nbsp;&nbsp;&nbsp;&nbsp;商品：<del class="fonts18 color3 totalprice"> ￥{$zporder[oprice]}</del>&nbsp;&nbsp;&nbsp;&nbsp;邮费：<em class="fonts18 color3">￥<b>10</b></em></span></p>
+				</div>
+			<!-- 支付方式 -->
+			<div class="ads-lst border-t1 border-b1 ovflw back2">
+				<p class="ads-tt border-b1">支付方式</p>
+				<div class="ads_pay ovflw ads_border_dashed" data-paytype="money" data-disable="{$isyue}">
+					<span class="iconfont fl ads_pay_lineh dtl_mar1"<if condition="$isyue eq 0"> style="color:#ff3000;"</if>>&#xe6d4</span>
+					<div class="ads_orimg fl dtl_mar1">
+						<img src="/Public/App/img/tue.jpg" />
+					</div>
+					<p class="ads_pay_p1 ads_pay_lineh1">余额：<i id='money' data-money='{$data[money]}'>￥{$data[money]}</i></p>
+				</div>
+				<div class="ads_pay ovflw" data-paytype="wxpay" data-disable="0">
+					<span class="iconfont fl ads_pay_lineh dtl_mar1"<if condition="$isyue eq 1"> style="color:#ff3000;"</if>>&#xe656</span>
+					<div class="ads_orimg fl dtl_mar1">
+						<img src="/Public/App/img/wxpay.jpg" />
+					</div>
+					<p class="ads_pay_lineh">微信安全支付</p>
+				</div>
+			</div>
+			<div class="insert1"></div>
+			<div class="dtl-ft ovflw">
+				<div class=" fl dtl-icon dtl-bck ovflw">
+					<a href="#">
+						<i class="iconfont">&#xe679</i>
+					</a>
+				</div>
+				<a href="#" class="fr ads-btn fonts9 back3" id="orderconfirm">确认</a>
+				<span class="fr ads-sum"><em class="fonts9">商品:</em><em class="fonts1"><del class="totalprice">￥{$zporder[oprice]}</del></em>&nbsp;&nbsp;&nbsp;&nbsp;邮费:<em class="fonts18 color3">￥<b>10</b></em></span>
+			</div>
+			</section>
+			<script type="text/javascript">
+			$('.ads_pay').click(function(){
+				var isdis=$(this).data('disable');
+				if(isdis==0){
+					var sp=$('.ads_pay span');
+					$(sp).css('color',' #cfcfcf');
+					$(this).find('span').css('color',' #ff3000');
+					$(paytype).val($(this).data('paytype'));
+				}else{
+					App_gmuMsg('余额不足，请使用其它方式！');
+				}
+			});
+			$('#orderconfirm').on('click',function(){
+				var vipaddress = $('#address').val();
+				var vipname = $('#name').val();
+				var vipmobile = $('#mobile').val();
+				var paytype = $('#paytype').val();
+				var sid = $('#sid').val();
+				var vipid = $('#ordervip').val();
+				var vipopenid = $('#vipopenid').val();
+				var totalnum = $('#totalnum').val();
+				var totalprice = $('#totalprice').val();
+				var items = $('#items').text();
+				var goodstype = $('#goodstype').val();
+				var re = /^1\d{10}$/;
+				if (re.test(vipmobile)==false) {
+					App_gmuMsg("手机号不正确！");
+					return false;
+				}
+				if(!vipname){
+					App_gmuMsg('请填写收件人姓名！');
+					return false;
+				}
+				if(!vipmobile){
+					App_gmuMsg('请填写联系电话！');
+					return false;
+				}
+				if(!vipaddress){
+					App_gmuMsg('请填写收货地址！');
+					return false;
+				}
+				if(!paytype){
+					App_gmuMsg('请选择支付方式！');
+					return false;
+				}
+				  $.ajax({
+						type:'post',
+						data:{
+							'vipaddress':vipaddress,
+							'vipname':vipname,
+							'vipmobile':vipmobile,
+							'paytype':paytype,
+							'sid':sid,
+							'vipid':vipid,
+							'vipopenid':vipopenid,
+							'totalnum':totalnum,
+							'totalprice':totalprice,
+							'items':items,
+							'goodstype':goodstype
+						},
+						url:"{:U('App/Shop/orderMake')}",
+						dataType:'json',
+						success:function(e){
+							if(e){
+								if(e.url){
+									window.location.href=e.url;
+								}
+								zbb_alert('领取成功',function(){
+									window.location.href= "{:U('App/Shop/orderList/sid/0/type/4')}";
+								});
+							}else{
+								zbb_alert(e.msg);
+								return false;
+							}
+						},
+						error:function(){
+						    zbb_alert('通讯失败！');
+							return false;
+						}
+					});	
+					return false;
+			});
+		</script>
+	</body>
+
+</html>

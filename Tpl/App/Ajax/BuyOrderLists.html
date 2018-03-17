@@ -1,0 +1,88 @@
+<volist name="cache" id="vo">
+    <a class="item-link" href="/App/Buy/orderDetail/orderid/{$vo.id}">
+    <div class="incomedetails buyliststyle_1">
+        <div class="buylist-no">第{$vo.goodsid}期
+            <div class="arrow"></div>
+            <div class="little-arrow"></div>
+        </div>
+        <div class="buylist-box">
+            <div class="buylist-info">
+                <div class="">
+                    <div class="incomedetails-top"></div>
+                    <div class="incomedetails-top" style="width: 40%;">
+                        <div class="buylist-subtitle" style="color:#999;">{$vo.vname}</div>
+                        <div class="buylist-subnum  black">{$vo.price}元/{$vo.unit}</div>
+                    </div>
+                    <eq name="vo.isobject" value="0">
+                    <div class="incomedetails-top" style="width: 20%;">
+                        <div class="buylist-subtitle" style="color:#999;">年收益</div>
+                        <div class="buylist-subnum black">{$vo.rate}</div>
+                    </div>
+                    <else />
+                    <div class="incomedetails-top" style="width: 20%;">
+                        <div class="buylist-subtitle" style="color:#999;">收益方式</div>
+                        <div class="buylist-subnum black">实物</div>
+                    </div>
+                    </eq>
+                </div>
+                <div class="buylist-subinfo">
+                    <div class="incomedetails-bottom">
+                        <div class="buylist-subtitle" style="color:#999;">我的{$vo.vname}</div>
+                        <div class="buylist-subnum orange fw800">{$vo.totalnum}{$vo.unit}</div>
+                    </div>
+                    <div class="incomedetails-bottom">
+                        <div class="buylist-subtitle" style="color:#999;">金额</div>
+                        <div class="buylist-subnum black">{$vo.totalprice}</div>
+                    </div>
+                    <div class="incomedetails-bottom">
+                        <div class="buylist-subtitle" style="color:#999;">期限</div>
+                        <div class="buylist-subnum black">{$vo.cycle}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="buylist-buy">
+                <div class="circle buylist-buying ro360">
+                    <div class="pie_left">
+                        <div class="circle_left"></div>
+                    </div>
+                    <div class="pie_right">
+                        <div class="circle_right"></div>
+                    </div>
+                   <eq name="vo.status" value="1"> 
+        			<div class="circle_mask" style="background-color: #f0f0f0;">
+        				<div class="buylist-buy-return">
+        					<div class="farm-icon icon-buylist-4 mcc"></div>
+        					<br>未付款
+        				</div>
+        			</div> 
+        			</eq> 
+                    <eq name="vo.status" value="2"> 
+        			<div class="circle_mask" style="background-color: #fff5f0;">
+        				<div class="buylist-buy-return" data-type="{$vo.bonusway}" data-fee="<?php echo $vo['fee']*$vo[totalnum]; ?>" data-id="{$vo.id}">
+        					<div class="farm-icon icon-buylist-6 mcc"></div>                   					
+         					<br> <eq name="vo.isobject" value="0">收益中<else />种养中</eq>              
+        				</div>
+        			</div> 
+        			</eq>   
+        			<eq name="vo.status" value="3">   
+        			<eq name="vo.isobject" value="0">
+        			<div class="circle_mask" style="background-color: #f0f0f0;">
+       					<div class="buylist-buy-return" style="margin-top: 19px;">已返还<br>本金</div>
+       				</div>
+        			<else />   
+       				<div class="circle_mask" style="background-color: #f0f0f0;">
+       					<div class="buylist-buy-return" style="margin-top: 28px;">待发货</div>
+       				</div>
+       				</eq>
+       				</eq>
+       				<eq name="vo.status" value="4">      
+       				<div class="circle_mask" style="background-color: #f0f0f0;">
+       					<div class="buylist-buy-return" style="margin-top: 28px;">已发货</div>
+       				</div>
+       				</eq>
+                    </div>
+                </div>
+            </div>
+           </div>
+            </a>
+   </volist>

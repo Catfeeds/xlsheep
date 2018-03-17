@@ -1,0 +1,94 @@
+ <script src="__PUBLIC__/Admin/js/ajaxfileupload.js"></script>
+ <div class="row">
+        <div class="col-md-12">
+                <form id="AppOrderGoodsSet" action="" method="post" class="form-horizontal"
+                                                  data-bv-message=""
+                                                  data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                                                  data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                                                  data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+                   <input type="hidden" name="id" value="{$cache.id}">                  
+                   <div class="form-group">
+                        <label class="col-lg-3 control-label">产品编号<sup>*</sup></label>
+                        <div class="col-lg-7">
+                        	<input id="AppOrderGoodsSn" type="text" class="form-control" name="sn" value="{$cache.sn}" readonly="readonly">
+                        </div>
+                   </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">归属农场<sup>*</sup></label>
+                        <div class="col-lg-7">
+                        	<input id="AppOrderGoodsPlace" type="text" class="form-control" name="place" value="{$cache.place}">
+                        </div>
+                   </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">保险公司</label>
+                        <div class="col-lg-7">
+                        	<input type="text" class="form-control" name="company" value="{$cache.company}">
+                        </div>
+                   </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">保单号</label>
+                        <div class="col-lg-7">
+                        	<input type="text" class="form-control" name="insurance_no" value="{$cache.insurance_no}">
+                        </div>
+                   </div>
+                   <div class="form-group">
+                        <label class="col-lg-3 control-label">保单</label>
+                        <div class="col-lg-7">
+                          <form method="post" action="{:U('/Admin/Upload/newUpload')}" enctype="multipart/form-data"> 
+                         	<div class="input-group input-group-sm">
+                         	    <input type="file" class="form-control" name="file" id="fileToUpload">
+                                <input type="hidden" name="url" id="filepath" value="{$insurance.url}">
+                                <span class="input-group-btn">                        
+                                   <button id="insuranceBtn" class="btn btn-default shiny" type="button"><i class="glyphicon glyphicon-file"></i>上传</button>
+                            	</span>
+                            </span>                      
+                            </div>
+                            </form>
+                        </div>
+                   </div>
+                   <neq name="insurance.url" value="">
+                   <div class="form-group">
+                        <label class="col-lg-3 control-label"></label>
+                        <div class="col-lg-7">                       
+                         	<div class="input-group input-group-sm">
+								<span>已上传保单：<a href="{$shopset['url']}{$insurance.url}" target="_blank">{$insurance.no}</a>（点击预览）</span>
+                            </div>
+                        </div>
+                   </div>
+                   </neq>
+        </div>
+</div>
+<script>
+$("#insuranceBtn").click(function () {
+    if ($("#fileToUpload").val().length > 0) {
+        ajaxFileUpload();
+    } else {
+    	$.App.alert('danger', "请选择文件");
+    }
+})
+function ajaxFileUpload (){ 
+	$.App.loading();
+	$.ajaxFileUpload ({ 
+		url :'/Admin/Upload/newUpload', 
+		secureuri :false, 
+		fileElementId :'fileToUpload', 
+		dataType : 'json', 
+		success : function (data, status){
+			 $.App.loading();
+			 if(typeof(data.error) != 'undefined'){
+                 if(data.error != ''){
+                	 $.App.alert('danger', data.error);
+                 }else{
+                	 $('#filepath').val(data.filepath);
+                	 $.App.alert('success','上传成功');
+                 }
+             }
+		}, 
+		error: function (data, status, e){ 
+			$.App.loading();
+			$.App.alert('danger', '连接错误，请稍后再试');
+		},
+	}) 
+	return false; 
+} 
+</script>

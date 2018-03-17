@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>{$cache.name}-砍价活动</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/activity/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/activity/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/swiper.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/activity/jquery-weui.min.js"></script>
+	<script src="__PUBLIC__/App/js/swiper.js"></script>
+	<script src="__PUBLIC__/App/js/jquery.lazyload.min.js"></script>
+   <script src="__PUBLIC__/App/layer/layer.js"></script>
+	<style type="text/css">
+	.old_price {color:#fff;margin:0;text-decoration: line-through;}
+	.img_wp img{max-width:100%;}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="banner kj_detial_swp">
+			<notempty name="appalbum">
+				<div class="swiper-container  kj_detial_container">
+				  <div class="swiper-wrapper">
+				   <foreach name="appalbum" item="vo">
+				    <div class="swiper-slide">
+						<img src="{$vo.imgurl}">
+				    </div>
+				    </foreach>
+				  </div>
+				</div>
+				</notempty>
+				<empty name="appalbum">
+					<notempty name="apppic">
+						<img src="{$apppic.imgurl}" width="100%">
+					</notempty>
+				</empty>
+				<div class="price_bar ovfl">
+					<div class="ovfl fl">
+						<span class="fl">底价：￥<i class="news_price">{$cache.price}</i></span>
+						<span class="fl">原价：<i class="old_price">￥{$cache.oprice}</i></span>
+					</div>
+					<div class="ovfl fr count_num">
+						<span><i>{$kjcount}</i>人参与</span>
+					</div>
+				</div>
+			</div>
+			<div class="goods_msg">
+				<p class="name_msg">{$cache.name}</p>
+				<div class="ovfl">
+					<p class="fl" style="width:33%;">库存：<i>{$cache.num}件</i></p>
+          <p class="fl"  style="width:33%;">单位：<i>{$cache.unit}</i></p>
+					<p class="fr"  style="width:33%;">砍价刀数：<i><if condition="$cache['blimit'] gt 0">{$cache.blimit}次<else />无限制</if></i></p>
+				</div>
+			</div>
+			<div class="bgf bod_top pd_5 lh_2 fz12 color_9">
+				<p>本活动不赠送积分</p>
+			</div>
+			<div class="detail-rule">
+                <div class="detail-tule-top fui-list">
+                    <div class="fui-list-inner"><i></i>砍价流程</div>
+
+                </div>
+                <div class="detail-tule-bot fui-list">
+                    <div class="fui-list-inner active"><i>1</i><p><span>选择心仪商品</span></p></div>
+                    <div class="fui-list-media"><i class="icon icon-right"></i></div>
+                    <div class="fui-list-inner"><i>2</i><p><span>邀请好友砍价</span></p></div>
+                    <div class="fui-list-media"><i class="icon icon-right"></i></div>
+                    <div class="fui-list-inner"><i>3</i><p><span>砍到最低后支付</span></p></div>
+                </div>
+            </div>
+            <div class="goods_detial_img">
+            	<div class="color_6 pd_10 text_c" >商品详情</div>
+            	<div class="img_wp">
+            		 {$cache.content|htmlspecialchars_decode}
+            	</div>
+            </div>
+		</div>
+		<div class="fui-navbar footer-nav bordert bd_ul01" style="z-index:10;padding:0;">
+            <a href="{:U('App/Shop/home')}" class="home-btn" data-nocache="true">
+                <i class="iconfont icon-shouye"></i>
+                <p class="label">首页</p>
+            </a>
+            <eq name='over' value='1'>
+            	<a class="join_kanjia flex_1" href="javascript:;" style="background:#ccc;">已经结束</a>
+            <else />
+
+                 <a class="join_kanjia flex_1" href="javascript:tips();">立即砍价</a>
+
+
+            </eq>
+        </div>
+	</div>
+</body>
+
+<script>
+function tips()
+    {
+    
+    
+    if({$subscribe}==1)
+    {
+      window.location.href="http://{$_SERVER['HTTP_HOST']}/App/Activity/bargain/id/{$cache['id']}/vipid/{$vipid}";
+    }
+    else
+    {
+       layer.open({
+       type: 1,
+       skin: 'layui-layer-rim', //加上边框
+       area: ['320px', '300px'], //宽高
+       title:'关注提示',
+       content: $("#tipscontent").html()
+       });
+       return false;
+     }
+   }
+ 
+
+
+ 
+</script>
+<script> 
+     
+var mySwiper2 = new Swiper('.kj_detial_container', {
+	//可选选项，自动滑动
+	
+})
+</script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    var share_url = "http://{$_SERVER['HTTP_HOST']}__ROOT__/App/Activity/bargoods/id/{$cache['id']}";
+    var share_title="原价{$cache.oprice}，现价{$cache.price}元疯抢{$cache.sname}";
+    var share_content = "{$cache.summary|myTrim}";
+    var share_img="{$_SESSION['WAP']['shopset']['url']}{$apppic.imgurl}";
+    
+  wx.config({
+      debug: false,
+      appId: "{$jsapi['appId']}",
+      timestamp: "{$jsapi['timestamp']}",
+      nonceStr: "{$jsapi['nonceStr']}",
+      signature: "{$jsapi['signature']}",
+      jsApiList: [
+        'checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'hideMenuItems',
+        'showMenuItems',
+        'hideAllNonBaseMenuItem',
+        'showAllNonBaseMenuItem',
+      ]
+  });
+  
+  wx.ready(function () {
+        //开启菜单
+        wx.showOptionMenu();
+        //隐藏菜单
+        //wx.hideOptionMenu();
+        //分享给朋友
+        wx.onMenuShareAppMessage({
+          title: share_title,
+          desc: share_content,
+          link: share_url,
+          imgUrl: share_img,
+          trigger: function (res) {
+            //alert('用户点击发送给朋友');
+          },
+          success: function (res) {
+            //alert('已分享');
+          },
+          cancel: function (res) {
+            //alert('已取消');
+          },
+          fail: function (res) {
+            //alert(JSON.stringify(res));
+          }
+        });
+        //分享到朋友圈
+        wx.onMenuShareTimeline({
+          title: share_title,
+          link: share_url,
+          imgUrl: share_img,
+          trigger: function (res) {
+            //alert('用户点击分享到朋友圈');
+          },
+          success: function (res) {
+            //alert('已分享');
+          },
+          cancel: function (res) {
+            //alert('已取消');
+          },
+          fail: function (res) {
+            //alert(JSON.stringify(res));
+          }
+        });
+        //分享到QQ
+        wx.onMenuShareQQ({
+          title: share_title,
+          desc: share_content,
+          link: share_url,
+          imgUrl: share_img,
+          trigger: function (res) {
+            //alert('用户点击分享到QQ');
+          },
+          complete: function (res) {
+            //alert(JSON.stringify(res));
+          },
+          success: function (res) {
+            //alert('已分享');
+          },
+          cancel: function (res) {
+            //alert('已取消');
+          },
+          fail: function (res) {
+            //alert(JSON.stringify(res));
+          }
+        });
+  });
+</script>
+<script type="text/javascript">
+    $(function() {
+        $("img.lazy").show().lazyload({effect: "fadeIn"});
+    });
+</script>
+<div id="tipscontent" style="display:none;">
+<div class="dialog_bd">
+      <p class="tt_tips">长按二维码并识别</p>
+      <p class="text">请长按下图并选择识别图中二维码参与活动</p>
+      <img class="ewm" src="__PUBLIC__/App/images/ewm.jpg" alt="">
+    
+    </div>
+</div>
+</html>

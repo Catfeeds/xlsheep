@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>农牧源便民</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/swiper.min.css">
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/swiper.min.css">
+	<style type="text/css">
+	.allgoods_list .goods .goods_msg .weui_media_desc {
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    display: -webkit-box;
+	    -webkit-box-orient: vertical;
+	    -webkit-line-clamp: 2;
+	    max-height: 38px;
+	    white-space: normal;
+	    word-wrap: break-word;
+	}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd live_store">
+			<div class="banner">
+				<div class="swiper-container">
+				  <div class="swiper-wrapper">
+					<adv pid ="1" limit="5" item="v">
+			            <div class="swiper-slide">
+						<a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if> >
+			              	<img src="{$v[imgurl]}" title="{$v[title]}"width="100%" style="{$v[style]}"/>
+			             </a>
+				    	</div>
+			        </adv>	
+				  </div>
+				   <div class="swiper-pagination"></div>
+				</div>
+			</div>
+			 
+			<div class="weui_cells mg_0">
+				 <img src="/tu.jpg?v=1.0.0" style="width:100%;">
+			</div>
+			 
+			<!-- 
+			<a class="float_car" href="{:U('App/Shop/basket',array('sid'=>0,'lasturl'=>$footlasturl))}">
+				<i class="iconfont icon-gouwuche fz_25"></i>
+			</a>
+			 -->
+			
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+	<script src="__PUBLIC__/App/js/swiper.min.js"></script>
+	<script>
+		var mySwiper = new Swiper('.swiper-container', {
+			autoplay: 5000,//可选选项，自动滑动
+			pagination : '.swiper-pagination',
+		})
+	</script>
+</body>
+</html>

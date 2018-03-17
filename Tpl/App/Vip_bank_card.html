@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/base.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/frozen.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+<script type="text/javascript"  src="__PUBLIC__/App/js/rem.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/city-picker.js"></script>
+<script src="__PUBLIC__/App/js/bank_card.js"></script>
+<title>我的银行卡-{$_SESSION['WAP']['shopset']['name']}</title>
+<style type="text/css">
+.noticebox .ui-tab-nav li{margin:0 30px;}
+.weui_btn_area{margin-top:80px;}
+.weui_label{font-size:16px;color:#5C5C5C;font-weight:bold;}
+.weui_input{font-size:14px;}
+</style>
+</head>
+<body>
+<section class="wrap-page wrap">
+		<div class="bd">
+			<div class="noticebox">
+		    	<div class="ui-tab" id="gaobox">
+		    		<form>
+					<div class="tempWrap" style="overflow:hidden; position:relative;">
+						<div class="weui_cells weui_cells_form">
+						  <div class="weui_cell">
+						    <div class="weui_cell_hd"><label class="weui_label">持卡人</label></div>
+						    <div class="weui_cell_bd weui_cell_primary">
+						      <input class="weui_input" type="text"  value="{$data.name}" readonly="readonly">
+						    </div>
+						  </div>
+						  <div class="weui_cell">
+						    <div class="weui_cell_hd"><label class="weui_label">银行卡号</label></div>
+						    <div class="weui_cell_bd weui_cell_primary">
+						      <input id="txcard" class="weui_input" type="text" placeholder="请输入银行卡号" name="txcard" value="{$data.txcard}" >
+						    </div>
+						  </div>
+						  <div class="weui_cell">
+						    <div class="weui_cell_hd"><label class="weui_label">开户银行</label></div>
+						    <div class="weui_cell_bd weui_cell_primary">
+						      <input id="txyh" class="weui_input" type="text" placeholder="请正确填写降低转账失败率" name="txyh" value="{$data.txyh}" >
+						    </div>
+						  </div>
+						 </div>
+						 <div class="weui_cells weui_cells_form">
+							 <div class="weui_cell">
+							    <div class="weui_cell_hd"><label class="weui_label">所属分行</label></div>
+							    <div class="weui_cell_bd weui_cell_primary">
+							      <input id="txfh" class="weui_input" type="text" placeholder="请输入银行分行" name="txfh" value="{$data.txfh}">
+							    </div>
+							  </div>			
+							 <div class="weui_cell">
+							    <div class="weui_cell_hd"><label class="weui_label">开户行所在地</label></div>
+							    <div class="weui_cell_bd weui_cell_primary">
+							      <input id="txszd" class="weui_input" type="text" placeholder="请输入开户行所在地" name="txszd" value="{$data.txszd}">
+							    </div>
+							  </div>
+						 </div>
+						 <div class="weui_btn_area">
+						 	<a id="save-btn" href="javascript:;" class="weui_btn weui_btn_primary">确定</a>
+						 </div>
+					</div>	
+					</form>				
+				</div>
+			</div>
+		</div>
+	</section>
+<script src="__PUBLIC__/App/js/fastclick.js"></script>
+ <script type="text/javascript">
+ $(function() {
+	  FastClick.attach(document.body);
+ });
+$("#txszd").cityPicker({
+	title: "请选择开户行所在地",
+});
+</script>
+<script>
+$('#save-btn').click(function(){
+	if(!$('#txcard').val()){
+		$.toptip('请填写银行卡号！', 'error');
+		return false;
+	}
+	if(luhmCheck($('#txcard').val())==false){
+		return false;
+	}
+	if(!$('#txyh').val()){
+		$.toptip('请填写开户银行！', 'error');
+		return false;
+	}
+	if(!$('#txfh').val()){
+		$.toptip('请填写开户银行分行！没有请填写总行!', 'error');
+		return false;
+	}
+	if(!$('#txszd').val()){
+		$.toptip('请填写提现所在地！', 'error');
+		return false;
+	}
+    $.ajax({
+		type:'post',
+		data:$("form").serialize(),
+		url:"{:U('App/Vip/bank_card')}",
+		dataType:'json',
+		success:function(e){
+			if(e.status==1) {
+				$.toast('操作成功',function(){location.href="{:U('App/Buy/income')}";});
+			} else {
+				$.toptip(e.info, 'error');
+			}
+			return false;
+		},
+		error:function(){
+		    $.toptip('通讯失败！', 'error');
+			return false;
+		}
+	});	
+	return false;
+})
+function judgeIsNum (srt){  
+     var pattern=/^\d+$/g;
+     var result= srt.match(pattern);
+     if (result==null){  
+         return false;  
+     }else{  
+         return true;  
+     }  
+ }  
+</script>
+</body>
+</html>

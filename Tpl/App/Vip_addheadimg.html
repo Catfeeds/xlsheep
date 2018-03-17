@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<title>农牧源牧场-上传头像</title>
+		<meta charset="utf-8" />
+		<meta name="MobileOptimized" content="320">
+		<!--默认宽度320-->
+		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<!--viewport 等比 不缩放-->
+		<meta http-equiv="cleartype" content="on">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!--删除苹果菜单-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<!--默认颜色-->
+		<meta name="apple-mobile-web-app-title" content="yes">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<link href="__PUBLIC__/App/images/qiaonongge.ico" type="image/x-icon" rel="shortcut icon">
+		<!--加载全部后 显示-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--不识别电话-->
+		<meta content="email=no" name="format-detection" />
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/style.css" />
+		<!--组件依赖js begin-->
+		<script src="__PUBLIC__/App/js/zepto.min.js" type="text/javascript"></script>
+		<script type="text/javascript" src="__PUBLIC__/App/gmu/gmu.min.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/App/gmu/app-basegmu.js"></script>
+		<!--组件依赖js end-->
+	</head>
+	
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a href="javascript:history.go(-1)" class="mui-icon mui-icon-back"></a>
+			<h2 class="mui-title">上传头像</h2>
+		</header>
+<!-- 		<section class="mui-content" id="txtab"> -->
+		<?php 
+			if($data[headimgurl]){
+				$userimg = $data[headimgurl];
+			}else{
+				$userimg = "/Public/App/images/farmer1.png";
+			}
+		?>
+		<form id="imageform" class="mui-content" enctype="multipart/form-data" action="/App/Vip/addheadimg" method="post">
+		<section id="txtab">
+			<section class="oldimg-tx">
+				<img src="{$userimg}" />
+			</section>
+			<p>原头像</p>			
+			<section class="newimg-tx" id="preview">
+			</section>
+			<p>新头像</p>
+			<section>
+				<div id="up_status" style="display:none"><img src="__PUBLIC__/App/images/loader.gif" alt="uploading"/></div> 
+    			<div id="up_btn" class="btn">
+        		<span>上传头像</span> 
+        		<input id="photoimg" type="file" name="pic" class="j_pic" onchange="previewImage(this)"> 
+   				</div>		
+			</section>
+			<input type="submit" name="dosubmit" class="savebtn" id="savebtn" value="保 存">
+		</section>
+		</form>
+		<footer class="my-bar footer">
+			<a class="my-bar-item" href="/App/Shop/index" id="fthome">
+				<span class="i-icon"><i class="i-icon-home"></i></span>
+				<div>首页</div>
+			</a>
+			<a class="my-bar-item" href="/App/Shop/category/type/0" id="ftcategory">
+				<span class="i-icon"><i class="i-icon-shop"></i></span>
+				<div>商城</div>
+			</a>
+			<a class="my-bar-item" href="/App/Buy/index" id="ftbase">
+				<span class="i-icon"><i class="i-icon-jd"></i></span>
+				<div>牧场</div>
+			</a>
+			<a class="my-bar-item m-active" href="/App/Vip/index" id="ftvip">
+				<span class="i-icon"><i class="i-icon-farmer"></i></span>
+				<div>农场主</div>
+			</a>
+		</footer>
+		<script type="text/javascript">
+		function previewImage(file)
+	    {
+	        var MAXWIDTH = 215;
+	        var MAXHEIGHT = 254;
+	        var div = document.getElementById('preview');
+	        if (file.files && file.files[0])
+	        {
+	            div.innerHTML = '<img id=imghead>';
+	            var img = document.getElementById('imghead');
+	            img.onload = function() {
+	                var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+	                img.width = rect.width;
+	                img.height = rect.height;
+	                //img.style.marginLeft = rect.left + 'px';
+	                //img.style.marginTop = rect.top + 'px';
+	            }
+	            var reader = new FileReader();
+	            reader.onload = function(evt) {
+	                img.src = evt.target.result;
+	            }
+	            reader.readAsDataURL(file.files[0]);
+	        }
+	        else
+	        {
+	            var sFilter = 'filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
+	            file.select();
+	            var src = document.selection.createRange().text;
+	            div.innerHTML = '<img id=imghead>';
+	            var img = document.getElementById('imghead');
+	            img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+	            var rect = clacImgZoomParam(MAXWIDTH, MAXHEIGHT, img.offsetWidth, img.offsetHeight);
+	            status = ('rect:' + rect.top + ',' + rect.left + ',' + rect.width + ',' + rect.height);
+	            div.innerHTML = "<div id=divhead style='width:" + rect.width + "px;height:" + rect.height + "px;margin-top:" + rect.top + "px;margin-left:" + rect.left + "px;" + sFilter + src + "\"'></div>";
+	        }
+	    }
+		 function clacImgZoomParam(maxWidth, maxHeight, width, height) {
+		        var param = {top: 0, left: 0, width: width, height: height};
+		        if (width > maxWidth || height > maxHeight)
+		        {
+		            rateWidth = width / maxWidth;
+		            rateHeight = height / maxHeight;
+
+		            if (rateWidth > rateHeight)
+		            {
+		                param.width = maxWidth;
+		                param.height = Math.round(height / rateWidth);
+		            } else
+		            {
+		                param.width = Math.round(width / rateHeight);
+		                param.height = maxHeight;
+		            }
+		        }
+
+		        param.left = Math.round((maxWidth - param.width) / 2);
+		        param.top = Math.round((maxHeight - param.height) / 2);
+		        return param;
+		    }
+		</script>
+	</body>
+</html>

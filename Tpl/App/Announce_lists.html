@@ -1,0 +1,59 @@
+<html><head lang="zh">
+    <meta charset="UTF-8">
+    <title>公告列表-{$_SESSION['WAP']['shopset']['name']}</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=0" name="viewport">
+    <script src="__PUBLIC__/App/js/zepto.min.js"></script>
+    <link rel="stylesheet" href="__PUBLIC__/App/css/style.css" />
+    <link href="__PUBLIC__/App/css/buy/comon.css" rel="stylesheet" type="text/css">
+</head>
+<body class="un-ms-con" style="background-color: rgb(244, 243, 239);" avalonctrl="wxApp">
+    <article class="pagecontent">
+    <section class="">
+    <section class="article-box" id="announcelist">
+    	<volist name="cache" id="vo">
+        <article class="ariticle-list">
+            <a class="list-info" href="{:U('App/Announce/index',array('id'=>$vo[id]))}">
+                <div class="ariticle-con">
+                    <div class="at-title">{$vo.title}</div>
+                    <div class="at-date">{$vo.time}</div>
+                </div>
+            </a>
+        </article>
+        </volist>
+    </section>
+</section>
+</article>
+<include file="./Tpl/App/Shop_footer.html" />
+<eq name="datamore" value="1">
+<script type="text/javascript">
+ var p = 1;  
+ var stop = true;
+ $(window).scroll(function() {     
+      if ($(this).scrollTop() + $(window).height() + 20 >= $(document).height() && $(this).scrollTop() > 20) {               
+          if(stop==true){  
+              stop=false;  
+              p=p+1;
+              canshu="?t={$t}&p="+p+"&cid={$cid}";  
+              $("#announcelist").append("<article class='ajaxtips'>加载中 ...</article>");  
+              $.get("{:U('App/Ajax/announceList')}"+canshu,function(data){  
+            	   if(data.status==1) {
+            		   $(".ajaxtips").hide();  
+            		   if(data.info != '') {		                   
+		                   $("#announcelist").append(data.info);
+		                   if(data.more==1) {	            			  
+		                   		stop=true;  
+		                   }
+            	   	   }           		  
+            	   }
+               })  
+         }  
+      }    
+  }); 
+</script>
+</eq>
+</body>
+</html>

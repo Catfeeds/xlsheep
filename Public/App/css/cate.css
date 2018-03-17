@@ -1,0 +1,66 @@
+.pp-follow {
+        padding: 0.2em 0px;
+        width: 100%;
+        background: #e4dcd1;
+        display: block;
+    }
+    
+    .p-fopic {
+        margin-left: 1%;
+        float: left;
+        width: 12.5%;
+        border-radius: 3px;
+        margin-top: 2%;
+    }
+    
+    .p-focon {
+        float: left;
+        margin-left: 2%;
+        width: 60%;
+        color: #000000;
+        font-size: 0.9em;
+        line-height: 3.2em;
+    }
+    
+    .p-fofo {
+        margin-top: 1.5%;
+        margin-left: 1%;
+        float: left;
+        width: 22.5%;
+        color: #fff;
+        font-size: 0.9em;
+        text-align: center;
+        line-height: 2.5em;
+        background: #df0e11;
+        border-radius: 0.3em;
+    }
+    
+    .p-fofo a,
+    .p-fofo a:visited {
+        color: #fff;
+        font-size: 0.9em;
+        text-align: center;
+        line-height: 2.5em;
+    }
+    
+    .clear {
+        clear: both;
+    }
+    
+    .showImg-div {
+    }
+    
+    .showImg {
+        width: 100%;
+        overflow: hidden;
+    }
+    
+    #wrap {
+        width: 100%
+    }
+ .secondNav{width: 100%;display: none;background: #99CCCC;}
+ .secondNav ul{overflow: hidden;padding-top: 10px;}
+ .secondNav ul li{float: left;margin-bottom: 10px;margin-left: 20px;text-align: center}
+ .secondNav ul li p{margin-top: 5px}
+ .secondNav ul li a:link{color: #fff}
+ .secondNav ul li a:visited{color: #fff}

@@ -1,0 +1,18 @@
+ <div class="row">
+        <div class="col-md-12">
+                <form id="AppOrderRejectTuikuan" action="" method="post" class="form-horizontal"
+                                                  data-bv-message=""
+                                                  data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                                                  data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                                                  data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+                   <input type="hidden" name="id" value="{$cache.id}">                               
+                   <div class="form-group">
+                        <label class="col-lg-3 control-label">拒绝退款说明<sup>*</sup></label>
+                        <div class="col-lg-7">
+                        	<textarea id="AppOrderRejectTuikuanMsg" class="form-control" name="rejecttuikuanmsg" rows="5" >{$cache.rejecttuikuanmsg}</textarea>
+                        </div>
+                   </div>
+               </form>
+        </div>
+</div>
+

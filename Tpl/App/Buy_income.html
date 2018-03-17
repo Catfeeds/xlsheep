@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>我的钱包</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd wallet_wp">
+			<div class="hd">
+				<div class="jf_wrap pd_15">
+					<p>本月收益（元）</p>
+					<div class="mg_t20 c_float text_r">
+						<p class="fz_25 f_left">+<i>{$data.bysy}</i></p>
+						<p class="f_right"><i>{$data.ydsy}</i><br><i>已得收益</i></p>
+					</div>
+				</div>
+			</div>
+			<div>
+				<div class="bd_tab">
+					<div class="weui_navbar">
+				        <div class="weui_navbar_item">
+				          <p class="color_0">{$data.money}</p>
+				          <p class="color_9">余额</p>
+				        </div>
+				        <div class="weui_navbar_item">
+				          <p class="color_0">{$data.dfyk}</p>
+				          <p class="color_9">认领金额</p>
+				        </div>
+				        <div class="weui_navbar_item">
+				          <p class="color_0">{$data['dfyk']+$data['money']}</p>
+				          <p class="color_9">净资产</p>
+				        </div>
+				        <div class="weui_navbar_item">
+				          <p class="color_0">{$data.dssy}</p>
+				          <p class="color_9">待收收益</p>
+				        </div>
+				    </div>
+				</div>
+				<eq name="data['vip_apply_status']" value="2">
+				<div class="bd_tab">
+					<div class="weui_navbar ">
+						<div class="weui_navbar_item lh_2">
+							<p class="color_6">保证金：{$data.vip_apply_money}</p>
+						</div>
+						<div class="weui_navbar_item lh_2">
+							<p class="color_6">有效期：{$data.vip_expiration_time|date='Y-m-d',###}</p>
+						</div>
+					</div>
+				</div>
+				</eq>
+				<div class="bd_tab">
+					<div class="weui_navbar ">
+				        <div class="weui_navbar_item lh_2">
+				          <a href="{:U('App/Vip/txOrder')}"><p class="color_6">提现</p></a>
+				        </div>
+				        <div class="weui_navbar_item lh_2">
+				          <a href="{:U('App/Vip/cz')}"><p class="color_6">充值</p></a>
+				        </div>
+				    </div>
+				</div>
+				<div class="weui_cells">
+					<div class="weui_cell pd_15">
+				        <div class="weui_cell_bd weui_cell_primary color_6 fz_14">
+				        	<notempty name="zhcz">
+				            <p>最后充值<i class="mg_l10">-</i><i class="mg_l10">{$zhcz.ctime|date="y-m-d",###}</i><i class="mg_l10">{$zhcz.money}</i>元</p>
+				            <else />
+				            <p>最后充值<i class="mg_l10">-</i><i class="mg_l10">0</i>元</p>
+				            </notempty>
+				            <notempty name="zhtx">
+				            <p>最后提现<i class="mg_l10">-</i><i class="mg_l10">{$zhtx.txprice}</i>元</p>
+				            <else />
+				            <p>最后提现<i class="mg_l10">-</i><i class="mg_l10">0</i>元</p>
+				            </notempty>
+				        </div>
+				        <div class="weui_cell_ft mg_l10"><a href="{:U('App/Vip/czRecord')}" class="org_btn fz_12 recharge_btn">充值/提现记录</a></div>
+			        </div>
+				</div>
+				<div class="weui_cells">
+					<div class="weui_cell pd_15">
+				        <div class="weui_cell_bd weui_cell_primary color_6 fz_14">
+				            <p>最后收入<i class="mg_l10">-</i><i class="mg_l10">{$zhsr}</i>元</p>
+				            <p>最后支出<i class="mg_l10">-</i><i class="mg_l10">{$zhzc}</i>元</p>
+				        </div>
+			        </div>
+			        <div class="weui_cells weui_cells_access mg_0">
+						<a class="weui_cell" href="{:U('App/Buy/record')}">
+					        <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/ics017.png" alt="" width="20"></div>
+					        <div class="weui_cell_bd weui_cell_primary">
+					            <p>余额流水账</p>
+					        </div>
+					        <div class="weui_cell_ft"></div>
+				        </a>
+						<a class="weui_cell" href="{:U('App/Buy/record', array('type'=>4))}">
+					        <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/ics018.png" alt="" width="20"></div>
+					        <div class="weui_cell_bd weui_cell_primary">
+					            <p>认领记录</p>
+					        </div>
+					        <div class="weui_cell_ft"></div>
+				        </a>
+						<a class="weui_cell" href="{:U('App/Buy/record', array('type'=>5))}">
+					        <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/ics019.png" alt="" width="20"></div>
+					        <div class="weui_cell_bd weui_cell_primary">
+					            <p>收益记录</p>
+					        </div>
+					        <div class="weui_cell_ft"></div>
+				        </a>
+						<a class="weui_cell" href="{:U('App/Buy/record', array('type'=>6))}">
+					        <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/ics020.png" alt="" width="20"></div>
+					        <div class="weui_cell_bd weui_cell_primary">
+					            <p>到期返还本金</p>
+					        </div>
+					        <div class="weui_cell_ft"></div>
+				        </a>
+						<a class="weui_cell" href="{:U('App/Buy/record', array('type'=>3))}">
+					        <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/ics021.png" alt="" width="20"></div>
+					        <div class="weui_cell_bd weui_cell_primary">
+					            <p>其他消费记录</p>
+					        </div>
+					        <div class="weui_cell_ft"></div>
+				        </a>
+				        <!--
+						<a class="weui_cell" href="{:U('App/Vip/tg')}">
+					        <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/ics022.png" alt="" width="20"></div>
+					        <div class="weui_cell_bd weui_cell_primary">
+					            <p>推广佣金收入</p>
+					        </div>
+					        <div class="weui_cell_ft"></div>
+				        </a>
+						<a class="weui_cell" href="javascript:;">
+					        <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/ics023.png" alt="" width="20"></div>
+					        <div class="weui_cell_bd weui_cell_primary">
+					            <p>参与活动支出</p>
+					        </div>
+					        <div class="weui_cell_ft"></div>
+				        </a>
+				          -->
+			        </div>
+				</div>
+			</div>
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+</html>

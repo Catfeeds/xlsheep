@@ -1,0 +1,276 @@
+<script src="__PUBLIC__/Admin/js/datetime/moment.js"></script>
+<script src="__PUBLIC__/Admin/js/datetime/daterangepicker.js"></script>
+<div class="row">
+	<div class="col-xs-12 col-md-12">
+		<div class="widget">
+			<div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i>
+				<span class="widget-caption">金融产品订单</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize">
+						<i class="fa fa-expand"></i>
+					</a>
+					<a href="#" data-toggle="collapse">
+						<i class="fa fa-minus"></i>
+					</a>
+					<a href="#" data-toggle="dispose">
+						<i class="fa fa-times"></i>
+					</a>
+				</div>
+			</div>
+			<div class="widget-body">
+				<div class="table-toolbar">
+					<notempty name="isad">
+							<button href="javascript:void(0)" class="btn btn-primary" id="exportOrder" style="margin-top: -4px;"><i class="fa fa-save"></i>导出订单</button>
+					</notempty>
+					<eq name="isad" value="0">
+							<button href="javascript:void(0)" class="btn btn-primary" id="exportOrder" style="margin-top: -4px;"><i class="fa fa-save"></i>导出订单</button>
+					</eq>
+					<div class="pull-right">
+						<form id="App-search">
+							<label style="margin-bottom: 0px;">
+							<select name="status" id="myselect">
+							    <option value="2">已付款</option>
+							    <option value="3">已完结</option>
+							    <option value="4">已发货</option>
+							</select>
+							</label>
+							<label style="margin-bottom: 0px;width:200px;">
+		                     	<div class="input-group input-group-sm">
+		                     	<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+		                        <input type="text" class="form-control input-sm" id="date" name="date" placeholder="日期范围"  value="{$date}">
+		                    	</div>
+		                    </label>  
+							<label style="margin-bottom: 0px;">
+								<input name="name" type="search" class="form-control input-sm" placeholder="输入订单号或手机号" value="{$name}">
+							</label>
+							<input type="hidden" name="isad" value="{$isad}">
+							<a href="{:U('Admin/Finance/order/')}" class="btn btn-success" data-loader="App-loader" data-loadername="商城订单" data-search="App-search">
+								<i class="fa fa-search"></i>搜索
+							</a>
+						</form>
+					</div>
+				</div>
+
+				<table id="App-table" class="table table-bordered table-hover">
+					<thead class="bordered-darkorange">
+						<tr role="row">
+							<th width="30px"><div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+									<label style="padding-left: 4px;"> <input type="checkbox" class="App-checkall colored-blue">
+                                     <span class="text"></span>
+									</label>                                    
+                                </div></th>
+							<th>ID</th>
+							<th>会员ID</th>
+							<th>类型</th>
+							<th>订单号</th>
+							<th>订单状态</th>
+							<th>订单总额</th>
+							<th>姓名</th>
+							<th>电话</th>
+							<th>支付金额</th>
+							<th>支付方式</th>
+							<th>支付时间</th>
+							<th>创建时间</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="cache" id="vo">
+							<tr id="item{$vo.id}">
+								<td>
+									<div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+										<label style="padding-left: 4px;"> <input name="checkvalue" type="checkbox" class="colored-blue App-check" value="{$vo.id}">
+	                                     <span class="text"></span>
+										</label>                                    
+	                                </div>
+								</td>
+								<td class=" sorting_1">{$vo.id}</td>
+								<td class=" ">{$vo.vipid}</td>
+								<td class=" "><notempty name="vo.address">实物众筹<else />虚拟众筹</notempty></td>
+								<td class=" ">{$vo.oid}</td>
+								<td class=" "><switch name="vo.status">
+									<case value="0">已取消</case>
+									<case value="1">未付款</case>
+									<case value="2">已付款</case>
+									<case value="3">已完结</case>
+									<case value="4">已发货</case>
+								</switch></td>
+								<td class=" ">{$vo.totalprice}</td>
+								<td class=" ">{$vo.vipname}</td>
+								<td class=" ">{$vo.vipmobile}</td>
+								<td class=" ">{$vo.payprice}</td>
+								<td class=" "><switch name="vo.paytype">
+									<case value="money">余额</case>
+									<case value="alipaywap">支付宝WAP</case>
+									<case value="wxpay">微信支付</case>
+								</switch></td>
+								<td class=" "><notempty name='vo.paytime'>{$vo.paytime|date='Y/m/d H:i',###}<else/>未支付</notempty></td>
+								<td class=" ">{$vo.ctime|date='Y/m/d H:i',###}</td>
+								<td class="center ">
+									<a href="{:U('Admin/Finance/orderDetail/',array('id'=>$vo['id'],'status'=>$status))}" class="btn btn-primary btn-xs" data-loader="App-loader" data-loadername="订单详情"><i class="fa fa-eye"></i> 详情</a>
+								</td>
+							</tr>
+						</volist>
+												
+					</tbody>
+				</table>
+				<div class="row DTTTFooter">
+					{$page}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+	setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->
+<!--全选特效封装/全部删除-->
+<script type="text/javascript">
+	//全选
+	var checkall=$('#App-table .App-checkall');
+	var checks=$('#App-table .App-check');
+	var trs=$('#App-table tbody tr');
+	$(checkall).on('click',function(){
+		if($(this).is(":checked")){			
+			$(checks).prop("checked","checked");
+		}else{
+			$(checks).removeAttr("checked");
+		}		
+	});
+	$(trs).on('click',function(){
+		var c=$(this).find("input[type=checkbox]");
+		if($(c).is(":checked")){
+			$(c).removeAttr("checked");
+		}else{
+			$(c).prop("checked","checked");
+		}		
+	});
+	//全删
+	$('#App-delall').on('click',function(){
+		var checks=$(".App-check:checked");
+		var chk='';
+		$(checks).each(function(){
+			chk+=$(this).val()+',';
+		});
+		if(!chk){
+			$.App.alert('danger','请选择要删除的项目！');
+			return false;
+		}
+		var toajax="{:U('Admin/Finance/orderDel')}"+"/id/"+chk;
+		var callok=function(){
+			//主框架可以直接模拟点击刷新按钮
+			//$('#refresh-toggler').trigger('click');
+			$(AppLoaderReloader).trigger('click');
+			return false;
+		};
+		var callerr=function(){
+			//拦截错误
+			return false;
+		};
+		$.App.ajax('post',toajax,'nodata',callok,callerr);
+	});
+</script>
+<!--/全选特效封装-->
+
+
+<!--订单特效-->
+<script type="text/javascript">
+	//订单关闭
+	var btnclose=$('.orderclose');
+	$(btnclose).on('click',function(){
+			var id=$(this).data('id');
+			$.ajax({
+					type:"post",
+					url:"{:U('Admin/Finance/orderClose')}",
+					data:{'id':id},
+					dataType: "json",
+					//beforeSend:$.App.loading(),
+					success:function(mb){
+						//$.App.loading();
+						bootbox.dialog({
+	                	message: mb,
+	                	title: "订单关闭",
+	                	className: "modal-darkorange",
+	                	buttons: {
+	                		   success: {
+			                        label: "确定",
+			                        className: "btn-blue",
+			                        callback: function () {
+			                        	var dtadmin=$('#AppOrderCloseAdmin').val();
+			                        	var dtmsg=$('#AppOrderCloseMsg').val();
+			                        	if(!dtadmin || !dtmsg){
+			                        		alert('请完整填写必添字段!');
+			                        		return false;
+			                        	}
+			                        	var dt=$('#AppOrderClose').serialize();
+			                        	$.ajax({
+			                        		type:"post",
+			                        		url:"{:U('Admin/Finance/orderCloseSave')}",
+			                        		data:dt,
+			                        		dataType:"json",
+			                        		async:false,
+			                        		success:function(info){
+			                        			if(info['status']){
+			                        				$.App.alert('success',info['msg']);
+			                        				$('#App-reloader').trigger('click');
+			                        			}else{
+			                        				$.App.alert('danger',info['msg']);
+			                        			}
+			                        			return false;
+			                        		},
+			                        		error:function(xhr){
+												$.App.alert('danger','通讯失败！请重试！');
+												return false;
+											}
+			                        	});
+			                        }
+			                   },
+			                    "取消": {
+			                        className: "btn-danger",
+			                        callback: function () { }
+			                    }
+		                	}
+		            	});
+					},
+					error:function(xhr){
+						$.App.alert('danger','通讯失败！请重试！');
+					}
+			});
+		return false;
+	});
+	
+	//订单完成
+	var btnsuccess=$('.ordersuccess');
+	$(btnsuccess).on('click',function(){
+		var id=$(this).data('id');
+		$.ajax({
+			type:"post",
+			url:"{:U('Admin/Finance/ordersuccess')}",
+			async:false,
+			data:{'id':id},
+			success:function(info){
+			    if(info['status']){
+			           $.App.alert('success',info['msg']);
+			           $('#App-reloader').trigger('click');
+			    }else{
+			           $.App.alert('danger',info['msg']);
+			         }
+			         return false;
+			   },
+			error:function(xhr){
+				$.App.alert('danger','通讯失败！请重试！');
+				return false;
+			}
+		});
+	});
+	//导出订单
+	$('#exportOrder').on('click', function() {
+		$("#App-search").attr('action',"{:U('Admin/Finance/orderExport')}");
+		$("#App-search").submit();
+	})
+	$('#date').daterangepicker();
+</script>	

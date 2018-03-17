@@ -1,0 +1,153 @@
+<!--百度编辑器-->
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Admin/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Admin/ueditor/ueditor.all.min.js"></script>
+<div class="row">
+	<div class="col-xs-12 col-xs-12">
+		<div class="widget radius-bordered">
+			<div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i> <span
+					class="widget-caption">文章设置</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize"> <i class="fa fa-expand"></i>
+					</a> <a href="#" data-toggle="collapse"> <i class="fa fa-minus"></i>
+					</a> <a href="#" data-toggle="dispose"> <i class="fa fa-times"></i>
+					</a>
+				</div>
+			</div>
+			<div class="widget-body">
+				<form id="AppForm" action="" method="post" class="form-horizontal" data-bv-message="" data-bv-feedbackicons-valid="glyphicon glyphicon-ok" data-bv-feedbackicons-invalid="glyphicon glyphicon-remove" data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+					<input type="hidden" name="id" value="{$artical.id}">
+                    <div class="form-title">
+                        <a href="{:U('Admin/Artical/index/')}" class="btn btn-primary" data-loader="App-loader" data-loadername="文章列表">
+                            <i class="fa fa-mail-reply"></i>返回
+                        </a>
+                    </div>
+					<div class="form-group">
+						<label class="col-lg-2 control-label">选择分类<sup>*</sup></label>
+						<div class="col-lg-4">
+							<select class="form-control" name="cid" data-bv-notempty="true"
+								data-bv-notempty-message="请选择分类">
+								<option value="0">顶级分类</option>
+								<volist name="cate" id="vo">
+								<option value="{$vo.id}"<eq name="vo.id"
+										value="$artical.cid">selected</eq>>{$vo.name}
+								</option>
+								<volist name="vo['_child']" id="vo2">
+								<option value="{$vo2.id}"<eq name="vo2.id"
+										value="$artical.cid">selected</eq>>&nbsp;&nbsp;└{$vo2.name}
+								</option>
+								<foreach name="vo2['_child']" item="vo3">
+								<option value="{$vo3.id}"<eq name="vo3.id"
+										value="$artical.cid">selected</eq>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└{$vo3.name}
+								</option>
+								<foreach name="vo3['_child']" item="vo4">
+								<option value="{$vo4.id}"<eq name="vo4.id"
+										value="$artical.cid">selected</eq>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└{$vo4.name}
+								</option>
+								<foreach name="vo4['_child']" item="vo5">
+								<option value="{$vo5.id}"<eq name="vo5.id"
+										value="$artical.cid">selected</eq>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└{$vo5.name}
+								</option>
+								</foreach> </foreach> </foreach> </volist> </volist>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">标题<sup>*</sup></label>
+						<div class="col-md-7">
+							<input class="form-control" name="title" type="text" placeholder="必填" data-bv-notempty="true" data-bv-notempty-message="请填写标题" value="{$artical.title}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-2 control-label">图片</label>
+						<div class="col-lg-4">
+							<div class="input-group input-group-sm">
+								<input type="text" class="form-control" name="pic"
+									value="{$artical.pic}" id="App-listpic" placeholder="">
+								<span class="input-group-btn">
+									<button class="btn btn-default shiny" type="button"
+										onclick="appImgviewer('App-listpic')">
+										<i class="fa fa-camera-retro"></i>预览
+									</button>
+									<button class="btn btn-default shiny" type="button"
+										onclick="appImguploader('App-listpic',false)">
+										<i class="glyphicon glyphicon-picture"></i>上传
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">作者</label>
+
+						<div class="col-md-7">
+							<input class="form-control" placeholder=""
+								value="{$artical.author}" name="author" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">简介</label>
+
+						<div class="col-md-7">
+							<input class="form-control" placeholder="" value="{$artical.sub}"
+								name="sub" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">浏览量</label>
+
+						<div class="col-md-7">
+							<input class="form-control" placeholder=""
+								value="{$artical.visiter}" name="visiter" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">内容</label>
+
+						<div class="col-md-7">
+							<!--style给定宽度可以影响编辑器的最终宽度-->
+							<input type="hidden">
+							<script type="text/plain" id="J-ueditor"
+								style="width: 600px; height: 380px; position: relative">{$artical.content|htmlspecialchars_decode}
+                                                </script>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2"></label>
+
+						<div class="col-md-7">
+							<button class="btn btn-primary" type="submit">提交</button>
+							<button class="btn btn-default-outline">取消</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+    UE.getEditor('J-ueditor', {
+        textarea: 'content' //提交字段名，必须填写，数据库必须有此字段
+    });
+</script>
+<!--/面包屑导航封装-->
+<!--表单验证与提交封装-->
+<script type="text/javascript">
+$('#AppForm').bootstrapValidator({
+    submitHandler: function(validator, form, submitButton) {
+        var tourl = "{:U('Admin/Artical/addArtical')}";
+        var data = $('#AppForm').serialize();
+        $.App.ajax('post', tourl, data, okfun);
+        return false;
+    },
+});
+var okfun=function(){
+	   var tourl = "{:U('Admin/Artical/index')}";
+	   $('#App-loader').empty().load(tourl, function() {
+	       initLoader('App-loader');
+	   });
+	}
+</script>
+<!--/表单验证与提交封装-->

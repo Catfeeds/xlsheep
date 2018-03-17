@@ -1,0 +1,64 @@
+<volist name="cache" id="vo">
+	<div class="bgf planting">
+		<div class="bd_ul01">
+			<div class="left_wp">
+				<div class="bd_ul01 top_wp">
+					<div class="time_badge">
+						<p>第{$vo.id}期</p>
+					</div>
+					<p class="title_msg">第{$vo.id}期-{$vo.name}<if condition="$vo['restrict'] gt 0">【限<i>{$vo['restrict']}</i>{$vo.unit}】</if></p>
+				</div>
+				<div class="bd_ul fz_14 text_c">
+					<eq name="vo.isobject" value="1">
+					<p class="object">到期领取实物</p>
+					<else />
+					<p>预期年收入</p>
+					<p class="color_green">{$vo['rate']*100}%</p>
+					</eq>
+					<div>
+						<p>元/每只</p>
+						<p class="color_green">{$vo.price}</p>
+					</div>
+					<div>
+						<p>期限</p>
+						<p class="color_6">{$vo.cycle}个月</p>
+					</div>
+				</div>
+			</div>
+			<div class="rate right_wp">
+				<div class="buylist-buy ro{$vo['ro']}">
+	                <div class="circle buylist-buying">
+	                    <div class="pie_left"><div class="circle_left"></div></div>
+	                    <div class="pie_right"><div class="circle_right"></div></div>
+	                    <div class="circle_mask fz_12">
+	                    	<a href="{:U('App/Buy/details',array('id'=>$vo['id']))}">
+	                    	<eq name="vo.status" value="1">
+	                    	<div class="circle_mask_bd">
+		                        <p class="color_red">已售{$vo['percent']}%</p>
+		                        <p class="color_green">立即购买</p>
+	                        </div>
+	                        </eq>
+	                        <eq name="vo.status" value="2">
+	                    	<div class="circle_mask_bd">
+		                       <div class="farm-icon icon-buylist-6 mcc"></div><br>收益中
+	                        </div>
+	                        </eq>
+	                        <eq name="vo.status" value="3">
+	                    	<div class="circle_mask_bd">
+	                    		<div style="margin-top: 19px;">已返还<br>本金</div>
+	                        </div>
+	                        </eq>
+	                        </a>
+	                    </div>
+	                </div>
+	            </div>
+			</div>
+		</div>
+		<eq name="vo.status" value="2">
+			<div class="buylist-mark buylist-mark-saledout"></div>
+		</eq>
+		<eq name="vo.status" value="3">
+			<div class="buylist-mark buylist-mark-timeout"></div>
+		</eq>
+	</div>
+</volist>	

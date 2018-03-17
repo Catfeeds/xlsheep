@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>我的积分-{$_SESSION['WAP']['shopset']['name']}</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css"/>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="hd">
+			<div class="jf_wrap">
+				<p>可用积分：</p>
+				<h2>{$vip.score}分</h2>
+				<!--<p class="text_r">冻结积分：<i>0</i>分</p>-->
+			</div>
+		</div>
+		<div class="bd">
+			<div class="bd_tab">
+				<div class="weui_navbar">
+			        <div class="weui_navbar_item <eq name="type" value="0">weui_bar_item_on</eq>">
+			         	<a href="{:U('App/Vip/credit')}">明细</a> 
+			        </div>
+			        <div class="weui_navbar_item <eq name="type" value="2">weui_bar_item_on</eq>">
+			         	 <a href="{:U('App/Vip/credit',array('type'=>2))}">带来注册</a>
+			        </div>
+			        <div class="weui_navbar_item">
+			          	<a href="{:U('App/Scoreshop/index')}">兑换</a>
+			        </div>
+			        <div class="weui_navbar_item <eq name="type" value="5">weui_bar_item_on</eq>">
+			         	<a href="{:U('App/Vip/credit',array('type'=>5))}"> 带来消费</a>
+			        </div>
+			    </div>
+		    </div>
+		    <empty name="cache">
+		    <div style="padding:30px 0;text-align:center;color:#ff8300">暂无明细</div>
+		    <else />
+		    <ul class="jf_bd_nav" id="list">
+		    <volist name="cache" id="vo">
+			    <li class="jf_nav_list">
+				    <div class="weui_cells mg_0">
+			            <div class="weui_cell pd_tb15">
+			              <div class="weui_cell_bd weui_cell_primary">
+			                <p class="color_6">{$vo.msg}</p>
+			                <p class="fz_12 color_9">{$vo.ctime|date='Y-m-d H:i:s',###}</p>
+			              </div>
+			              <div class="weui_cell_ft color_green">{$vo.score}</div>
+			            </div>
+			        </div>
+		        </li>
+		       </volist> 
+	        </ul>
+	        </empty>
+	        <!--<a class="float_car" href="{:U('App/Shop/basket',array('sid'=>0,'lasturl'=>$footlasturl))}">-->
+	        	<!--<i class="iconfont icon-gouwuche fz_25"></i>-->
+	        <!--</a>-->
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+	<script type="text/javascript">
+	var type = {$type};
+	if($("#infinite")[0]) {
+		var p = 1;
+		var loading = false;
+		$(document.body).infinite().on("infinite", function() {
+		  if(loading) return;
+		  loading = true;
+		  p=p+1;
+		  param ="?p="+p+"type="+type;  
+	      $.get("{:U('App/Ajax/credit')}"+param,function(data){  
+	    	   if(data.status==1) {
+	    		   if(data.info) {	    			   
+	                   $("#list").append(data.info);
+	    			   loading = false;
+	                   if(data.more==0) {	            			  
+	                	   $(document.body).destroyInfinite();
+	                   }
+	    	   	   }  
+					$('#infinite').hide();          		   
+	    	   }
+	       })  
+		});
+	}
+	</script>
+</body>
+</html>

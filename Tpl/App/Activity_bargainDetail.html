@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>砍价商品详情</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/swiper.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/activity/jquery-weui.min.js"></script>
+	<script src="__PUBLIC__/App/js/swiper.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="banner kj_swp">
+				<div class="swiper-container">
+				  <div class="swiper-wrapper">
+				    <foreach name="appalbum" item="vo">
+				    <div class="swiper-slide">
+						<img src="{$vo.imgurl}">
+				    </div>
+				    </foreach>
+				  </div>
+					<div class="mask_text ovfl">
+						<p class="text fl">{$cache.summary}</p>
+						<div class="swiper-pagination fr"></div>
+					</div>
+				  
+				</div>
+			</div>
+			<div class="goods_msg">
+				<p class="name_msg">{$cache.name}</p>
+				<div class="ovfl">
+					<p class="fl">原价：<i>￥{$cache.price}</i></p>
+					<p class="fr">底价：<i>￥{$cache.oprice}</i></p>
+				</div>
+				<div class="ovfl">
+					<p class="fl">库存：<i>{$cache.num}件</i></p>
+					<p class="fr">砍价刀数：<i>10次</i></p>
+				</div>
+			</div>
+			<div class="kanjia_tool">
+				<div class="bd_ul ovfl">
+					<a href="" class="fl">我要砍价<i class="iconfont icon-iconfontdaocha"></i></a>
+					<a href="" class="fr">放入收藏夹<i class="iconfont icon-shoucang"></i></a>
+				</div>
+				<div class="contact_mj">
+					<a href="">联系卖家</a>
+				</div>
+			</div>
+
+			<div class="goods_detial_img">
+				<div class="color_6 pd_10 text_c" >商品详情</div>
+				<div class="img_wp">
+					{$cache.content|htmlspecialchars_decode}
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script> 
+var mySwiper = new Swiper('.swiper-container', {
+	//可选选项，自动滑动
+	pagination : '.swiper-pagination',
+})
+</script>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>{$cache.name}</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css" />
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/swiper.min.css" />
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/swiper.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery.lazyload.min.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<header>
+			<div class="banner">
+				<notempty name="appalbum">
+				<div class="swiper-container">
+				    <div class="swiper-wrapper">
+				       <foreach name="appalbum" item="vo">
+				        <div class="swiper-slide"><img src="{$vo.imgurl}" width="100%"></div>
+				        </foreach>
+				    </div>
+				    <div class="swiper-pagination"></div>		
+				</div>
+				</notempty>
+				<empty name="appalbum">
+					<notempty name="apppic">
+						<img src="{$apppic.imgurl}" width="100%">
+					</notempty>
+				</empty>
+			</div>
+		</header>
+		<div class="bd">
+			<div class="goods_xq_msg fz_16 color_6">
+				<div class="weui_cells mg_0 pd_15">
+					<p class="title_name">{$cache.name}</p>
+					<div class="bd_ul01 pd_0">
+				        <div class="weui_cell_bd weui_cell_primary">
+				            <p class="color_red fz_16">{$cache.score}积分</p>
+				        </div>
+			        </div>
+		        </div>
+		        <div class="weui_cells mg_0">
+			        <div class="weui_media_box weui_media_appmsg bd_ul">
+		                <div class="">
+		                    <p class="weui_media_desc">免邮费</p>
+		                </div>
+		                <div class="">
+		                    <p class="weui_media_desc">剩余:<i>{$cache.num}</i></p>
+		                </div>
+		                <div class="">
+		                    <p class="weui_media_desc">销量：<i>{$cache.sells}</i></p>
+		                </div>
+		            </div>
+	            </div>
+	            <div class="weui_cells">
+					<div class="weui_cell">
+						<em class="tips_icon green_icon">包邮</em>
+						<em class="tips_icon green_icon">优惠</em>
+					</div>
+	            </div>
+	            <div class="pd_15 text_c">
+					<p class=" color_9">————<i style="margin:0px 10px;">商品详情</i>————</p>
+				</div>
+				<div class="mg_t10 pic_wp">
+					{$cache.content|htmlspecialchars_decode}
+				</div>
+	        </div>
+		</div>
+		<div class="footer">
+			<eq name="cache.num" value="0">
+				<a href="javascript:;" class="weui_btn weui_btn_primary fz_16" style="border-radius:0px;background:#ccc;">已兑完</a>
+			<else />
+				<a id="exchange" href="javascript:;" class="weui_btn weui_btn_primary fz_16" style="border-radius:0px;">兑换</a>
+			</eq>
+		</div>
+	</div>
+</body>
+<!--全局封装-->
+<script type="text/javascript">
+	var goodsid="{$cache.id}";
+	var vipid="{$_SESSION.WAP.vipid}";
+</script>
+<!--封装图集-->
+<notempty name="appalbum">
+<script type="text/javascript">
+var swiper = new Swiper('.swiper-container',{
+	pagination: '.swiper-pagination',
+    paginationClickable: true
+});
+</script>
+</notempty>
+<script>
+var id={$cache.id};
+$('#exchange').click(function(){
+	var orderurl="{:U('App/Scoreshop/orderMake/id')}/"+id;
+	$.ajax({
+		type:"post",
+		url:"{:U('App/Scoreshop/exchange')}",
+		dataType:'json',
+		data:{'id':id},
+		success:function(info){
+			if(info['status']){
+				$.toast('正在生成订单',function(){window.location.href=orderurl;});
+			}else{
+				$.toptip(info.info, 'error');
+			}
+		},
+		error:function(xh,obj){
+			$.toptip('通讯失败，请重试！', 'error');
+		}
+	});
+	return false;
+});
+</script>
+<!--通用分享-->
+<!--新版分享特效-->
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+	var share_url = "http://{$_SERVER['HTTP_HOST']}__ROOT__/App/Score/goods/ppid/{$_SESSION['WAP']['vipid']}/id/{$cache.id}";
+	var share_title="{$cache.name}";
+	var share_content="{$_SESSION['WAP']['shopset']['summary']}";
+	var share_img="{$_SESSION['WAP']['shopset']['url']}{$apppic.imgurl}";
+	
+  wx.config({
+      debug: false,
+      appId: "{$jsapi['appId']}",
+	  timestamp: "{$jsapi['timestamp']}",
+	  nonceStr: "{$jsapi['nonceStr']}",
+	  signature: "{$jsapi['signature']}",
+      jsApiList: [
+        'checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'hideMenuItems',
+        'showMenuItems',
+        'hideAllNonBaseMenuItem',
+        'showAllNonBaseMenuItem',
+      ]
+  });
+  
+  wx.ready(function () {
+	  	//开启菜单
+	  	wx.showOptionMenu();
+	  	//隐藏菜单
+	  	//wx.hideOptionMenu();
+	    //分享给朋友
+	    wx.onMenuShareAppMessage({
+	      title: share_title,
+	      desc: share_content,
+	      link: share_url,
+	      imgUrl: share_img,
+	      trigger: function (res) {
+	        //alert('用户点击发送给朋友');
+	      },
+	      success: function (res) {
+	        //alert('已分享');
+	      },
+	      cancel: function (res) {
+	        //alert('已取消');
+	      },
+	      fail: function (res) {
+	        //alert(JSON.stringify(res));
+	      }
+	    });
+	    //分享到朋友圈
+	    wx.onMenuShareTimeline({
+	      title: share_title,
+	      link: share_url,
+	      imgUrl: share_img,
+	      trigger: function (res) {
+	        //alert('用户点击分享到朋友圈');
+	      },
+	      success: function (res) {
+	        //alert('已分享');
+	      },
+	      cancel: function (res) {
+	        //alert('已取消');
+	      },
+	      fail: function (res) {
+	        //alert(JSON.stringify(res));
+	      }
+	    });
+	    //分享到QQ
+	    wx.onMenuShareQQ({
+	      title: share_title,
+	      desc: share_content,
+	      link: share_url,
+	      imgUrl: share_img,
+	      trigger: function (res) {
+	        //alert('用户点击分享到QQ');
+	      },
+	      complete: function (res) {
+	        //alert(JSON.stringify(res));
+	      },
+	      success: function (res) {
+	        //alert('已分享');
+	      },
+	      cancel: function (res) {
+	        //alert('已取消');
+	      },
+	      fail: function (res) {
+	        //alert(JSON.stringify(res));
+	      }
+	    });
+  });
+  $(document).ready(function () {
+	  $('.ui-tab-nav li').click(function () {
+	  var index = $(this).index();
+	  $(this).attr('class',"current").siblings('li').removeClass('current');
+	  $('.ui-tab-content li').eq(index).show(200).siblings('.ui-tab-content li').hide();
+	  $('html,body').animate({scrollTop:$('.ui-tab-nav').offset().top},800);
+	  });
+  })
+</script>
+<script type="text/javascript">
+  $(function() {
+      $("img.lazy").show().lazyload({effect: "fadeIn"});
+  });
+</script>
+</html>

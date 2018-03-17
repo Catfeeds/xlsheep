@@ -1,0 +1,235 @@
+<div class="row">
+	<div class="col-xs-12 col-md-12">
+		<div class="widget">
+			<div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i>
+				<span class="widget-caption">会员银行卡提现订单</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize">
+						<i class="fa fa-expand"></i>
+					</a>
+					<a href="#" data-toggle="collapse">
+						<i class="fa fa-minus"></i>
+					</a>
+					<a href="#" data-toggle="dispose">
+						<i class="fa fa-times"></i>
+					</a>
+				</div>
+			</div>
+			<div class="widget-body">
+				<div class="table-toolbar">
+					<button href="javascript:void(0)" class="btn btn-primary" id="exportTxorder"><i class="fa fa-save"></i>导出提现订单</button>
+					<div class="pull-right">
+						<form id="App-search">
+							<label style="margin-bottom: 0px;">
+								<input name="name" type="search" placeholder="按姓名模糊搜索" class="form-control input-sm" value="{$name}">
+							</label>
+							<a href="{:U('Admin/Vip/txorder/',array('status'=>$status))}" class="btn btn-success" data-loader="App-loader" data-loadername="提现订单" data-search="App-search">
+								<i class="fa fa-search"></i>搜索
+							</a>
+						</form>
+					</div>
+				</div>
+
+				<table id="App-table" class="table table-bordered table-hover">
+					<thead class="bordered-darkorange">
+						<tr role="row">
+							<th width="30px"><div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+									<label style="padding-left: 4px;"> <input type="checkbox" class="App-checkall colored-blue">
+                                     <span class="text"></span>
+									</label>                                    
+                                </div></th>
+							<th>提现编号</th>
+							<th>VIPID</th>
+							<th>提现金额</th>
+							<th>提现姓名</th>
+							<th>提现电话</th>
+							<th>提现银行</th>							
+							<th>提现分行</th>
+							<th>提现银行所在地</th>
+							<th>提现卡号</th>
+							<th>申请时间</th>
+							<eq name="status" value="1">
+						    <th width="200">操作</th>
+						    </eq>
+						    <eq name="status" value="2">
+						    <th>提现时间</th>
+						    <th>转账流水号</th>
+						    </eq>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="cache" id="vo">
+							<tr id="item{$vo.id}">
+								<td>
+									<div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+										<label style="padding-left: 4px;"> <input name="checkvalue" type="checkbox" class="colored-blue App-check" value="{$vo.id}">
+	                                     <span class="text"></span>
+										</label>                                    
+	                                </div>
+								</td>
+								<td class=" sorting_1">{$vo.id}</td>
+								<td class=" ">{$vo.vipid}</td>
+								<td class=" ">{$vo.txprice}</td>
+								<td class=" ">{$vo.txname}</td>
+								<td class=" ">{$vo.txmobile}</td>
+								<td class=" ">{$vo.txyh}</td>
+								<td class=" ">{$vo.txfh}</td>
+								<td class=" ">{$vo.txszd}</td>
+								<td class=" ">{$vo.txcard}</td>
+								<td class=" ">{$vo.txsqtime|date='Y/m/d H:i',###}</td>
+								<eq name="status" value="1">
+								<td class="center">
+									<eq name="vo.status" value="1"><button class="btn btn-success btn-xs txorderok" data-id = "{$vo.id}"><i class="glyphicon glyphicon-ok"></i> 完成提现</button></eq> &nbsp;&nbsp;&nbsp;
+									<eq name="vo.status" value="1"><button class="btn btn-danger btn-xs txordercancel" data-id = "{$vo.id}"><i class="glyphicon glyphicon-remove"></i> 取消申请</button></eq>
+								</td>
+								</eq>
+								<eq name="status" value="2">
+								<td class=" ">{$vo.txtime|date='Y/m/d H:i',###}</td>
+								<td class="center">{$vo.sno}</td>
+								</eq>
+							</tr>
+						</volist>
+												
+					</tbody>
+				</table>
+				<div class="row DTTTFooter">
+					{$page}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+	setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->
+<!--全选特效封装/全部删除-->
+<script type="text/javascript">
+	//全选
+	var checkall=$('#App-table .App-checkall');
+	var checks=$('#App-table .App-check');
+	var trs=$('#App-table tbody tr');
+	$(checkall).on('click',function(){
+		if($(this).is(":checked")){			
+			$(checks).prop("checked","checked");
+		}else{
+			$(checks).removeAttr("checked");
+		}		
+	});
+	$(trs).on('click',function(){
+		var c=$(this).find("input[type=checkbox]");
+		if($(c).is(":checked")){
+			$(c).removeAttr("checked");
+		}else{
+			$(c).prop("checked","checked");
+		}		
+	});
+	<eq name="status" value="1">
+	//提现完成
+	$('.txorderok').on('click',function(){
+			var id=$(this).data('id');
+			if(!id){
+				$.App.alert('danger','请选择要提现的项目！');
+				return false;
+			}
+			$.ajax({
+					type:"post",
+					url:"{:U('Admin/Vip/txVoucher')}",
+					data:{'id':id},
+					dataType: "json",
+					//beforeSend:$.App.loading(),
+					success:function(mb){
+						//$.App.loading();
+						bootbox.dialog({
+	                	message: mb,
+	                	title: "提现完成",
+	                	className: "modal-darkorange",
+	                	buttons: {
+	                		   success: {
+			                        label: "确定",
+			                        className: "btn-blue",
+			                        callback: function () {
+			                        	var sno = $('#sno').val();
+			                    		if(!sno){
+			                    			$.App.alert('danger','请填写转账流水号！');
+			                    			return false;
+			                    		}			     
+			                    		var toajax="{:U('Admin/Vip/txorderOk')}";
+			                    		var dt=$('#AppTxForm').serialize();
+			                    		var funok=function(){
+			                    			var callok=function(){
+			                    				//成功删除后刷新
+			                    				//$('#refresh-toggler').trigger('click');
+			                    				$("#menu_viptx_complete").click();
+			                    				return false;
+			                    			};
+			                    			var callerr=function(){
+			                    				//拦截错误
+			                    				return false;
+			                    			};
+			                    			$.App.ajax('post',toajax,dt,callok,callerr);
+			                    		}						
+			                    		$.App.confirm("确认要完成提现吗？此操作不可逆转！",funok);
+			                        }
+			                   },
+			                    "取消": {
+			                        className: "btn-danger",
+			                        callback: function () { }
+			                    }
+		                	}
+		            	});
+					},
+					error:function(xhr){
+						$.App.alert('danger','通讯失败！请重试！');
+					}
+			});
+		return false;
+	});
+	//取消申请
+	var btntxcancel=$('.txordercancel');
+	$(btntxcancel).on('click',function(){
+		var id=$(this).data('id');
+		var funok=function(){			
+			$.ajax({
+				type:"post",
+				url:"{:U('Admin/Vip/txorderCancel')}",
+				async:false,
+				data:{'id':id},
+				success:function(info){
+				    if(info['status']){
+				           $.App.alert('success',info['msg']);
+				           //$('#App-reloader').trigger('click');
+				           $("#menu_viptx_cancle").click();
+				    }else{
+				           $.App.alert('danger',info['msg']);
+				         }
+				         return false;
+				   },
+				error:function(xhr){
+					$.App.alert('danger','通讯失败！请重试！');
+					return false;
+				}
+			});
+		}
+		$.App.confirm("确认要取消此笔提现操作吗？此操作不可逆转！",funok);
+	
+	});
+	</eq>	
+		
+	//导出提现帐单
+	$('#exportTxorder').on('click',function(){
+		var checks=$(".App-check:checked");
+		var chk='';
+		$(checks).each(function(){
+			chk+=$(this).val()+',';
+		});
+		window.open("{:U('Admin/Vip/txorderExport')}/status/{$status}/id/"+chk);
+	})
+</script>
+<!--/全选特效封装-->
+
+
+	

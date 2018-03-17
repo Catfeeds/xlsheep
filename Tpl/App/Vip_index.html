@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+        <title>用户中心</title>
+        <link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+        <link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css">
+        <link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+        <link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+        <link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+        <script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+        <style>
+            .mg_r8 {
+                margin-right: 8px;
+            }
+            .wd_80 {
+                width: 80px !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="bd">
+                <div class="center_wp">
+                    <div class="center_title">
+                        <div class="weui_cells">
+                            <div class="c_float bd_ul01">
+                                <div class="f_left left_wp weui_cell_primary">
+                                    <p><span class="wd_80">本月收益</span><i class="mg_l10">{$data.bysy}元</i></p>
+                                    <p><span class="wd_80">余额</span><i class="mg_l10">{$data.money}元</i></p>
+                                    <p><span class="wd_80">待返认购款</span><i class="mg_l10">{$data.dfrgk}元</i></p>
+                                </div>
+                                <div class="right_wp my_wallet">
+                                    <a href="{:U('App/Buy/income')}">
+                                        <img class="img" src="__PUBLIC__/App/images/wallet.png" alt="">
+                                        <p>查看我的钱包</p>
+                                    </a>
+                                </div>
+                            </div>
+                            <p class="bod_red_l lh_2_5"></p>
+                        </div>
+                    </div>
+                    <div class="weui_cells">
+                        <div class="bd_ul">
+                            <a href="{:U('App/Buy/sheepfold')}" class="weui_cell_primary pd_10 bod_r">
+                                <img style="width:35px;" class="mg_r8" src="__PUBLIC__/App/images/icons_cnt01.png" alt=""><span>种养数量:{$data.totalnum}</span>
+                            </a>
+                            <a href="{:U('App/Buy/orderList')}" class="weui_cell_primary pd_10">
+                                <img style="width:35px;" class="mg_r8" src="__PUBLIC__/App/images/icons_cnt02.png" alt=""><span>认购记录</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="weui_cells">
+                        <div class="bd_ul">
+
+                            <a href="{:U('App/Vip/credit')}" class="weui_cell_primary pd_10 bod_r">
+                                <img style="width:33px;margin-left: 3px" class="mg_r8"
+                                     src="__PUBLIC__/App/images/icons_cnt09.png" alt=""><span>推荐积分:{$vip.score}</span>
+                            </a>
+                            <a href="{:U('App/Scoreshop/index')}" class="weui_cell_primary pd_10 ">
+                                <img style="width:30px;margin-left: 3px" class="mg_r8"
+                                     src="__PUBLIC__/App/images/icons_cnt10.png" alt=""><span>积分兑换</span>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="weui_cells weui_cells_access">
+                        <a class="weui_cell" href="{:U('App/Vip/message')}">
+                            <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/icons_cnt08.png" alt="" width="20"></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>我的消息
+                                <if condition="$data['unread'] gt 0"><span
+                                        class="badge badge-primary">{$data['unread']}</span></if>
+                                </p>
+                            </div>
+                            <div class="weui_cell_ft"></div>
+                        </a>
+                        <eq name="isdelivery" value="1">
+                        <a class="weui_cell" href="{:U('App/Shop/deliveryOrderList')}">
+                            <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/delivery.png" alt="" width="20"></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>配送管理</p>
+                            </div>
+                            <div class="weui_cell_ft"></div>
+                        </a>
+                        </eq>
+                        <eq name="data.isfx" value='1'>
+                        <a class="weui_cell" href="{:U('App/Fx/index')}">
+                            <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/icons_cnt11.png" alt="" width="20">
+                            </div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>分销中心</p>
+                            </div>
+                            <div class="weui_cell_ft"></div>
+                        </a>
+                        </eq>
+
+                        <a class="weui_cell" href="{:U('App/Shop/orderList')}">
+                            <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/icons_cnt07.png" alt="" width="20"></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>商品订单</p>
+                            </div>
+                            <div class="weui_cell_ft"></div>
+                        </a>
+                        <a class="weui_cell" href="{:U('App/Shop/orderList',array('type'=>6))}">
+                            <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/icons_cnt13.png" alt="" width="20"></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>我的团购</p>
+                            </div>
+                            <div class="weui_cell_ft"></div>
+                        </a>
+                        <a class="weui_cell" href="{:U('App/Shop/orderList',array('type'=>7))}">
+                            <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/icons_cnt12.png" alt="" width="20"></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>我的砍价</p>
+                            </div>
+                            <div class="weui_cell_ft"></div>
+                        </a>
+                        <a class="weui_cell" href="{:U('App/Vip/contract')}">
+                            <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/icons_cnt06.png" alt="" width="20"></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>保单与合同</p>
+                            </div>
+                            <div class="weui_cell_ft"></div>
+                        </a>
+
+                        <a class="weui_cell" href="{:U('App/Vip/bank_card')}">
+                            <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/icons_cnt04.png" alt="" width="20"></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>我的银行卡</p>
+                            </div>
+                            <div class="weui_cell_ft"></div>
+                        </a>
+
+
+                        <!--
+                        <a class="weui_cell" href="javascript:;">
+                          <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/icons_cnt05.png" alt="" width="20"></div>
+                          <div class="weui_cell_bd weui_cell_primary">
+                            <p>接收通知设定</p>
+                          </div>
+                          <div class="weui_cell_ft"></div>
+                        </a>
+                        -->
+
+
+                        <a class="weui_cell" href="{:U('App/Vip/edit')}">
+                            <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/icons_cnt03.png" alt="" width="20"></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>账号设置</p>
+                            </div>
+                            <div class="weui_cell_ft"></div>
+                        </a>
+
+                        <a class="weui_cell" href="{:U('App/Vip/bindAdmin')}">
+                            <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/bindadmin.png" alt="" width="20"></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>绑定管理</p>
+                            </div>
+                            <div class="weui_cell_ft"></div>
+                        </a>
+
+                        <switch name="data.vip_apply_status">
+                        <case value="0">
+
+
+                            <a class="weui_cell" href="{:U('App/Vip/upgrade')}">
+                                <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/icons_vip.png" alt="" width="20">
+                                </div>
+                                <div class="weui_cell_bd weui_cell_primary">
+                                    <p>会员等级：普通会员</p>
+                                </div>
+                                <div class="weui_cell_ft"></div>
+                            </a>
+                        </case>
+                        <case value="1">
+
+
+                            <a class="weui_cell" href="javascript:;">
+                                <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/icons_vip.png" alt="" width="20">
+                                </div>
+                                <div class="weui_cell_bd weui_cell_primary">
+                                    <p>会员等级：合伙人申请中</p>
+                                </div>
+                                <div class="weui_cell_ft"></div>
+                            </a>
+
+                        </case>
+
+                        <case value="2">
+                            <a class="weui_cell" href="javascript:;">
+                                <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/icons_vip.png" alt="" width="20">
+                                </div>
+                                <div class="weui_cell_bd weui_cell_primary">
+                                    <p>会员等级：农牧源合伙人(截止:{$data.vip_expiration_time|date='Y-m-d',###})</p>
+                                </div>
+                                <div class="weui_cell_ft"></div>
+                            </a>
+                        </case>
+                        </switch>
+                    </div>
+                </div>
+            </div>
+            <include file="./Tpl/App/Shop_footer.html"/>
+        </div>
+    </body>
+</html>

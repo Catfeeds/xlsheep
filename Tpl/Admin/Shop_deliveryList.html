@@ -1,0 +1,103 @@
+<script src="__PUBLIC__/App/js/global.js"></script>
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <div class="widget">
+            <div class="widget-header bg-blue">
+                <i class="widget-icon fa fa-arrow-down"></i>
+                <span class="widget-caption">自提点列表</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body">
+                <div class="table-toolbar">
+                    <a href="{:U('Admin/Shop/deliverySet/')}" class="btn btn-primary" data-loader="App-loader"
+                       data-loadername="新增配送员">
+                        <i class="fa fa-plus"></i>新增配送员
+                    </a>
+                    <div class="pull-right">
+                        <form id="App-search">
+
+                            <label style="margin-bottom: 0px;">
+                                <input name="name" type="search" class="form-control input-sm" placeholder="请输入关键地址信息"
+                                       value="{$name}">
+                            </label>
+                            <a href="{:U('Admin/Shop/deliveryList/')}" class="btn btn-success" data-loader="App-loader"
+                               data-loadername="配送员列表" data-search="App-search">
+                                <i class="fa fa-search"></i>搜索
+                            </a>
+                        </form>
+                    </div>
+                </div>
+                <table id="App-table" class="table table-bordered table-hover">
+                    <thead class="bordered-darkorange">
+                    <tr role="row">
+                        <th>ID</th>
+                        <th>姓名</th>
+                        <th>电话</th>
+                        <th>关联会员ID</th>
+                        <th>手续费</th>
+                        <th>绑定代码</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="cache" id="vo">
+                        <tr id="item{$vo.id}">
+                            <td class=" sorting_1">{$vo.id}</td>
+                            <td class=" ">{$vo.realname}</td>
+                            <td class=" ">{$vo.mobile}</td>
+                            <td class=" ">{$vo.vipid}</td>
+                            <td class=" ">{$vo.fee}</td>
+                            <td class=" ">{$vo.code}</td>
+                            <td class=" ">
+                                <switch name="vo.status">
+                                    <case value="0">正常</case>
+                                    <case value="1">禁用</case>
+                                </switch>
+                                </td>
+                            <td class="center ">
+                                <a href="{:U('Admin/Shop/deliverySet/',array('id'=>$vo['id']))}"
+                                                   class="btn btn-success btn-xs" data-loader="App-loader"
+                                                   data-loadername="设置自提点"><i class="fa fa-edit"></i> 编辑</a>&nbsp;&nbsp;
+                                <eq name="vo.status" value="0">
+                                    <a
+                                            href="{:U('Admin/Shop/deliverySet/')}" class="btn btn-danger btn-xs" data-type="del"
+                                            data-content="禁用配送员后将会不分配配送费用，确定禁用该配送员?"
+                                            data-ajax="{:U('Admin/Shop/deliveryStop/',array('id'=>$vo['id'],'status'=>1))}"><i
+                                            class="fa fa-trash-o"></i> 禁用</a>
+                                    <else/>
+                                    <a
+                                            href="{:U('Admin/Shop/deliverySet/')}" class="btn btn-danger btn-xs" data-type="del"
+                                            data-content="启用配送员后将会分配配送费用，确定启用该配送员?"
+                                            data-ajax="{:U('Admin/Shop/deliveryStop/',array('id'=>$vo['id'],'status'=>0))}"><i
+                                            class="fa fa-trash-o"></i> 启用</a>
+                                </eq>
+
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+                <div class="row DTTTFooter">
+                    {$page}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+    setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->

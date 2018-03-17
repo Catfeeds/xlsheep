@@ -1,0 +1,111 @@
+<div class="row">
+	<div class="col-xs-12 col-xs-12">
+		<div class="widget radius-bordered">
+			<div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i> <span
+					class="widget-caption">直播设置</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize"> <i class="fa fa-expand"></i>
+					</a> <a href="#" data-toggle="collapse"> <i class="fa fa-minus"></i>
+					</a> <a href="#" data-toggle="dispose"> <i class="fa fa-times"></i>
+					</a>
+				</div>
+			</div>
+			<div class="widget-body">
+				<form id="AppForm" action="" method="post" class="form-horizontal" data-bv-message="" data-bv-feedbackicons-valid="glyphicon glyphicon-ok" data-bv-feedbackicons-invalid="glyphicon glyphicon-remove" data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+                    <input type="hidden" name="id" value="{$video.id}">
+                    <div class="form-title">
+                        <a href="{:U('Admin/Video/index/')}" class="btn btn-primary" data-loader="App-loader" data-loadername="直播列表">
+                            <i class="fa fa-mail-reply"></i>返回
+                        </a>
+                    </div>
+					<div class="form-group">
+						<label class="control-label col-md-2">标题<sup>*</sup></label>
+
+						<div class="col-md-7">
+							<input class="form-control"	name="title" type="text" placeholder="必填" data-bv-notempty="true" data-bv-notempty-message="请填写标题" value="{$video.title}">
+						</div>
+					</div>
+					<div class="form-group">
+                        <label class="col-lg-2 control-label">选择分类<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <select class="form-control" name="cid" data-bv-notempty="true"
+                                                               data-bv-notempty-message="不能为空">
+                                <option value="0">顶级分类</option>
+                                <volist name="cate" id="vo">
+                                    <option value="{$vo.id}" <eq name="vo.id" value="$cache.cid">selected</eq>>{$vo.name}</option>
+                                    <volist name="vo['_child']" id="vo2">
+                                        <option value="{$vo2.id}" <eq name="vo2.id" value="$cache.cid">selected</eq>>&nbsp;&nbsp;└{$vo2.name}</option>
+                                        <foreach name="vo2['_child']" item="vo3">
+                                            <option value="{$vo3.id}" <eq name="vo3.id" value="$cache.cid">selected</eq>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└{$vo3.name}</option>
+                                            <foreach name="vo3['_child']" item="vo4">
+                                                <option value="{$vo4.id}" <eq name="vo4.id" value="$cache.cid">selected</eq>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└{$vo4.name}</option>
+                                                <foreach name="vo4['_child']" item="vo5">
+                                                    <option value="{$vo5.id}" <eq name="vo5.id" value="$cache.cid">selected</eq>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└{$vo5.name}</option>
+                                                </foreach>
+                                            </foreach>
+                                        </foreach>
+                                    </volist>
+                                </volist>
+                            </select>
+                        </div>
+                    </div>
+					<div class="form-group">
+						<label class="control-label col-md-2">直播地址<sup>*</sup></label>
+
+						<div class="col-md-7">
+							<input class="form-control" name="src" type="text" placeholder="必填" data-bv-notempty="true" data-bv-notempty-message="请填写直播地址" value="{$video.src}">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-lg-2 control-label">图片</label>
+						<div class="col-lg-4">
+							<div class="input-group input-group-sm">
+								<input type="text" class="form-control" name="pic"
+									value="{$video.pic}" id="App-listpic" placeholder=""> <span
+									class="input-group-btn">
+									<button class="btn btn-default shiny" type="button"
+										onclick="appImgviewer('App-listpic')">
+										<i class="fa fa-camera-retro"></i>预览
+									</button>
+									<button class="btn btn-default shiny" type="button"
+										onclick="appImguploader('App-listpic',false)">
+										<i class="glyphicon glyphicon-picture"></i>上传
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label col-md-2"></label>
+
+						<div class="col-md-7">
+							<button class="btn btn-primary" type="submit">提交</button>
+							<button class="btn btn-default-outline">取消</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->
+<!--表单验证与提交封装-->
+<script type="text/javascript">
+$('#AppForm').bootstrapValidator({
+    submitHandler: function(validator, form, submitButton) {
+        var tourl = "{:U('Admin/Video/addVideo')}";
+        var data = $('#AppForm').serialize();
+        $.App.ajax('post', tourl, data, null);
+        return false;
+    },
+});
+</script>
+<!--/表单验证与提交封装-->

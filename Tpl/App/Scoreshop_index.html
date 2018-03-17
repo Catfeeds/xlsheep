@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>我的积分</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>	
+	<style>
+	.about{    
+		position: relative;
+	    left: 50%;
+	    width: 122px;
+	    height: 26px;
+	    margin-left: -61px;
+	    text-align: center;
+	    line-height: 26px;
+	    display: block;
+	    border-radius: 8px;
+	    color: #F00;
+	    font-size: 22px;
+	}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<div class="hd">
+			<div class="jf_wrap">
+				<p>可用积分：</p>
+				<h2>{$data.score}分</h2><a class="about" href="{:U('App/Artical/index',array('id'=>11))}"><积分说明></a>
+			</div>
+		</div>
+		<div class="bd">
+			<div class="bd_tab">
+				<div class="weui_navbar">
+			        <div class="weui_navbar_item">
+			         	<a href="{:U('App/Vip/credit')}">明细</a> 
+			        </div>
+			        <div class="weui_navbar_item">
+			         	 <a href="{:U('App/Vip/credit',array('type'=>2))}">带来注册</a>
+			        </div>
+			        <div class="weui_navbar_item weui_bar_item_on">
+			          	<a href="{:U('App/Scoreshop/index')}">兑换</a>
+			        </div>
+			        <div class="weui_navbar_item">
+			         	<a href="{:U('App/Vip/credit',array('type'=>5))}"> 带来消费</a>
+			        </div>
+			    </div>
+		    </div>
+		    <empty name="cache">
+		    <div style="padding:30px 0;text-align:center;color:#ff8300">暂无积分商品</div>
+		    <else />
+		    <ul class="jf_bd_nav">
+			       <li class="jf_nav_list" style="display:block">
+				    <div class="goods_list">
+						<ul class="bd_ul flex_wp">
+							<volist name="cache" id="vo">
+							<li style="width: 48%">
+								<a href="{:U('App/Shop/goods',array('id'=>$vo['id']))}">
+									<img class="img" src="{$vo.imgurl}" alt="">
+									<div class="goods_msg fz_12 color_6">
+										<p class="title_name fz_14">{$vo.name}</p>
+										<div class="bd_ul01 pd_0">
+									        <div class="weui_cell_bd weui_cell_primary">
+									            <p class="color_red fz_14">￥{:number_format($vo['price'],2)}+{$vo['integral']}积分</p>
+									        </div>
+								        </div>
+							        </div>
+								</a>
+							</li>
+							</volist> 
+						</ul>
+				    </div>
+		        </li>
+	        </ul>
+	        </empty>
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+</html>

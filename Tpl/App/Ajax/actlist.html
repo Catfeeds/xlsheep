@@ -1,0 +1,20 @@
+<volist name='cache' id='vv'>
+<div class="goods">
+	<a href="{:U('App/Activity/actgoods',array('id'=>$vv['id']))}">
+		<img src="{$vv['apppic']['imgurl']}" class="goods_img">
+	</a>
+	<div class="goods_msg">
+		<p>{$vv.name}</p>
+		<!-- <p class="fz_12 color_9 weui_media_desc">{$vo.summary|msubstr=0,10}</p> -->
+		<div class="c_float mg_t10 weui_media_box pd_0 bd_ul">
+			<div class="f_left">
+				<p class="color_org">团购价：￥{$vv.price}</p>
+				<p>已团：{$vv.sells}件</p>
+			</div>
+			<div class="f_right">
+				<a href="{:U('App/Activity/actgoods',array('id'=>$vv['id']))}" class="fr buy_btn">立即参团</a>
+			</div>
+		</div>
+	</div>
+</div>
+</volist>

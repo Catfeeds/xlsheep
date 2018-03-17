@@ -1,0 +1,200 @@
+<html>
+<head lang="zh">
+    <meta charset="UTF-8">
+    <title>众筹记录-{$_SESSION['WAP']['shopset']['name']}</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=0" name="viewport">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css"/>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+    <link href="__PUBLIC__/App/css/buy/comon.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/style.css" />   
+    <script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+</head>
+<body class="un-ms-con" style="background-color: rgb(244, 243, 239);" avalonctrl="wxApp">
+<article class="pagecontent" style="display: block;">
+<section>
+    <div class="buy-record">
+        <div class="un-buy-record-list" id="list">
+         <empty name="cache">
+         	<div class="no-goat">
+		        <div class="orange no-goat-tips">暂无订单</div>
+		    </div>
+		    <else />
+            <volist name="cache" id="vo">
+                <a class="item-link" href="/App/Buy/orderDetail/orderid/{$vo.id}">
+                <div class="incomedetails buyliststyle_1">
+                    <div class="buylist-no">第{$vo.goodsid}期
+                        <div class="arrow"></div>
+                        <div class="little-arrow"></div>
+                    </div>
+                    <div class="buylist-box">
+                        <div class="buylist-info">
+								<eq name="vo.isaddress" value="0">
+                            <div class="">
+                                <div class="incomedetails-top"></div>
+                                <div class="incomedetails-top" style="width: 40%;height: 43px;overflow: hidden;">
+                                    <div class="buylist-subtitle" style="color:#999;">{$vo.vname}</div>
+                                    <div class="buylist-subnum  black">{$vo.copies_price}元/份</div>
+                                </div>
+                                <div class="incomedetails-top" style="width: 24%;height: 43px;overflow: hidden;">
+                                    <div class="buylist-subtitle" style="color:#999;">年收益</div>
+                                    <div class="buylist-subnum black">{$vo.rate}</div>
+                                </div>
+                            </div>
+                            <div class="buylist-subinfo">
+                                <div class="incomedetails-bottom" style="height: 43px;overflow: hidden;">
+                                    <div class="buylist-subtitle" style="color:#999;">我的{$vo.vname}</div>
+                                    <div class="buylist-subnum orange fw800">{$vo.totalnum}份</div>
+                                </div>
+                                <div class="incomedetails-bottom" style="height: 43px;overflow: hidden;width: 40%;">
+                                    <div class="buylist-subtitle" style="color:#999;">金额</div>
+                                    <div class="buylist-subnum black">{$vo.totalprice}</div>
+                                </div>
+                                <div class="incomedetails-bottom" style="width: 24%;height: 43px;overflow: hidden;">
+                                    <div class="buylist-subtitle" style="color:#999;">期限</div>
+                                    <div class="buylist-subnum black">{$vo.cycle}</div>
+                                </div>
+                            </div>
+								<else />
+								<div class="">
+                                <div class="incomedetails-top"></div>
+                                <div class="incomedetails-top" style="width: 40%;height: 43px;overflow: hidden;">
+                                    <div class="buylist-subtitle" style="color:#999;">{$vo.vname}</div>
+                                    <div class="buylist-subnum  black">{$vo.price}元/{$vo.unit}</div>
+                                </div>
+                                <div class="incomedetails-top" style="width: 24%;height: 43px;overflow: hidden;">
+                                    <div class="buylist-subtitle" style="color:#999;">收益方式</div>
+                                    <div class="buylist-subnum black">实物</div>
+                                </div>
+                            </div>
+                            <div class="buylist-subinfo">
+                                <div class="incomedetails-bottom" style="height: 43px;overflow: hidden;">
+                                    <div class="buylist-subtitle" style="color:#999;">我的{$vo.vname}</div>
+                                    <div class="buylist-subnum orange fw800">{$vo.totalnum}{$vo.unit}</div>
+                                </div>
+                                <div class="incomedetails-bottom" style="height: 43px;overflow: hidden;width: 40%;">
+                                    <div class="buylist-subtitle" style="color:#999;">金额</div>
+                                    <div class="buylist-subnum black">{$vo.totalprice}</div>
+                                </div>
+                                <div class="incomedetails-bottom" style="width: 24%;height: 43px;overflow: hidden;">
+                                    <div class="buylist-subtitle" style="color:#999;">期限</div>
+                                    <div class="buylist-subnum black">{$vo.cycle}</div>
+                                </div>
+                            </div>
+								</eq>
+							</div>
+							<div class="buylist-buy">
+                            <div class="circle buylist-buying ro360">
+                                <div class="pie_left">
+                                    <div class="circle_left"></div>
+                                </div>
+                                <div class="pie_right">
+                                    <div class="circle_right"></div>
+                                </div>
+                               <eq name="vo.status" value="1"> 
+                    			<div class="circle_mask" style="background-color: #f0f0f0;">
+                    				<div class="buylist-buy-return">
+                    					<div class="farm-icon icon-buylist-4 mcc"></div>
+                    					<br>未付款
+                    				</div>
+                    			</div> 
+                    			</eq> 
+                                <eq name="vo.status" value="2"> 
+                    			<div class="circle_mask" style="background-color: #fff5f0;">
+                    				<div class="buylist-buy-return" data-type="{$vo.bonusway}" data-fee="<?php echo $vo['fee']*$vo[totalnum]; ?>" data-id="{$vo.id}">
+                    					<div class="farm-icon icon-buylist-6 mcc"></div>                   					
+                    					<br> 
+                                        <eq name='vo.isproject' value='1'>
+                                            <egt name='vo.endtime' value='$now'>
+                                                众筹中
+                                            <else/>
+                                                <eq name="vo.isaddress" value="0">
+                                                    收益中
+                                                <else />
+                                                    <egt name='vo.rtime' value='$now'>
+                                                        种养中
+                                                    <else/>
+                                                        <eq name='vo.delivery' value='express'>待发货<else/>待自提</eq>
+                                                    </egt>
+                                                </eq>  
+                                            </egt>
+                                        <else/>
+                                            <eq name="vo.isaddress" value="0">
+                                                收益中
+                                            <else />
+                                                <egt name='vo.rtime' value='$now'>
+                                                    种养中
+                                                <else/>
+                                                    <eq name='vo.delivery' value='express'>待发货<else/>待自提</eq>
+                                                </egt>
+                                            </eq>  
+                                        </eq>            
+                    				</div>
+                    			</div> 
+                    			</eq>   
+                    			<eq name="vo.status" value="3">   
+                        			<eq name="vo.isaddress" value="0">
+                            			<div class="circle_mask" style="background-color: #f0f0f0;">
+                           					<div class="buylist-buy-return" style="margin-top: 19px;">已返还<br>本金</div>
+                           				</div>
+                                    <else/>
+                                        <div class="circle_mask" style="background-color: #f0f0f0;">
+                                            <div class="buylist-buy-return" style="margin-top: 19px;"><eq name='vo.delivery' value='express'>已收货<else/>已自提</eq></div>
+                                        </div>
+                       				</eq>
+                   				</eq>
+                   				<eq name="vo.status" value="4">      
+                   				<div class="circle_mask" style="background-color: #f0f0f0;">
+                   					<div class="buylist-buy-return" style="margin-top: 28px;">已发货</div>
+                   				</div>
+                   				</eq>
+                                </div>
+                            </div>
+                        </div>
+                       </div>
+                        </a>
+                        </volist>
+                      </empty>
+               </div>
+    </div>
+
+    <!--ms-if-->
+</section>
+</article>
+<script>
+window.onload = function () { 
+    document.getElementsByTagName('body')[0].style.backgroundColor = '#f4f3ef';
+}; 
+</script>
+<script type="text/javascript">
+	if($("#infinite")[0]) {
+		var p = 1;
+		var loading = false;
+		$(document.body).infinite().on("infinite", function() {
+		  if(loading) return;
+		  loading = true;
+		  p=p+1;
+		  param ="?p="+p;  
+	      $.get("{:U('App/Ajax/buyOrderList')}"+param,function(data){  
+	    	   if(data.status==1) {
+	    		   if(data.info) {	    			   
+	                   $("#list").append(data.info);
+	    			   loading = false;
+	                   if(data.more==0) {	            			  
+	                	   $(document.body).destroyInfinite();
+	                   }
+	    	   	   }  
+					$('#infinite').hide();          		   
+	    	   }
+	       })  
+		});
+	}
+	</script>
+<include file="./Tpl/App/Shop_footer.html" />
+</body></html>

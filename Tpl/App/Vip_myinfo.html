@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+	<title>个人信息</title>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<form>
+			<div class="weui_cells">
+	       	    <div class="weui_cell">
+       	            <div class="weui_cell_hd"><label class="weui_label">昵称</label></div>
+       	            <div class="weui_cell_bd weui_cell_primary">
+       	            	<input id="nickname" name="nickname" class="weui_input" type="text" placeholder="请输入昵称" value="{$data.nickname}">
+       	            </div>
+       	        </div>
+	       	    <div class="weui_cell">
+       	            <div class="weui_cell_hd"><label class="weui_label">性别</label></div>
+       	            <div class="weui_cell_bd weui_cell_primary">
+       	            	<label><input name="sex" style="width: 18px;height: 18px;vertical-align: middle;" <eq name="data.sex" value="1">checked=""</eq> type="radio" value="1"> 男&nbsp;&nbsp;</label>
+                        <label><input name="sex" style="width: 18px;height: 18px;vertical-align: middle;" <eq name="data.sex" value="2">checked=""</eq> type="radio" value="2"> 女</label>
+       	            </div>
+       	        </div>
+			</div>
+			</form>	
+			<div class="weui_btn_area">
+		        <a id="save-btn" class="weui_btn weui_btn_primary fz_16" href="javascript:">修改信息</a>
+		      </div>
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+	<script src="__PUBLIC__/App/js/fastclick.js"></script>
+<script type="text/javascript">
+ $(function() {
+	  FastClick.attach(document.body);
+ });
+</script>
+<script>
+$('#save-btn').click(function(){
+	var nickname = $('#nickname').val();
+	var sex = $("input[name='sex']:checked").val();
+	if(nickname==''){
+		$.toptip('请填写昵称！', 'error');
+		return;
+	}else if(!sex){
+		$.toptip('请选择性别！', 'error');
+		return;
+	}
+    $.ajax({
+		type:'post',
+		data:$("form").serialize(),
+		url:"{:U('App/Vip/myinfo')}",
+		dataType:'json',
+		success:function(e){
+			if(e.status==1) {
+				$.toast(e.info,function(){location.href="{:U('App/Vip/edit')}";});
+			} else {
+				$.toptip(e.info, 'error');
+			}
+			return false;
+		},
+		error:function(){
+		    $.toptip('通讯失败！', 'error');
+			return false;
+		}
+	});	
+	return false;
+})
+</script>
+</eq>
+</body>
+</html>

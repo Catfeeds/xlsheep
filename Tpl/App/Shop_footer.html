@@ -1,0 +1,62 @@
+<if condition="$commonShare eq 1">
+<include file="./Tpl/App/Shop_share.html" />
+</if>
+<div class="insert1"></div>
+<div class="footer" style="line-height: normal;">
+		<div class="weui_tabbar">
+	        <a href="{:U('App/Shop/index')}" class="weui_tabbar_item" id="fthome">
+	          <div class="weui_tabbar_icon">
+	          	<if condition="$actname eq 'fthome'">
+	            <img src="__PUBLIC__/App/images/icon01.png" alt="">
+	            <else />
+	            <img src="__PUBLIC__/App/images/icon001.png" alt="">
+	            </if>
+	          </div>
+	          <p class="weui_tabbar_label">养殖基地</p>
+	        </a>
+	          <a href="{:U('App/Shop/bianmin')}" class="weui_tabbar_item" id="ftbase">
+	          <div class="weui_tabbar_icon">
+	          	<if condition="$actname eq 'ftbase'">
+	            <img src="__PUBLIC__/App/images/icon02.png" alt="">
+	            <else />
+	            <img src="__PUBLIC__/App/images/icon002.png" alt="">
+	            </if>
+	          </div>
+	          <p class="weui_tabbar_label">订单农业</p>
+	        </a>
+	      <!--   <a href="{:U('App/Buy/index')}" class="weui_tabbar_item" id="ftbase">
+	          <div class="weui_tabbar_icon">
+	          	<if condition="$actname eq 'ftbase'">
+	            <img src="__PUBLIC__/App/images/icon02.png" alt="">
+	            <else />
+	            <img src="__PUBLIC__/App/images/icon002.png" alt="">
+	            </if>
+	          </div>
+	          <p class="weui_tabbar_label">农场众筹</p>
+	        </a> -->
+	        <a href="{:U('App/Shop/home')}" class="weui_tabbar_item" id="ftcategory">
+	          <div class="weui_tabbar_icon">
+	            <if condition="$actname eq 'ftcategory'">
+	            <img src="__PUBLIC__/App/images/icon03.png" alt="">
+	            <else />
+	            <img src="__PUBLIC__/App/images/icon003.png" alt="">
+	            </if>
+	          </div>
+	          <p class="weui_tabbar_label">商城</p>
+	        </a>
+	        <a href="{:U('App/Vip/index')}" class="weui_tabbar_item" id="ftvip">
+	          <div class="weui_tabbar_icon" style="width: 36px;">
+	           <if condition="$actname eq 'ftvip'">
+	            <img src="__PUBLIC__/App/images/icon04.png" alt="" style="height: 26px;padding-top: 2px;margin-left: 6px;">
+	            <else />
+	            <img src="__PUBLIC__/App/images/icon004.png" alt="" style="height: 26px;padding-top: 2px;margin-left: 6px;">
+	            </if>
+	          </div>
+	          <p class="weui_tabbar_label">农场主</p>
+	        </a>
+	    </div>
+</div>
+<script type="text/javascript">
+	 var actname="{$actname}";
+	 $('#'+actname).addClass('weui_bar_item_on');
+</script>

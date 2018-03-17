@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+<title>申请分销商</title>
+<style type="text/css">
+body, html {background: #f1f1f1;}
+.auth-text {
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    padding: 15px 0;
+}
+.auth-pic {
+    width: 35%;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+.setbox ul {
+    padding: 0 12px;
+    border-top: 1px solid #dcdcdc;
+}
+.add-dz {
+    background: #fff;
+    border-bottom: 1px solid #dcdcdc;
+}
+.add-dz li {
+    position: relative;
+    height: 45px;
+    padding-left: 72px;
+    line-height: 45px;
+}
+.add-dz li label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 72px;
+    color: #727272;
+    font-size: 12px;
+}
+.add-dz li input[type=text] {
+    color: #666;
+    width: 100%;
+    font-size: 12px;
+    border: 0;
+    outline: 0;
+    background: 0 0;
+}
+.pd25 {
+    padding: 25px;
+}
+.weui-btn_disabled.weui-btn_default {
+    color: rgba(0,0,0,.3);
+    background-color: #f7f7f7;
+}
+button.weui-btn, input.weui-btn {
+    width: 100%;
+    border-width: 0;
+    outline: 0;
+    -webkit-appearance: none;
+}
+.weui-btn_primary {
+    background: #2abf4d;
+}
+.weui-btn {
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 14px;
+    padding-right: 14px;
+    box-sizing: border-box;
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    line-height: 2.55555556;
+    border-radius: 5px;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    overflow: hidden;
+}
+</style>
+</head>
+<body>
+<section class="wrap-page">
+	<div style="background: #63a3e3;">
+		<div class="auth-pic">
+			<img src="__PUBLIC__/App/images/auth.jpg" width="100%">
+		</div>
+		<eq name="data[apply_fx_status]" value="0">
+			<p class="auth-text">未申请</p>
+		</eq>
+		<eq name="data[apply_fx_status]" value="1">
+			<p class="auth-text">申请审核中</p>
+		</eq>
+		<eq name="data[apply_fx_status]" value="2">
+			<p class="auth-text">申请成功</p>
+		</eq>
+	</div>
+	<div class="setbox">
+		<neq name="data[is_auth]" value="2">
+		<div class="weui-cells mg_0">
+		  <div class="weui-cell fz_14">
+		    <eq name="data[is_auth]" value="0">
+				<p>申请分销商需进行<span class="color_blue">实名认证</span>，您未进行实名认证。<a href="{:U('App/Vip/auth')}" class="color_red">点击认证</a></p>
+			</eq>
+			<eq name="data[is_auth]" value="1">
+				<p>申请分销商需进行<span class="color_blue">实名认证</span>，您的实名认证申请正在申请中，请耐心等待！</p>
+			</eq>
+		  </div>
+		 </div>
+		 </neq>
+		<form>
+		<ul class="add-dz">
+			<li style="border-bottom:0;">
+				<label>手机号码</label>
+				<input id="mobile" type="text" name="mobile" placeholder="姓名需同提现银行卡户名一致" value="{$data.mobile}" <neq name="data[apply_fx_status]" value="0">readonly="readonly"</neq>/>
+			</li>
+		</ul>
+	</div>
+	</form>
+	<div class="pd25">
+	<if condition="$data[apply_fx_status] eq 0 and $data[is_auth] eq 2">
+		<button class="weui-btn weui-btn_primary fz_14" id="save-btn">
+	       申请
+	    </button>
+	<else />
+	    <button class="weui-btn weui-btn_disabled weui-btn_default fz_16">
+	     申请
+	    </button>
+	 </if>
+	</div>	
+</section>
+<script src="__PUBLIC__/App/js/fastclick.js"></script>
+<script type="text/javascript">
+ $(function() {
+	  FastClick.attach(document.body);
+ });
+</script>
+<eq name="data[apply_fx_status]" value="0">
+<script>
+$('#save-btn').click(function(){
+	var mobile = $('#mobile').val();
+	if(mobile==''){
+		$.toptip('请填写手机号码！', 'error');
+		return;
+	}
+	var reg = /^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/;
+	if (reg.test(mobile)==false) {
+		$.toptip('手机号码格式不正确！', 'error');
+		return false;
+	}
+    $.ajax({
+		type:'post',
+		data:$("form").serialize(),
+		url:"{:U('App/Vip/applyFx')}",
+		dataType:'json',
+		success:function(e){
+			if(e.status==1) {
+				$.toast(e.info,function(){window.location.reload()});
+			} else {
+				$.toptip(e.info, 'error');
+			}
+			return false;
+		},
+		error:function(){
+		    $.toptip('通讯失败！', 'error');
+			return false;
+		}
+	});	
+	return false;
+})
+</script>
+</eq>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/buy/comon.css"/>
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+	<title>资金流水-{$_SESSION['WAP']['shopset']['name']}</title>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="bd_tab">
+				<div class="weui_navbar">
+			        <div class="weui_navbar_item <if condition="$type eq ''">weui_bar_item_on</if>">
+			          	<a href="{:U('App/Buy/record/')}">全部</a>
+			        </div>
+			        <div class="weui_navbar_item <if condition="$type eq 4">weui_bar_item_on</if>"">
+			         <a href="{:U('App/Buy/record/',array('type'=>4))}"> 项目</a>
+			        </div>
+			        <div class="weui_navbar_item <if condition="$type eq 5">weui_bar_item_on</if>"">
+			         <a href="{:U('App/Buy/record/',array('type'=>5))}"> 收益</a>
+			        </div>
+			        <div class="select_btn">v</div>
+			    </div>
+			    <div class="select_list" <if condition="($type gt 5) OR ($type eq 3)">style="display:block"</if>>
+					<div class="bd_tab">
+						<div class="weui_navbar">
+					        <div class="weui_navbar_item <if condition="$type eq 6">weui_bar_item_on</if>">
+					        <a href="{:U('App/Buy/record/',array('type'=>6))}">本金</a>
+					        </div>
+					        <div class="weui_navbar_item <if condition="$type eq 3">weui_bar_item_on</if>">
+					          <a href="{:U('App/Buy/record/',array('type'=>3))}">购买</a>
+					        </div>
+					        <!--
+					        <div class="weui_navbar_item <if condition="$type eq 11">weui_bar_item_on</if>">
+					         <a href="{:U('App/Buy/record/',array('type'=>11))}">佣金（注册）</a>
+					        </div>
+					        <div class="weui_navbar_item <if condition="$type eq 12">weui_bar_item_on</if>">
+					         <a href="{:U('App/Buy/record/',array('type'=>12))}">佣金（消费）</a>
+					        </div>
+					          -->
+					    </div>
+					</div>
+			    </div>
+			</div>
+			<empty name="data">
+			<div class="no-goat">
+			        <div class="orange no-goat-tips">暂无记录</div>
+			    </div>
+			    <else />
+				<div class="weui_cells" id="list">    
+				    <volist name="data" id="vo">
+					<div class="weui_media_box weui_media_text" onclick="window.location.href='{:U('App/Buy/recorddetails',array('id'=>$vo['id']))}'">
+				        <h4 class="weui_media_title fz_16">{$vo.remark}</h4>
+				        <div class="weui_media_desc">
+							<div class="weui_cell pd_0">
+						        <div class="weui_cell_bd weui_cell_primary">
+						            <p>{$vo.ctime|date="Y-m-d H:i:s",###}</p>
+						        </div>
+						        <if condition="$vo.money lt 0">
+						        	<div class="weui_cell_ft cRed">{$vo.money}</div>
+						        <else/>
+						        	<div class="weui_cell_ft color_green">{$vo.money}</div>
+						        </if>
+						    </div>
+				        </div>
+				    </div>
+				    </volist>
+				    <eq name="datamore" value="1">
+				    <div class="weui-infinite-scroll" id="infinite">
+					<div class="infinite-preloader"></div>
+						  正在加载...
+					</div>
+				</eq>	
+				</div>
+			</empty>
+		</div>
+	</div>
+	<include file="./Tpl/App/Shop_footer.html" />
+</body>
+<script>
+$('.select_btn').click(function () {
+	$('.select_list').animate({"height":'toggle',"opacity": 'toggle'}, "fadeIn");
+})
+
+</script>
+<script type="text/javascript">
+	var type = {$type};
+	if($("#infinite")[0]) {
+		var p = 1;
+		var loading = false;
+		$(document.body).infinite().on("infinite", function() {
+		  if(loading) return;
+		  loading = true;
+		  p=p+1;
+		  param ="?p="+p+'&type='+type;  
+	      $.get("{:U('App/Ajax/record')}"+param,function(data){  
+	    	   if(data.status==1) {
+	    		   if(data.info) {	    			   
+	                   $("#list").append(data.info);
+	    			   loading = false;
+	                   if(data.more==0) {	            			  
+	                	   $(document.body).destroyInfinite();
+	                   }
+	    	   	   }  
+					$('#infinite').hide();          		   
+	    	   }
+	       })  
+		});
+	}
+	</script>
+</html>

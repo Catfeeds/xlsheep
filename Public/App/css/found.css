@@ -1,0 +1,116 @@
+.mui-bar a.mui-icon-arrowleft {
+	color: #929394;
+}
+
+.foundpassword {
+	position: static;
+	margin: 20px 2% 0;
+	width: 96%;
+	background: transparent;
+}
+.foundpassword .mui-input-row{
+	position: static;
+}
+
+.foundpassword .mui-input-row {
+	margin: 20px auto;
+	background: #fff;
+	border: none;
+}
+
+.foundpassword label {
+	padding: 0 5px;
+	width: 30%;
+	text-align: right;
+}
+
+.foundpassword input.found-input,
+.foundpassword input.founduser-input,
+.foundpassword input.newpass-input  {
+	float: left;
+}
+
+.foundpassword .mui-input-row,
+.foundpassword label,
+.foundpassword input.found-input,
+.foundpassword input.code-input,
+.foundpassword input.founduser-input,
+.foundpassword input.newpass-input {
+	height: 50px;
+	line-height: 50px;
+}
+
+.foundpassword input.found-input {
+	padding: 0 1%;
+	width: 58%;
+}
+
+.foundpassword input.code-input {
+	padding: 0 1%;
+	text-align: center;
+	width: 50%;
+}
+
+.foundpassword span.codeimg,
+.resizebtn{
+	width: 39%;
+}
+.foundpassword span.codeimg,
+.resizebtn,
+.overbtn {
+	display: block;
+	float: right;
+	overflow: hidden;
+}
+.resizebtn{
+	background: #e1e0e0;
+	color: #fff;
+	text-align: center;
+}
+
+.nextbtn,
+.overbtn{
+	height: 40px;
+	line-height: 40px;
+	background: #a8a8a8;
+	display: block;
+	color: #fff;
+	width: 100%;
+}
+
+.nextbtn:hover,
+.nextbtn.active,
+.resizebtn:hover,
+.overbtn:hover,
+.overbtn.active{
+	background: #b1da4c;
+}
+.danger{
+	color: #f00;
+	display:none;
+}
+
+.foundpassword h2{
+	font-size: 16px;
+}
+.foundpassword p{
+	line-height: 30px;
+}
+.foundpassword p a{
+	color: #606060;
+}
+.foundpassword label.user-label{
+	width: 15%;
+	text-align: left;
+}
+#mobile{
+	width: 85%;
+}
+#code{
+	text-align: left;
+}
+#code-mfind{
+	height: 50px;
+	line-height: 50px;
+	vertical-align: middle;
+}

@@ -1,0 +1,13 @@
+<volist name="cache" id="vo">
+ 	<a href="{:U('App/Vip/contract_info',array('no'=>$vo['no']))}" class="listitem">
+	<div class="bod_top pd_10">
+		<div class="c_float">
+			<p class="f_left">(<i>{$vo.index}</i>){$vo.name}</p>
+		</div>
+		<div class="c_float fz_12 mg_t5 color_9">
+			<p class="f_left">合同号：<i>{$vo.no}</i></p>
+			<p class="f_right fz_14">{$vo.ctime|date="Y.m.d",###}</p>
+		</div>
+	</div>
+	</a>
+</volist>

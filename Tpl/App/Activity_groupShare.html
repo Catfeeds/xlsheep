@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>邀请好友参团</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/activity/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/activity/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/swiper.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/activity/jquery-weui.min.js"></script>
+	<script src="__PUBLIC__/App/js/time.js"></script>
+</head>
+<style>
+body,html{background:#fff}
+</style>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="invite">
+				<if condition="$group['status'] eq 0">	
+				<p class="count_time" id="timecount" data-end="{$group.rtime|date='Y/m/d H:i:s',###}"><span class="hour">0</span>:<span class="mini">0</span>:<span class="sec">0</span>:<span class="hm">0</span></p>
+				</if>
+				<div class="invite_msg">
+					<if condition="$group['status'] eq 0">										
+					<p class="b_text">还差<i>{$group['left']}</i>人,赶紧邀请好友来参团吧~</p>
+					<a href="javascript:;" class="invite_bth" id="fenxiang">邀请好友参团</a>
+					<else />
+					<if condition="$group['status'] eq 1">	
+					<p class="b_text">恭喜您，拼团成功，我们将尽快为您发货~</p>
+					<else />
+					<p class="b_text">很遗憾，拼团失败~</p>
+					</if>
+					</if>
+					<div class="my_team">
+						<div class="member captain">
+							<span class="label_float">团长</span>
+							<img class="id_head" src="{$vip.headimgurl}" alt="">
+						</div>
+							<empty name="member">
+						<div class="member"></div>
+						<else />
+						<volist name="member" id="vo">
+						<div class="member"><img class="id_head" src="{$vo.headimgurl}" alt="{$vo.nickname}"></div>
+						</volist>
+						</empty>
+					</div>
+				</div>
+				<div class="weui-cells order_detial_msg">
+					<a class="weui-cell weui-cell_access" href="javascript:;">
+		                <div class="weui-cell__bd">
+		                    <p>商品名称</p>
+		                </div>
+		                <div class="weui-cell__ft">{$cache['name']}</div>
+		            </a>
+					<a class="weui-cell weui-cell_access" href="javascript:;">
+		                <div class="weui-cell__bd">
+		                    <p>参团时间</p>
+		                </div>
+		                <div class="weui-cell__ft">{$activity.time|date="Y/m/d H:i:s",###}</div>
+		            </a>
+					<a class="weui-cell weui-cell_access" href="javascript:;">
+		                <div class="weui-cell__bd">
+		                    <p>拼团须知</p>
+		                </div>
+		                <div class="weui-cell__ft">
+							·好友参团·人满发货·人不满退款
+		                </div>
+		            </a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 分享成功的弹窗 -->
+	<div class="invite_success" style="display:none;">
+		<div class="success_tips_msg">
+			<div class="tips_title"><i class="iconfont icon-chenggong color_red2"></i>分享成功</div>
+			<div class="tips_bd">
+				<p>分享<i>3</i>次以上，成团率高达98%哦~</p>
+				<a href="javascript:;" class="continue_btn">继续分享</a>
+				<p class="text_tips">好货提示</p>
+				<p>90%的人都在这里发现了心仪好货~</p>
+				<a class="go_index" href="{:U('App/Index/index')}">前往首页</a>
+			</div>
+		</div>
+	</div>
+	<div id="shareit" style="display:none">
+      <img src="/Public/App/images/share.png" id="shareImg">
+    </div>
+</body>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+var share_url = "http://{$_SERVER['HTTP_HOST']}__ROOT__/App/Activity/joinGroup/id/{$group['id']}";
+var share_title="{$cache.name}";
+var share_content = "{$cache.summary|myTrim}";
+var share_img="{$_SESSION['WAP']['shopset']['url']}{$apppic.imgurl}";
+
+wx.config({
+  debug: false,
+  appId: "{$jsapi['appId']}",
+  timestamp: "{$jsapi['timestamp']}",
+  nonceStr: "{$jsapi['nonceStr']}",
+  signature: "{$jsapi['signature']}",
+  jsApiList: [
+    'checkJsApi',
+    'onMenuShareTimeline',
+    'onMenuShareAppMessage',
+    'onMenuShareQQ',
+    'onMenuShareWeibo',
+    'hideMenuItems',
+    'showMenuItems',
+    'hideAllNonBaseMenuItem',
+    'showAllNonBaseMenuItem',
+  ]
+});
+
+wx.ready(function () {
+    //开启菜单
+    wx.showOptionMenu();
+    //隐藏菜单
+    //wx.hideOptionMenu();
+    //分享给朋友
+    wx.onMenuShareAppMessage({
+      title: share_title,
+      desc: share_content,
+      link: share_url,
+      imgUrl: share_img,
+      trigger: function (res) {
+        //alert('用户点击发送给朋友');
+      },
+      success: function (res) {
+    	  $('.invite_success').show();
+        //alert('已分享');
+      },
+      cancel: function (res) {
+        //alert('已取消');
+      },
+      fail: function (res) {
+        //alert(JSON.stringify(res));
+      }
+    });
+    //分享到朋友圈
+    wx.onMenuShareTimeline({
+      title: share_title,
+      link: share_url,
+      imgUrl: share_img,
+      trigger: function (res) {
+        //alert('用户点击分享到朋友圈');
+      },
+      success: function (res) {
+    	  $('.invite_success').show();
+        //alert('已分享');
+      },
+      cancel: function (res) {
+        //alert('已取消');
+      },
+      fail: function (res) {
+        //alert(JSON.stringify(res));
+      }
+    });
+});
+<if condition="$group['status'] eq 0">	
+$("#timecount").fnTimeCountDown("{$group.rtime|date='Y/m/d H:i:s',###}");
+</if>
+$("#fenxiang").on("click", function() {
+    $("#shareit").show();
+});
+$("#shareit").on("click", function(){
+    $("#shareit").hide(); 
+});
+$(".continue_btn").on("click", function(){
+	$(".invite_success").hide();
+});
+</script>
+</html>

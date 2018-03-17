@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css" />
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/swiper.min.css">
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+	<style>
+
+	</style>
+	<title>农场-{$_SESSION['WAP']['shopset']['name']}</title>
+</head>
+<body>
+	<div class="wrap">
+		<header>
+			<div class="banner">
+				<div class="swiper-container">
+				  <div class="swiper-wrapper">
+				  	<empty name='cid'>
+					  	<adv pid ="1" limit="5" item="v">
+			                 <div class="swiper-slide">
+								<a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if> >
+					              	<img src="{$v[imgurl]}" title="{$v[title]}"width="100%" style="{$v[style]}"/>
+					             </a>
+						    </div>
+				        </adv>
+			        </empty>
+			        <notempty>
+						<eq name="cid" value="10">
+							<adv pid ="7" limit="5" item="v">
+				                 <div class="swiper-slide">
+									<a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if> >
+						              	<img src="{$v[imgurl]}" title="{$v[title]}"width="100%" style="{$v[style]}"/>
+						             </a>
+							    </div>
+					        </adv>
+				        </eq>
+				        <eq name="cid" value="26">
+							<adv pid ="8" limit="5" item="v">
+				                 <div class="swiper-slide">
+									<a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if> >
+						              	<img src="{$v[imgurl]}" title="{$v[title]}"width="100%" style="{$v[style]}"/>
+						             </a>
+							    </div>
+					        </adv>
+				        </eq>
+				        <eq name="cid" value="27">
+							<adv pid ="9" limit="5" item="v">
+				                 <div class="swiper-slide">
+									<a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if> >
+						              	<img src="{$v[imgurl]}" title="{$v[title]}"width="100%" style="{$v[style]}"/>
+						             </a>
+							    </div>
+					        </adv>
+				        </eq>
+			        </notempty>	
+				  </div>
+				   <div class="swiper-pagination"></div>
+				</div>
+			</div>
+		</header>
+		<div class="bd" id="list">
+		<volist name="cache" id="vo">
+			<div class="bgf planting">
+				<div class="bd_ul01">
+					<div class="left_wp">
+						<div class="bd_ul01 top_wp">
+							<notempty name='cid'><div <eq name="cid" value='10'>class="time_badge"</eq><eq name="cid" value='26'>class="time_badge1"</eq><eq name="cid" value='27'>class="time_badge2"</eq>
+							></notempty>
+							<empty name="cid">
+							<div <eq name="vo.cid" value='10'>class="time_badge"</eq><eq name="vo.cid" value='26'>class="time_badge1"</eq><eq name="vo.cid" value='27'>class="time_badge2"</eq>
+							>
+							</empty>
+								<p>第{$vo.id}期</p>
+							</div>
+							<p class="title_msg">第{$vo.id}期-{$vo.name}<if condition="$vo['restrict'] gt 0">【限<i>{$vo['restrict']}</i>{$vo.unit}】</if></p>
+						</div>
+						<div class="bd_ul fz_14 text_c">
+							<div>
+								<eq name='vo.way' value='3'>
+									<p class="object">实物或分红</p>
+								<else/>
+									<eq name='vo.way' value='2'>
+										<p class="object">到期领取实物</p>
+									<else/>
+										<p>预期年收入</p>
+										<p class="color_org">{$vo['rate']*100}%</p>
+									</eq>
+								</eq>
+							</div>
+							<div>
+								<p>元/{$vo.unit}</p>
+								<p class="color_green">{$vo.price}</p>
+							</div>
+							<div>
+								<p>期限</p>
+								<p class="color_6">{$vo.cycle}天</p>
+							</div>
+						</div>
+					</div>
+					<div class="rate right_wp">
+						<div class="buylist-buy ro{$vo['ro']}">
+			                <div class="circle buylist-buying">
+			                    <div class="pie_left"><div class="circle_left"></div></div>
+			                    <div class="pie_right"><div class="circle_right"></div></div>
+			                    <div class="circle_mask fz_12">
+			                    	<a href="{:U('App/Buy/details',array('id'=>$vo['id']))}">
+			                    	<eq name="vo.status" value="1">
+			                    	<div class="circle_mask_bd">
+				                        <p class="color_red">已售{$vo['percent']}%</p>
+				                        <p class="color_green">立即购买</p>
+			                        </div>
+			                        </eq>
+			                        <eq name="vo.status" value="2">
+			                    	<div class="circle_mask_bd">
+				                       <div class="farm-icon icon-buylist-6 mcc"></div><br>收益中
+			                        </div>
+			                        </eq>
+			                        <eq name="vo.status" value="3">
+			                    	<div class="circle_mask_bd">
+			                    		<div style="margin-top: 19px;">已返还<br>本金</div>
+			                        </div>
+			                        </eq>
+			                        </a>
+			                    </div>
+			                </div>
+			            </div>
+					</div>
+				</div>
+<!-- 				<eq name="vo.status" value="2">
+				<div class="buylist-mark buylist-mark-timeout"></div>已售罄
+				</eq> -->
+<!-- 				<eq name="vo.status" value="3">
+				<div class="buylist-mark buylist-mark-timeout"></div>已到期
+				</eq> -->
+			</div>
+			</volist>	
+			<eq name="datamore" value="1">
+               <div class="weui-infinite-scroll" id="infinite">
+				  <div class="infinite-preloader"></div>
+				  正在加载...
+				</div>
+			</eq>	
+		</div>
+		 <!-- 底部导航 -->
+        <include file="./Tpl/App/Shop_footer.html" />
+	</div>
+	<script src="__PUBLIC__/App/js/swiper.min.js"></script>
+	<script>
+		var mySwiper = new Swiper('.swiper-container', {
+			autoplay: 5000,//可选选项，自动滑动
+			pagination : '.swiper-pagination',
+		})
+	</script>
+	<!--新版分享特效-->
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script>
+    var share_url = "http://{$_SERVER['HTTP_HOST']}__ROOT__/App/Shop/index/ppid/{$_SESSION['WAP']['vipid']}/";
+    var share_title = "{$_SESSION['WAP']['shopset']['name']}";
+    var share_content = "{$_SESSION['SET']['wxsummary']}";
+    var share_img = "{$_SESSION['WAP']['shopset']['url']}{$_SESSION['WAP']['shopset']['sharepic']}";
+
+    wx.config({
+        debug: false,
+        appId: "{$jsapi['appId']}",
+        timestamp: "{$jsapi['timestamp']}",
+        nonceStr: "{$jsapi['nonceStr']}",
+        signature: "{$jsapi['signature']}",
+        jsApiList: [
+            'checkJsApi',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo',
+            'hideMenuItems',
+            'showMenuItems',
+            'hideAllNonBaseMenuItem',
+            'showAllNonBaseMenuItem',
+        ]
+    });
+
+    wx.ready(function() {
+        //开启菜单
+        wx.showOptionMenu();
+        //隐藏菜单
+        //wx.hideOptionMenu();
+        //分享给朋友
+        wx.onMenuShareAppMessage({
+            title: share_title,
+            desc: share_content,
+            link: share_url,
+            imgUrl: share_img,
+            trigger: function(res) {
+                //alert('用户点击发送给朋友');
+            },
+            success: function(res) {
+                //alert('已分享');
+            },
+            cancel: function(res) {
+                //alert('已取消');
+            },
+            fail: function(res) {
+                //alert(JSON.stringify(res));
+            }
+        });
+        //分享到朋友圈
+        wx.onMenuShareTimeline({
+            title: share_title,
+            link: share_url,
+            imgUrl: share_img,
+            trigger: function(res) {
+                //alert('用户点击分享到朋友圈');
+            },
+            success: function(res) {
+                //alert('已分享');
+            },
+            cancel: function(res) {
+                //alert('已取消');
+            },
+            fail: function(res) {
+                //alert(JSON.stringify(res));
+            }
+        });
+        //分享到QQ
+        wx.onMenuShareQQ({
+            title: share_title,
+            desc: share_content,
+            link: share_url,
+            imgUrl: share_img,
+            trigger: function(res) {
+                //alert('用户点击分享到QQ');
+            },
+            complete: function(res) {
+                //alert(JSON.stringify(res));
+            },
+            success: function(res) {
+                //alert('已分享');
+            },
+            cancel: function(res) {
+                //alert('已取消');
+            },
+            fail: function(res) {
+                //alert(JSON.stringify(res));
+            }
+        });
+    });
+    </script>
+	<script type="text/javascript">
+	if($("#infinite")[0]) {
+		var p = 1;
+		var loading = false;
+		$(document.body).infinite().on("infinite", function() {
+		  if(loading) return;
+		  loading = true;
+		  p=p+1;
+		  param ="?p="+p+"&cid="+cid;  
+	      $.get("{:U('App/Ajax/buyAllList')}"+param,function(data){  
+	    	   if(data.status==1) {
+	    		   if(data.info) {		
+	                   $("#list").append(data.info);
+	    			   loading = false;
+	                   if(data.more==0) {	            			  
+	                	   $(document.body).destroyInfinite();
+	                   }
+	    	   	   }  
+               	   $('#infinite').hide();
+	    	   }
+	       })  
+		});
+	}
+	</script>
+</body>
+</html>

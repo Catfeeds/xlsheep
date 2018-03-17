@@ -1,0 +1,117 @@
+<style>
+	#App-getVip-body .imgwp{ float: left; width: 130px; height: 100px; overflow: hidden; text-align: center; margin-left: 5px; margin-bottom: 10.5px; border: 1px solid #F5F5F5; position: relative; cursor: pointer;}
+	#App-getVip-body .nickname{ width: 130px; height: 20px; position: absolute; bottom:0px;background: url('/Public/Admin/img/choosed.png');color:#fff;}
+	#App-getVip-body .cover{ width: 130px; height: 100px; position: absolute; left: 0px; top:0px; background:url('__PUBLIC__/Admin/img/choosed.png'); display: none;}
+	#App-getVip-body .imgwp:hover{border: 1px solid #ED4E2A;}
+	#App-getVip-body .imgwp img{width: 100%; height: 100%; vertical-align: middle;}
+	#App-getVip-body .group{ position: absolute; right: 0px; top: 0px;}
+</style>
+<div id="App-getVip" style="height:450px;overflow-y:auto;">
+	<div id="App-getVip-header">
+		<div class="alert alert-success">
+		     	<label style="margin-bottom: 0px;">
+                 <input id="App-getVip-keyword" name="search" type="search" class="form-control input-sm" placeholder="会员昵称或者手机号" value="{$search}">
+            </label>
+            <a href="javascript:;" id="App-getVip-search" class="btn btn-success" style="margin-left:10px;">
+                 <i class="fa fa-search"></i>搜索
+            </a>
+			  <button id="App-getVip-getmore" class="btn btn-default" style="margin-left: 20px"><i class="glyphicon glyphicon-refresh"></i>加载更多</button>
+        </div>
+        <div class="input-group input-group-sm" style="margin-bottom: 20px;">
+        		<input type="text" class="form-control" disabled value="" id="App-getVip-findback" placeholder="点击下方头像自动添加" style="width: 540px">
+        </div>
+	</div>
+	<div id="App-getVip-body" data-page = "2">
+		<volist name="cache" id="vo">
+			<div class="imgwp" data-id = "{$vo.id}" data-check = "0" onclick="selectvip(this);">
+				<img src="{$vo.headimgurl}" />
+				<div class="nickname">{$vo.nickname}</div>
+				<div class="cover"></div>
+			</div>
+		</volist>
+	</div>
+	<div class="clear"></div>
+</div>
+<script>
+	var fbid="{$fbid}";
+	var isall="{$isall}"=="true"?true:false;
+	var Jupsearch=$("#App-getVip-search");
+	var Jupkeyword=$("#App-getVip-keyword");
+	var Jupresult=$("#App-getVip-result");
+	var Jupform=$("#App-getVip-form");
+	var Jupgetmore=$("#App-getVip-getmore");
+	var Jupbody=$('#App-getVip-body');
+	var Jupfindback=$('#App-getVip-findback');
+	
+	//用户选择函数
+	function selectvip(obj){
+		var id=$(obj).data('id');
+		var ischeck=$(obj).data('check');
+		var cover=$(obj).find('.cover');
+		if(!isall){
+			var objs=$(Jupbody).find('.imgwp');
+		}
+		va=$(Jupfindback).val();
+		if(!isall){
+			//单用户模式
+			$(objs).each(function(){
+				if($(this).data('check')==1){
+					$(this).data('check',0);
+					$(this).find('.cover').hide();
+				}
+			});
+			$(Jupfindback).val(id);
+			$(obj).data('check',1);
+			$(cover).show();
+		}else{
+			//多用户模式
+			if(ischeck=='1'){
+				$(obj).data('check',0);
+				$(Jupfindback).val(va.replace(id+',',''));
+				$(cover).hide();
+			}else{
+				$(obj).data('check',1);			
+				$(Jupfindback).val(va+id+',');
+				$(cover).show();
+			}
+		}
+	}
+	//搜索
+	$(Jupsearch).on('click',function(){
+		$(Jupbody).data('page',1);
+		var p=$(Jupbody).data('page');
+		var keyword= $(Jupkeyword).val();
+		var searchurl="{:U('Admin/Vip/getMore/')}";
+		$.ajax({
+			type:"post",			
+			data:{'p':p, 'search':keyword},
+			dataType: "json", 
+			url:searchurl,
+			success:function(info){
+				if(info){$(Jupbody).html($(info));$(Jupbody).data('page',(p+1));}else{$(Jupbody).html('');$(Jupfindback).val('');$(Jupbody).data('page',1);$.App.alert('success','没有相关用户！');}
+			},
+			error:function(x){
+				$.App.alert('dange','通讯失败！请重试！');
+			}
+		});
+	});
+	//加载更多
+	$(Jupgetmore).on('click',function(){
+		var p=$(Jupbody).data('page');
+		var keyword= $(Jupkeyword).val();
+		var moreurl="{:U('Admin/Vip/getMore/')}";
+		var more;
+		$.ajax({
+			type:"post",			
+			data:{'p':p, 'search':keyword},
+			dataType: "json", 
+			url:moreurl,
+			success:function(info){
+				if(info){$(info).appendTo($(Jupbody));$(Jupbody).data('page',(p+1));}else{$.App.alert('success','没有更多用户了！');}
+			},
+			error:function(x){
+				$.App.alert('dange','通讯失败！请重试！');
+			}
+		});
+	});
+</script>

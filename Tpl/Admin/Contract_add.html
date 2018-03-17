@@ -1,0 +1,102 @@
+<!--百度编辑器-->
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Admin/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Admin/ueditor/ueditor.all.min.js"></script>
+<div class="row">
+	<div class="col-xs-12 col-xs-12">
+		<div class="widget radius-bordered">
+			<div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i> <span
+					class="widget-caption">文章设置</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize"> <i class="fa fa-expand"></i>
+					</a> <a href="#" data-toggle="collapse"> <i class="fa fa-minus"></i>
+					</a> <a href="#" data-toggle="dispose"> <i class="fa fa-times"></i>
+					</a>
+				</div>
+			</div>
+			<div class="widget-body">
+				<form id="AppForm" action="" method="post" class="form-horizontal" data-bv-message="" data-bv-feedbackicons-valid="glyphicon glyphicon-ok" data-bv-feedbackicons-invalid="glyphicon glyphicon-remove" data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+					<input type="hidden" name="id" value="{$contract.id}">
+                    <div class="form-title">
+                        <a href="{:U('Admin/Contract/index/')}" class="btn btn-primary" data-loader="App-loader" data-loadername="文章列表">
+                            <i class="fa fa-mail-reply"></i>返回
+                        </a>
+                    </div>
+
+					<div class="form-group">
+						<label class="control-label col-md-2">期数<sup>*</sup></label>
+						<div class="col-md-7">
+							<input class="form-control" name="name" type="text" placeholder="必填" data-bv-notempty="true" data-bv-notempty-message="请填写期数" value="{$contract.name}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">用户姓名</label>
+
+						<div class="col-md-7">
+							<input class="form-control" placeholder=""
+								value="{$contract.vipname}" name="vipname" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">用户手机</label>
+
+						<div class="col-md-7">
+							<input class="form-control" placeholder="" value="{$contract.vipmobile}"
+								name="vipmobile" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">合同模板ID</label>
+
+						<div class="col-md-7">
+							<input class="form-control" placeholder=""
+								value="{$contract.contract_id}" name="contract_id" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">保险单号</label>
+
+						<div class="col-md-7">
+							<input class="form-control" placeholder=""
+								value="{$contract.insurance}" name="insurance" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2"></label>
+
+						<div class="col-md-7">
+							<button class="btn btn-primary" type="submit">提交</button>
+							<button class="btn btn-default-outline">取消</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+    UE.getEditor('J-ueditor', {
+        textarea: 'content' //提交字段名，必须填写，数据库必须有此字段
+    });
+</script>
+<!--/面包屑导航封装-->
+<!--表单验证与提交封装-->
+<script type="text/javascript">
+$('#AppForm').bootstrapValidator({
+    submitHandler: function(validator, form, submitButton) {
+        var tourl = "{:U('Admin/Contract/addContract')}";
+        var data = $('#AppForm').serialize();
+        $.App.ajax('post', tourl, data, okfun);
+        return false;
+    },
+});
+var okfun=function(){
+	   var tourl = "{:U('Admin/Contract/index')}";
+	   $('#App-loader').empty().load(tourl, function() {
+	       initLoader('App-loader');
+	   });
+	}
+</script>
+<!--/表单验证与提交封装-->

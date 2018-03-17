@@ -1,0 +1,106 @@
+<div class="row">
+     <div class="col-xs-12 col-xs-12">
+          <div class="widget radius-bordered">
+              <div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i>
+				<span class="widget-caption">编辑广告位</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize">
+						<i class="fa fa-expand"></i>
+					</a>
+					<a href="#" data-toggle="collapse">
+						<i class="fa fa-minus"></i>
+					</a>
+					<a href="#" data-toggle="dispose">
+						<i class="fa fa-times"></i>
+					</a>
+				</div>
+			</div>
+              <div class="widget-body">
+                   <form id="AppForm" action="" method="post" class="form-horizontal"
+                                                  data-bv-message=""
+                                                  data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                                                  data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                                                  data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+                  <input type="hidden" name="position_id" value="{$info.position_id}">
+                  <div class="form-title">
+                        <a href="{:U('Admin/Ad/positionList/')}" class="btn btn-primary" data-loader="App-loader" data-loadername="管理员管理">
+							<i class="fa fa-mail-reply"></i>返回
+						</a>
+                   </div>
+                   <div class="form-group">
+                        <label class="col-lg-2 control-label">广告位名称<sup>*</sup></label>
+                        <div class="col-lg-4">
+                        <input type="text" class="form-control" name="position_name" placeholder="必填"
+                                                               data-bv-notempty="true"
+                                                               data-bv-notempty-message="不能为空" value="{$info.position_name}">
+                        </div>
+                   </div>
+                   <div class="form-group">
+                        <label class="col-lg-2 control-label">广告位宽度</label>
+                        <div class="col-lg-2">
+                        <input type="text" class="form-control" name="ad_width" value="{$info.ad_width}">
+                        </div>
+                        <div class="col-lg-1" style="padding-left:0">
+                       		<label>px</label>	
+                        </div>
+                   </div>
+                   <div class="form-group">
+                        <label class="col-lg-2 control-label">广告位高度</label>
+                        <div class="col-lg-2">
+                        <input type="text" class="form-control" name="ad_height" value="{$info.ad_height}">
+                        </div>
+                        <div class="col-lg-1" style="padding-left:0">
+                       		<label>px</label>
+                        </div>
+                   </div>
+                   <div class="form-group">
+                        <label class="col-lg-2 control-label">广告位描述</label>
+                        <div class="col-lg-4">
+                        <input type="text" class="form-control" name="position_desc" value="{$info.position_desc}">
+                        </div>                        
+                   </div>
+                  <div class="form-group">
+                   		<label class="col-lg-2 control-label">是否启用</label>
+                   		<div class="col-lg-4">
+                   			<label>
+                                <input type="hidden" name="is_open" value="{$info.is_open}" id="isopen">
+                                <input class="checkbox-slider slider-icon colored-primary" type="checkbox" id="isopenbtn" <eq name="info.is_open" value="1">checked="checked"</eq>>
+                            	<span class="text darkorange">&nbsp;&nbsp;&larr;启用了前台才会显示。</span>
+                            </label>
+			       		</div>
+                   </div>
+						<div class="form-group">
+                             <div class="col-lg-offset-2 col-lg-4">
+                             <button class="btn btn-primary btn-lg" type="submit">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                             <button class="btn btn-palegreen btn-lg" type="reset">重填</button>
+                        </div>
+                    </div>
+                   </form>
+                </div>
+        </div>
+	</div>
+     
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+	setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->
+<!--表单验证与提交封装-->
+<script type="text/javascript">
+	$('#AppForm').bootstrapValidator({
+		submitHandler: function (validator, form, submitButton) {
+           	var tourl="{:U('Admin/Ad/positionSet')}";
+			var data=$('#AppForm').serialize();
+			$.App.ajax('post',tourl,data,null);
+			return false;
+        },
+	});
+	  $('#isopenbtn').on('click', function() {
+	        var value = $(this).prop('checked') ? 1 : 0;
+	        $('#isopen').val(value);
+	    });
+</script>
+<!--/表单验证与提交封装-->

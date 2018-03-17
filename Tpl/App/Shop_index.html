@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>{$_SESSION['WAP']['shopset']['name']}</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<notempty name="new">
+			<div class="bgf planting">
+				<div class="bd_ul01">
+					<div class="left_wp">
+						<div class="bd_ul01 top_wp">
+							<div <eq name="new.cid" value='10'>class="time_badge"</eq><eq name="new.cid" value='26'>class="time_badge1"</eq><eq name="new.cid" value='27'>class="time_badge2"</eq>>
+								<p>第{$new.id}期</p>
+							</div>
+							<p class="title_msg">{$new.name}<if condition="$new['restrict'] gt 0">【限<i>{$new.restrict}</i>{$new.unit}】</if></p>
+						</div>
+						<div class="bd_ul fz_14 text_c">
+							<div>
+								<eq name='way' value='3'>
+									<p class="color_org">实物或分红</p>
+								<else/>
+									<eq name='way' value='2'>
+										<p class="color_org">到期领取实物</p>
+									<else/>
+										<p>预期年收入</p>
+										<p class="color_org">{$new['rate']*100}%</p>
+									</eq>
+								</eq>
+							</div>
+							<div>
+								<p>元/{$new.unit}</p>
+								<p class="color_org">{$new.price}</p>
+							</div>
+							<div>
+								<p>期限</p>
+								<p class="color_6">{$new.cycle}天</p>
+							</div>
+						</div>
+					</div>
+					<div class="rate right_wp">
+						<div class="buylist-buy ro{$new['ro']}">
+			                <div class="circle buylist-buying">
+			                    <div class="pie_left"><div class="circle_left"></div></div>
+			                    <div class="pie_right"><div class="circle_right"></div></div>
+			                    <div class="circle_mask fz_12">
+			                    	<a href="{:U('App/Buy/details',array('id'=>$new['id']))}">
+			                    	<eq name="new.status" value="1">
+			                    	<div class="circle_mask_bd">
+				                        <p class="color_red">已售{$new['percent']}%</p>
+				                        <p class="color_green">立即购买</p>
+			                        </div>
+			                        </eq>
+			                        <eq name="new.status" value="2">
+			                    	<div class="circle_mask_bd">
+				                       <div class="farm-icon icon-buylist-6 mcc"></div><br>收益中
+			                        </div>
+			                        </eq>
+			                        <eq name="new.status" value="3">
+			                    	<div class="circle_mask_bd">
+			                    		<div style="margin-top: 19px;">已返还<br>本金</div>
+			                        </div>
+			                        </eq>
+			                        </a>
+			                    </div>
+			                </div>
+			            </div>
+					</div>
+				</div>
+				<eq name="new.status" value="2">
+				<div class="buylist-mark buylist-mark-saledout"></div>
+				</eq>
+				<eq name="new.status" value="3">
+				<div class="buylist-mark buylist-mark-timeout"></div>
+				</eq>
+			</div>
+			</notempty>
+			<div class="weui_cells weui_cells_access">
+				<volist name="announce" id="vo">
+		        <a class="weui_cell" href="<eq name="vo.islink" value="1">{$url}<else />{:U('App/Artical/index' , array('id'=>$vo['id']))}</eq>">
+		          <div class="weui_cell_hd"><img src="__PUBLIC__/App/images/lb_icon.png" alt="" width="30"></div>
+		          <div class="weui_cell_bd weui_cell_primary">
+		            <p class="color_blue fz_12">公告：<span>{$vo.title}</span></p>
+		          </div>
+		        </a>
+		        </volist>
+		    </div>
+			<div class="weui_cells">
+				<ul class="index_icon_list bd_ul flex_wp">
+
+					<li class="">
+				    	<a href="{:U('/App/Buy/income')}">
+							<img src="__PUBLIC__/App/images/ic01.png" alt="">
+							<p>我的钱包</p>
+						</a>
+				    </li>
+
+				    <li class="">
+				    	<a href="{:U('/App/Buy/sheepfold')}">
+							<img src="__PUBLIC__/App/images/ic02.png" alt="">
+							<p>我的农场</p>
+						</a>
+				    </li>
+				    <li class="">
+				    	<a href="{:U('/App/Buy/orderList')}">
+							<img src="__PUBLIC__/App/images/ic_28.png" alt="">
+							<p>认领记录</p>
+						</a>
+				    </li>	
+					
+
+					
+					<li class="">
+				    	<a href="{:U('/App/Buy/index',array('cid'=>'10'))}">
+							<img src="__PUBLIC__/App/images/ic_29.png" alt="">
+							<p>	养殖认领</p>
+						</a>
+				    </li>
+				    <li class="">
+				    	<a href="{:U('/App/Video/lists')}">
+							<img src="__PUBLIC__/App/images/ic013.png" alt="">
+							<p>农场直播</p>
+						</a>
+				    </li>
+				    <li class="">
+				    	<a href="{:U('/App/Buy/index',array('cid'=>'26'))}">
+							<img src="__PUBLIC__/App/images/ic_30.png" alt="" style="width: 35px;height: 35px;">
+							<p>种植认领</p>
+						</a>
+				    </li>
+
+
+				    <li class="">
+				    	<a href="https://shequ.yunzhijia.com/thirdapp/forum/network/5a16923ae4b08a6b670aad0f">
+							<img src="__PUBLIC__/App/images/ic015.png" alt="" style="width: 36px;height: 36px;">
+							<p>农牧源社区</p>
+						</a>
+				    </li>
+				    <li class="">
+				    	<a href="{:U('App/Artical/lists',array('cid'=>3))}">
+							<img src="__PUBLIC__/App/images/ic08.png" alt="">
+							<p>农场资讯</p>
+						</a>
+				    </li>
+				    <li class="">
+				    	<a href="https://static.meiqia.com/dist/standalone.html?_=t&eid=83265">
+							<img src="__PUBLIC__/App/images/ic09.png" alt="">
+							<p>在线客服</p>
+						</a>
+				    </li>
+			    </ul>
+			</div>
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+</html>

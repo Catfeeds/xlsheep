@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>消息详情</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+</head>
+<body>
+	<section class="wrap-page wrap">
+		<div class="bd">
+			<div class="weui_cells mg_t0">
+				<div class="weui_panel_bd">
+			        <div class="weui_media_box weui_media_text" style="padding-bottom: 0">
+			          <p class="weui_media_desc">{$data.title}</p>
+			          <ul class="weui_media_info">
+			            <li class="weui_media_info_meta">{$data.ctime|date='Y-m-d',###}</li>
+			            <li class="weui_media_info_meta">{$data.ctime|date='H:i:s',###}</li>
+			          </ul>
+			        </div>
+			    </div>
+			    <article class="weui_article color_6">
+			          <section>
+			            <section>
+			            	<p>{$data.content}</p>
+			            </section>
+			        </section>
+			    </article>
+			</div>
+		</div>
+	</section>
+	 <include file="./Tpl/App/Shop_footer.html" />
+</body>
+</html>

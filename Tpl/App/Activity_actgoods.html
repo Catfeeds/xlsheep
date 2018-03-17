@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>{$cache.name}-{$_SESSION['WAP']['shopset']['name']}</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/activity/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/activity/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/swiper.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/activity/jquery-weui.min.js"></script>
+	<script src="__PUBLIC__/App/js/swiper.js"></script>
+	<script src="__PUBLIC__/App/js/time.js"></script>
+	<script src="__PUBLIC__/App/js/jquery.lazyload.min.js"></script>
+  <script src="__PUBLIC__/App/layer/layer.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="banner kj_detial_swp">
+				<div class="swiper-container  kj_detial_container">
+				  <div class="swiper-wrapper">
+				  <foreach name="appalbum" item="vo">
+				    <div class="swiper-slide">
+						<img src="{$vo.imgurl}">
+				    </div>
+				    </foreach>
+				  </div>
+				</div>
+			</div>
+			<div class="goods_msg">
+				<p class="name_msg">{$cache.name}</p>
+				<div class="">
+          <div style="display:inline-block; width:32%;">
+					<p class="price"><i>价格：￥{$cache.price} </i>
+          <i class="old_price mg_r15" style="color:#999; margin-left:0px;">￥{$cache.oprice}</i>
+          </div>
+           <div style="display:inline-block; width:32%;text-align:center;">
+           <span>单位：{$cache.unit}</span>
+           </div>
+          <div style="display:inline-block; width:32%; text-align:right;">
+         
+          <span>已团<span style="color:#FF9800">{$cache.sells}</span>件</span>
+          <span>&nbsp;&nbsp;<span style="color:#FF9800">{$cache.peoplenum}</span>人成团</span>
+          <div>
+          </p>
+				</div>
+			</div>
+			<div class="bgf pd_5 lh_2 fz12 color_9">
+				<p>本活动不赠送积分</p>
+			</div>
+			<notempty name="group">
+			<div class="weui-cells star_tuangou">
+				<a class="weui-cell weui-cell_access" href="{:U('App/Activity/groupall',array('id'=>$cache['id']))}">
+	                <div class="weui-cell__bd">
+	                    <p><i>{$groupCount}</i>人在开团</p>
+	                </div>
+	                <if condition="$grouplistcount gt 3">
+	                <div class="weui-cell__ft">查看更多</div>
+	                </if>
+	            </a>
+	            <volist name="grouplist" id="vo">
+	            <div  class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__hd">
+                        <a href="javascript:;"><img class="weui-media-box__thumb" src="{$vo.headimgurl}"></a>
+                    </div>
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">{$vo.nickname}</h4>
+                        <p class="weui-media-box__desc">还差<i>{$vo.left}</i>人，剩余<i id="timecount_{$vo.id}" data-end="{$vo.rtime|date='Y/m/d H:i:s',###}"><span class="hour">0</span>:<span class="mini">0</span>:<span class="sec">0</span>:<span class="hm">0</span></i></p>
+                    </div>
+                    <span class="weui-cell__ft"><a href="{:U('App/Activity/joinGroup',array('id'=>$vo['id']))}" class="go_join">去参团</a></span>
+                </div>
+                </volist>
+			</div>
+			</notempty>
+            <div class="goods_detial_img">
+            	<div class="color_6 pd_10 text_c" >商品详情</div>
+            	<div class="img_wp">
+            		{$cache.content|htmlspecialchars_decode}
+            	</div>
+            </div>
+		</div>
+		<div class="fui-navbar tuangou footer-nav bordert bd_ul01" style="z-index:10;padding:0;">
+            <a href="{:U('App/Shop/home')}" class="home-btn" data-nocache="true">
+                <i class="iconfont icon-shouye"></i>
+                <p class="label">首页</p>
+            </a>
+            <a class="alone flex_1 fastbuy" href="javascript:;" data-sku='0' data-id="0">
+				<p class="price">￥{$cache.oprice}</p>
+				<p>单独购买</p>
+            </a>
+            <a class="join_kaituan flex_1 fastbuy" href="javascript:;" data-sku='1' data-id="0">
+				<p class="price">￥{$cache.price}</p>
+				<p>一键开团</p>
+            </a>
+        </div>
+	</div>
+</body>
+<script> 
+var mySwiper2 = new Swiper('.kj_detial_container', {
+	//可选选项，自动滑动
+	
+})
+$('.fastbuy').on('click',function(){  
+
+ 
+if({$subscribe}!=1)
+{
+  layer.open({
+  type: 1,
+  skin: 'layui-layer-rim', //加上边框
+  area: ['320px', '300px'], //宽高
+  title:'关注提示',
+  content: $("#tipscontent").html()
+  });
+  return false;
+}
+
+    
+    var a = $(this).attr('data-sku');
+    var goodsnum="{$cache.num}";
+    var num=1;
+    var goodsid="{$cache.id}";
+    var vipid="{$_SESSION.WAP.vipid}";
+    var groupid = $(this).data('id');
+    if(goodsnum-num<0){
+        $.toptip('该产品库存不足！请调整购买量或选择其他属性！', 'error');
+        return false;
+    }
+    if(!vipid){
+        var fun=function(){
+            window.location.href=loginback;
+        }
+        $.toast('您还未登录，2秒后自动跳转登陆界面！',function(){window.location.href=loginback;});
+        return false;
+    }
+    if(a==1){
+      var dt={'sid':0,'goodsid':goodsid,'vipid':vipid,'num':num,'isact':1,'groupid':groupid};
+      var orderurl="{:U('App/Shop/orderMake',array('type'=>1,'sid'=>0,'lasturl'=>$lasturl))}";
+    }else{
+      var dt={'sid':0,'goodsid':goodsid,'vipid':vipid,'num':num};
+      var orderurl="{:U('App/Shop/orderMake',array('sid'=>0,'lasturl'=>$lasturl))}";
+    }
+    $.ajax({
+        type:"post",
+        url:"{:U('App/Shop/fastbuy')}",
+        dataType:'json',
+        data:dt,
+        success:function(info){
+            if(info['status']){
+                window.location.href=orderurl;
+            }else{
+            	if(info.url) {
+					$.confirm(info['msg'], function() {
+						  window.location.href=info['url'];
+					}, function() {
+						  return false;
+					 });
+				} else {
+					$.toptip(info['msg'], 'error');
+				}
+            }
+        },
+        error:function(xh,obj){
+            $.toptip('通讯失败，请重试！', 'error');
+        }
+    });
+    return false;
+});
+</script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+var share_url = "http://{$_SERVER['HTTP_HOST']}__ROOT__/App/Activity/actgoods/id/{$cache['id']}";
+var share_title="{$cache.name}";
+var share_content = "{$cache.summary}";
+var share_img="{$_SESSION['WAP']['shopset']['url']}{$apppic.imgurl}";
+
+wx.config({
+  debug: false,
+  appId: "{$jsapi['appId']}",
+  timestamp: "{$jsapi['timestamp']}",
+  nonceStr: "{$jsapi['nonceStr']}",
+  signature: "{$jsapi['signature']}",
+  jsApiList: [
+    'checkJsApi',
+    'onMenuShareTimeline',
+    'onMenuShareAppMessage',
+    'onMenuShareQQ',
+    'onMenuShareWeibo',
+    'hideMenuItems',
+    'showMenuItems',
+    'hideAllNonBaseMenuItem',
+    'showAllNonBaseMenuItem',
+  ]
+});
+
+wx.ready(function () {
+    //开启菜单
+    wx.showOptionMenu();
+    //隐藏菜单
+    //wx.hideOptionMenu();
+    //分享给朋友
+    wx.onMenuShareAppMessage({
+      title: share_title,
+      desc: share_content,
+      link: share_url,
+      imgUrl: share_img,
+      trigger: function (res) {
+        //alert('用户点击发送给朋友');
+      },
+      success: function (res) {
+        
+      },
+      cancel: function (res) {
+        //alert('已取消');
+      },
+      fail: function (res) {
+        //alert(JSON.stringify(res));
+      }
+    });
+    //分享到朋友圈
+    wx.onMenuShareTimeline({
+      title: share_title,
+      link: share_url,
+      imgUrl: share_img,
+      trigger: function (res) {
+        //alert('用户点击分享到朋友圈');
+      },
+      success: function (res) {
+        //alert('已分享');
+      },
+      cancel: function (res) {
+        //alert('已取消');
+      },
+      fail: function (res) {
+        //alert(JSON.stringify(res));
+      }
+    });
+
+});
+<notempty name="group">
+<volist name="grouplist" id="vo">
+$("#timecount_{$vo.id}").fnTimeCountDown("{$vo.rtime|date='Y/m/d H:i:s',###}");
+</volist>
+</notempty>
+</script>
+<script type="text/javascript">
+    $(function() {
+        $("img.lazy").show().lazyload({effect: "fadeIn"});
+    });
+</script>
+
+<div id="tipscontent" style="display:none;">
+<div class="dialog_bd">
+      <p class="tt_tips">长按二维码并识别</p>
+      <p class="text">请长按下图并选择识别图中二维码参与活动</p>
+      <img class="ewm" src="__PUBLIC__/App/images/ewm.jpg" alt="">
+    
+    </div>
+</div>
+</html>

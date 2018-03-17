@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">     
+        <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>{$cache.name}-我要砍价</title>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Activity/css/foxui.min.css">
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Activity/css/style.css">        
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Activity/css/iconfont.css">
+        <script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+        <script src="__PUBLIC__/App/js/fastclick.js"></script>
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css" />
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />      
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Activity/css/iconfont(1).css">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/Activity/css/style(1).css">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/Activity/css/bargain.css">
+        <script src="__PUBLIC__/App/layer/layer.js"></script>
+        <style type="text/css">
+		body{position:absolute;margin:auto;}
+		.fui-navbar{max-width:750px}
+		.fui-footer,.fui-navbar{max-width:750px}
+		.fui-page-group.fui-page-from-center-to-left,.fui-page-group.fui-page-from-center-to-right,.fui-page-group.fui-page-from-left-to-center,.fui-page-group.fui-page-from-right-to-center,.fui-page.fui-page-from-center-to-left,.fui-page.fui-page-from-center-to-right,.fui-page.fui-page-from-left-to-center,.fui-page.fui-page-from-right-to-center{
+		-webkit-animation:pageFromCenterToRight 0s forwards;animation:pageFromCenterToRight 0s forwards
+		}
+		.bargain-list img{max-width:100%}
+		.bargain-list-content-item{min-height:200px}
+		#shareit{
+		-webkit-user-select:none;display:none;position:fixed;width:100%;height:100%;background:rgba(0,0,0,.65);text-align:center;top:0;left:0;z-index:105
+		}
+		#shareit img{width:100%}
+		#alert-mask2{position: fixed;background: rgba(0, 0, 0, 0.8) none repeat scroll 0 0;width: 100%;height: 100%;left: 0;top: 0;z-index: 1000;-moz-transition-duration: 400ms;-webkit-transition-duration: 400ms;transition-duration: 400ms;}
+    	#alert-mask3{position: fixed;background: rgba(0, 0, 0, 0.9) none repeat scroll 0 0;width: 100%;height: 100%;left: 0;top: 0;z-index: 1000;-moz-transition-duration: 400ms;-webkit-transition-duration: 400ms;transition-duration: 400ms;}
+       .dialog_wp .mask{position:absolute;width:100%;height:100%;top:0;background:rgba(0,0,0,.6)}
+		.dialog_bd{width:250px;margin:0 auto;text-align:center}
+		.dialog_bd .tt_tips{font-size:16px;font-weight:600;color:#ff4d15}
+		.dialog_bd .text{font-size:16px;color:#666;margin:10px 0}
+		.dialog_bd .ewm{width:150px;height:150px;margin:5px 0}
+		.get_btn{border-radius:5px;padding:2px 25px;line-height:2;background:#ff0808;color:#fff;text-decoration:none;margin-top:10px;display:inline-block}		       
+        </style>
+    </head>
+    <body ontouchstart="">
+	<div class="fui-page-group "> 
+    <script language="javascript" type="text/javascript">
+        var interval = 1000;
+        function ShowCountDown(year,month,day,hour,minute,second,status,divname)
+        {
+            var now = new Date();
+            var endDate = new Date(year, month-1, day,hour,minute,second);
+            var leftTime=endDate.getTime()-now.getTime();
+            var leftsecond = parseInt(leftTime/1000);
+            //var day1=parseInt(leftsecond/(24*60*60*6));
+            var day1=Math.floor(leftsecond/(60*60*24));
+            var hour=Math.floor((leftsecond-day1*24*60*60)/3600);
+            var minute=Math.floor((leftsecond-day1*24*60*60-hour*3600)/60);
+            var second=Math.floor(leftsecond-day1*24*60*60-hour*3600-minute*60);
+            var cc = document.getElementById(divname);
+            if (status == 0) {
+                cc.innerHTML = "未开始";
+                return;
+            }else if(status == 1){
+                cc.innerHTML = "已结束";
+                return;
+            }else if(Number(day1)<0 || Number(hour) <0 || Number(minute) <0 || Number(second) <0){
+                cc.innerHTML = "超过砍价时限";
+                return;
+            }else{
+                cc.innerHTML = "剩余时间："+day1+"天"+hour+"小时"+minute+"分"+second+"秒";
+            }
+        }
+
+        window.setInterval(function(){ShowCountDown({$time['Y']},{$time['m']},{$time['d']},{$time['H']},{$time['i']},{$time['s']},{$time['status']},'divdown1');}, interval);
+    </script>
+
+
+<div class="fui-page-group">
+    <div class="fui-page creditshop-detail-page fui-page-current" id="fui-page-1497784967727">
+                <div class="fui-content">
+            <div class="bargain-header fui-list">
+                <div class="fui-list-media">
+                    <img src="{$vipinfo.headimgurl}" alt="">
+                </div>
+                <div class="fui-list-inner">
+                    <h2>{$vipinfo.nickname}</h2>
+                    <p>开砍时间：{$vipdata.ctime|date='Y-m-d H:i:s',###}</p>
+                </div>
+                <div><a href="{:U('App/Shop/home')}" data-nocache="true">
+                    <span class="icon" style="float: right;width: 40px;color: red">首页</span></a>
+                </div>
+            </div>
+
+            <div class="bargain-shop">
+                <a href="{:U('App/Activity/bargoods',array('id'=>$cache['id']))}" data-nocache="true" class="external">
+                    <div class="bargain-shop-top fui-list">
+                        <div class="fui-list-media">
+                            <img src="{$apppic['imgurl']}" alt="">
+                        </div>
+                        <div class="fui-list-inner">
+                            <h2>{$cache['name']}</h2>
+                            <p>库存{$cache.num} | 已售{$cache.sells}</p>
+                            <p id="divdown1">剩余时间：</p>
+                        </div>
+                    </div>
+                </a>
+                <div class="bargain-shop-price fui-list">
+                    <div class="bargain-shop-price-item fui-list-inner active">
+                        <i style="background: #fafafa">当前成交价</i>
+                        <p>
+                            <span class="price"><i>¥</i>{$data.price}</span>
+                            <span>原价 <del>¥{$cache['oprice']}</del></span>
+                        </p>
+                    </div>
+                    <div class="bargain-shop-price-item fui-list-inner">
+                        <i style="background: #fafafa">已砍金额</i>
+                        <p>
+                            <span class="price"><i>¥</i>{$data.pmoney}</span>
+                            <span>砍价次数 {$data.aboutnum} 次</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="bargain-shop-shop">
+                <eq name='over' value='1'>
+                    <span><a class="right "><i class="fu"></i>您的砍价已结束</a></span>
+                <else/>
+                <if condition="$cankan eq 0 or $isbuyed eq 1">
+					<span><a class="right" style="background: #ccc;">砍价已完成</a></span>
+                </if>
+                    <if condition="$people eq 1 and $isbuyed eq 0">
+                    <span><a id='fastbuy' class="left external">立刻购买</a></span>
+                    </if>
+                     <if condition="$people eq 0">
+                        <span><a href="{:U('App/Activity/bargoods',array('id'=>$cache['id']))}" class="left external">我也要砍</a></span>
+                    </if>                 
+                </span>
+                <if condition="$selfkan eq 0 and $cankan eq 1">
+                <span onclick="bargain()" id="fuceng"><a class="right "><i class="fu"></i>砍一刀</a></span>
+                <else />
+                <if condition="$cankan eq 1">
+                <span id="fenxiang"><a class="right "><i class="fu"></i>邀请好友砍</a></span>
+                </if>
+                </if>
+                </eq>
+            </div>
+            
+            <div class="bargain-list">
+                <div class="bargain-list-top" id="bargainTab">
+                    <a href="javascript:void(0);" data="family" class="active">亲友团</a>
+                    <a href="javascript:void(0);" data="detail" class="sta">商品详情</a>
+                    <a href="javascript:void(0);" data="rule" class="sta">活动规则</a>
+                    <a href="javascript:void(0);" data="list">参与榜</a>                
+                </div>
+                <div class="bargain-list-content" id="bargainTabContent">
+
+                    <div class="bargain-list-content-item active" id="family">
+                        <ul class="bargain-list-content-ul">
+                        <empty name='vips'>
+                        <div style="padding: 10px; text-align: center;color: #949494;">暂无</div>
+                        <else/>
+                        <volist name='vips' id='vv'>
+                            <li class="fui-list">
+                                <div class="fui-list-media first"><img src="{$vv.headimgurl}" alt=""></div>
+                                <div class="fui-list-inner">{$vv.nickname}</div>
+                                <div class="fui-list-media three" style="width: 60px;">-{:number_format($vv['money'],2)}元</div>
+                                <div class="fui-list-media four">{$vv.etime|date='m-d H:i',###}</div>
+                            </li>
+                        </volist>
+                        </empty>
+                        </ul>
+                    </div>
+
+                    <div class="bargain-list-content-item" id="detail" style="padding: 10px;">
+                        {$cache.content|htmlspecialchars_decode}
+                    </div>
+
+                    <div class="bargain-list-content-item" id="rule" style="padding: 10px;">
+                        <p>{$cache.summary}</p> 
+                    </div>
+
+                    <div class="bargain-list-content-item" id="list">
+                        <ul class="bargain-list-content-ul">
+                            <empty name='success'>
+                            <div style="padding: 10px; text-align: center;color: #949494;">暂无</div>
+                            <else/>
+                            <volist name='success' id='vc'>
+                                <li class="fui-list">
+                                    <div class="fui-list-media first"><img src="{$vc.headimgurl}" alt=""></div>
+                                    <div class="fui-list-inner">{$vc.nickname}</div>
+                                    <div class="fui-list-media three" style="width: 60px;">-{:number_format($vc['money'],2)}元</div>
+                                    <div class="fui-list-media four">{$vc.etime|date='m-d H:i',###}</div>
+                                </li>
+                            </volist>
+                            </empty>
+                        </ul>
+                    </div>                
+                </div>
+            </div>
+            <br>
+        </div>
+
+    </div>
+
+</div>
+<script type="text/javascript">
+    $(function(){
+        $("#bargainTab a").on("click",function(){
+            var id = $(this).attr("data");
+            if(!$(this).hasClass("active")){
+                $("#bargainTab a").removeClass("active");
+                $(".bargain-list-content-item").hide();
+                $(this).addClass("active")
+                $("#"+id+"").fadeIn();
+            }
+        })
+    });
+
+  
+  
+</script>
+<div style="display: none;" id="bargainres">
+    <div class="lynn-bargain-bg" style="position:absolute;z-index:10000;height: 100%">
+        <p id='sdc'>恭喜您</p>
+        <span id="myDiv">1</span> 
+          <br/> <br/> <br/> <br/>
+        <a href="javascript:;" class="lynn-bargain-bg-a" style="width: 130px;height: 35px;" onclick="tiao()"><span style="margin-top: 6px;font-size: 1.5em;color: #FFFFFF" data-nocache="">知道了</span></a>
+    </div>
+
+    <div id="alert-mask" style="position:absolute;z-index:1;"></div>
+</div>
+<div id="shareit" style="display:none">
+     <img src="/Public/App/images/share.png" id="shareImg">
+</div>
+
+<script language="javascript">
+function bargain() {
+ 
+    var helpvipid = "{$helpvipid}";
+    var goodsid = "{$cache['id']}";
+    var dt={'helpvipid':helpvipid,'goodsid':goodsid};
+    $.ajax({
+        type:"post",
+        url:"{:U('App/Activity/help')}",
+        dataType:'json',
+        data:dt,
+        success:function(info){
+            if(info['status']){
+                if(info['status']==1){
+                    $('#myDiv').html(info['msg']);
+                    var res = document.getElementById('bargainres');
+                    res.style.display = 'block';
+                }else{
+                    $('#sdc').html('对不起');
+                    $('#myDiv').html('您已经砍过一次了');
+                    var res = document.getElementById('bargainres');
+                    res.style.display = 'block';
+                }
+            } else {
+            	if(info.sub==1) {
+         		   layer.open({
+         			    type: 1,
+         			    skin: 'layui-layer-rim', //加上边框
+         			    area: ['320px', '300px'], //宽高
+         			    title:'关注提示',
+         			    content: $("#tipscontent").html()
+         			    });
+         			return false;
+         			} else {
+            			$.toptip(info.msg, 'error');
+            		}
+            }
+        },
+        error:function(xh,obj){
+            $.alert('通讯失败，请重试！');
+        }
+    });
+    
+    return false;
+}
+function tiao() {
+	$('#bargainres').hide();
+    window.location.reload();
+}
+</script>
+<eq name="people" value="1">
+<script>
+    $('#fastbuy').on('click',function(){
+        var goodsnum="{$cache.num}";
+        var num=1;
+        var goodsid="{$cache.id}";
+        var vipid="{$_SESSION.WAP.vipid}";
+        if(goodsnum-num<0){
+            $.toptip('该产品库存不足！请调整购买量或选择其他属性！', 'error');
+            return false;
+        }
+        if(!vipid){
+            var fun=function(){
+                window.location.href=loginback;
+            }
+            $.toast('您还未登录，2秒后自动跳转登陆界面！',function(){window.location.href=loginback;});
+            return false;
+        }
+        var bid = "{$bid}";
+        var dt={'sid':0,'goodsid':goodsid,'vipid':vipid,'num':num,'bid':bid};
+        //保证订单生成页的返回
+        var orderurl="{:U('App/Shop/orderMake',array('bid'=>$bid,'sid'=>0,'lasturl'=>$lasturl))}";
+        $.ajax({
+            type:"post",
+            url:"{:U('App/Shop/fastbuy')}",
+            dataType:'json',
+            data:dt,
+            success:function(info){
+                if(info['status']){
+                    $.toast('正在生成订单',function(){window.location.href=orderurl;});
+                }else{
+                    if(info["url"]){
+                         $.toast(info['msg'],function(){window.location.href=info['url'];});
+                    }
+                    else
+                    {
+                      $.toptip(info['msg'], 'error');  
+                    }
+                    
+                }
+            },
+            error:function(xh,obj){
+                $.toptip('通讯失败，请重试！', 'error');
+            }
+        });
+        return false;
+    });
+</script>
+</eq>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    var share_url = "http://{$_SERVER['HTTP_HOST']}__ROOT__/App/Activity/bargain/id/{$cache['id']}/vipid/{$helpvipid}";
+    var share_title="我正参加{$cache['price']}元抢购{$cache['sname']}活动，原价{$cache['oprice']}，还差一刀到底价";
+    var share_content = "求各位朋友背后来一刀 支持来砍";
+    var share_img="{$_SESSION['WAP']['shopset']['url']}{$apppic.imgurl}";
+    
+  wx.config({
+      debug: false,
+      appId: "{$jsapi['appId']}",
+      timestamp: "{$jsapi['timestamp']}",
+      nonceStr: "{$jsapi['nonceStr']}",
+      signature: "{$jsapi['signature']}",
+      jsApiList: [
+        'checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'hideMenuItems',
+        'showMenuItems',
+        'hideAllNonBaseMenuItem',
+        'showAllNonBaseMenuItem',
+      ]
+  });
+  
+  wx.ready(function () {
+        //开启菜单
+        wx.showOptionMenu();
+        //隐藏菜单
+        //wx.hideOptionMenu();
+        //分享给朋友
+        wx.onMenuShareAppMessage({
+          title: share_title,
+          desc: share_content,
+          link: share_url,
+          imgUrl: share_img,
+          trigger: function (res) {
+            //alert('用户点击发送给朋友');
+          },
+          success: function (res) {
+            //alert('已分享');
+          },
+          cancel: function (res) {
+            //alert('已取消');
+          },
+          fail: function (res) {
+            //alert(JSON.stringify(res));
+          }
+        });
+        //分享到朋友圈
+        wx.onMenuShareTimeline({
+          title: share_title,
+          link: share_url,
+          imgUrl: share_img,
+          trigger: function (res) {
+            //alert('用户点击分享到朋友圈');
+          },
+          success: function (res) {
+            //alert('已分享');
+          },
+          cancel: function (res) {
+            //alert('已取消');
+          },
+          fail: function (res) {
+            //alert(JSON.stringify(res));
+          }
+        });
+        //分享到QQ
+        wx.onMenuShareQQ({
+          title: share_title,
+          desc: share_content,
+          link: share_url,
+          imgUrl: share_img,
+          trigger: function (res) {
+            //alert('用户点击分享到QQ');
+          },
+          complete: function (res) {
+            //alert(JSON.stringify(res));
+          },
+          success: function (res) {
+            //alert('已分享');
+          },
+          cancel: function (res) {
+            //alert('已取消');
+          },
+          fail: function (res) {
+            //alert(JSON.stringify(res));
+          }
+        });
+  });
+  $("#fenxiang").on("click", function() {
+	    $("#shareit").show();
+	});
+	$("#shareit").on("click", function(){
+	    $("#shareit").hide(); 
+});
+function reload(){
+	　　window.location.href=window.location.href+"?id="+10000*Math.random();
+}
+</script>
+</div>
+<div id="tipscontent" style="display:none;">
+<div class="dialog_bd">
+      <p class="tt_tips">长按二维码并识别</p>
+      <p class="text">请长按下图并选择识别图中二维码参与活动</p>
+      <img class="ewm" src="__PUBLIC__/App/images/ewm.jpg" alt="">
+    
+    </div>
+</div>
+</body>
+</html>

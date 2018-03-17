@@ -1,0 +1,131 @@
+<div class="row">
+	<div class="col-xs-12 col-md-12">
+		<div class="widget">
+			<div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i>
+				<span class="widget-caption">会员积分日志</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize">
+						<i class="fa fa-expand"></i>
+					</a>
+					<a href="#" data-toggle="collapse">
+						<i class="fa fa-minus"></i>
+					</a>
+					<a href="#" data-toggle="dispose">
+						<i class="fa fa-times"></i>
+					</a>
+				</div>
+			</div>
+			<div class="widget-body">
+				<div class="table-toolbar">
+					<a href="#" class="btn btn-danger" disabled="disabled">
+						<i class="fa fa-delicious"></i>预留按钮
+					</a>
+					<div class="pull-right">
+						<form id="App-search">
+							<label style="margin-bottom: 0px;">
+                                 <select class="form-control location" name="type">
+	                                	<option value="">请选择类型</option>	            
+	                                	<option value="1" <if condition="$type eq 1"> selected</if>>注册奖励</option>
+	                                	<option value="2" <if condition="$type eq 2"> selected</if>>带来注册奖励</option>
+	                                	<option value="3" <if condition="$type eq 3"> selected</if>>购买商品奖励</option>
+	                                	<option value="4" <if condition="$type eq 4"> selected</if>>兑换</option>
+	                                	<option value="5" <if condition="$type eq 5"> selected</if>>带来消费奖励</option>
+                                </select>
+                             </label> 
+							<label style="margin-bottom: 0px;">
+								<input name="vipid" type="search" class="form-control input-sm" value="{$vipid}" placeholder="会员ID">
+							</label>
+							<label style="margin-bottom: 0px;">
+								<input name="mobile" type="search" class="form-control input-sm" value="{$mobile}" placeholder="手机号码">
+							</label>
+							<label style="margin-bottom: 0px;">
+								<input name="name" type="search" class="form-control input-sm" value="{$name}" placeholder="会员昵称或会员姓名">
+							</label>
+							<input type="hidden" name="search" value="1">
+							<a href="{:U('Admin/Score/log/')}" class="btn btn-success" data-loader="App-loader" data-loadername="会员日志" data-search="App-search">
+								<i class="fa fa-search"></i>搜索
+							</a>
+						</form>
+					</div>
+				</div>
+
+				<table id="App-table" class="table table-bordered table-hover">
+					<thead class="bordered-darkorange">
+						<tr role="row">
+							<th>流水号</th>
+							<th>会员ID</th>
+							<th>会员昵称</th>
+							<th>会员姓名</th>
+							<th>手机号码</th>
+							<th>积分变动</th>
+							<th>类型</th>
+							<th>关联订单号</th>
+							<th>备注</th>
+							<th>记录时间</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="cache" id="vo">
+							<tr id="item{$vo.id}">
+								<td class=" sorting_1">{$vo.id}</td>
+								<td class=" ">{$vo.vipid}</td>
+								<td class=" ">{$vo.nickname}</td>
+								<td class=" ">{$vo.name}</td>
+								<td class=" ">{$vo.mobile}</td>
+								<td class=" ">{$vo.score}</td>
+								<td class=" ">
+									<switch name="vo.type">
+										<case value="1">注册奖励</case>
+										<case value="2">带来注册奖励</case>
+										<case value="3">购买商品奖励</case>
+										<case value="4">兑换</case>
+										<case value="5">带来消费奖励</case>
+									</switch>
+									</td>
+								<td class=" ">{$vo.oid}</td>
+								<td class=" ">
+									{$vo.msg}
+								</td>
+								<td class=" ">{$vo.ctime|date="Y-m-d H:i:s",###}</td>								
+							</tr>
+						</volist>
+												
+					</tbody>
+				</table>
+				<div class="row DTTTFooter">
+					{$page}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+	setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->
+<!--全选特效封装/全部删除-->
+<script type="text/javascript">
+	//全选
+	var checkall=$('#App-table .App-checkall');
+	var checks=$('#App-table .App-check');
+	var trs=$('#App-table tbody tr');
+	$(checkall).on('click',function(){
+		if($(this).is(":checked")){			
+			$(checks).prop("checked","checked");
+		}else{
+			$(checks).removeAttr("checked");
+		}		
+	});
+	$(trs).on('click',function(){
+		var c=$(this).find("input[type=checkbox]");
+		if($(c).is(":checked")){
+			$(c).removeAttr("checked");
+		}else{
+			$(c).prop("checked","checked");
+		}		
+	});
+</script>
+<!--/全选特效封装-->

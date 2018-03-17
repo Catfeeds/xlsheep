@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>养只保单</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd recharge_list">
+			<div class="bd_tab">
+				<div class="weui_navbar">
+			        <div class="weui_navbar_item weui_bar_item_on">
+			         <a href="{:U('App/Vip/insurance')}">我的保单</a>
+			        </div>
+			        <div class="weui_navbar_item">
+			         <a href="{:U('App/Vip/contract')}">项目合同</a>
+			        </div>
+			    </div>
+		    </div>
+		    <div class="balance_wp">
+		    	<ul>
+	    	    	<li>
+	    	    		<div class="weui_cells">
+							<div class="weui_cell pd_15">
+					          <div class="weui_cell_bd weui_cell_primary">
+					            <p>您有<i>{$count}</i>份保单（含已完结保单）</p>
+					          </div>
+					        </div>
+			    		</div>
+				    	<div class="weui_cells">
+				    		<volist name="cache" id="vo">
+				    		<a href="{$vo.url}" class="listitem">
+							<div class="bod_top pd_10">
+								<div class="c_float">
+									<p class="f_left">(<i>{$vo.index}</i>){$vo.company}</p>
+								</div>
+								<div class="c_float fz_12 mg_t5 color_9">
+									<p class="f_left">保单号：<i>{$vo.no}</i></p>
+									<p class="f_right fz_14">{$vo.ctime|date="Y.m.d",###}</p>
+								</div>
+							</div>
+							</a>
+							</volist>
+						</div>
+	    			</li>
+				</ul>
+		    </div>
+				
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+	<script src="__PUBLIC__/App/js/fastclick.js"></script>
+	 <script type="text/javascript">
+	 $(function() {
+		  FastClick.attach(document.body);
+	 });
+	 if($("#infinite")[0]) {
+	 	var p = 1;
+	 	var loading = false;
+	 	$(document.body).infinite().on("infinite", function() {
+	 	  if(loading) return;
+	 	  loading = true;
+	 	  p=p+1;
+	 	  param ="?p="+p;  
+	       $.get("{:U('App/Ajax/insuranceList')}"+param,function(data){  
+	     	   if(data.status==1) {
+	     		   if(data.info) {	    			   
+	                    $("#list").append(data.info);
+	     			   loading = false;
+	                    if(data.more==0) {	            			  
+	                 	   $(document.body).destroyInfinite();
+	                    }
+	     	   	   }  
+	         	   $('#infinite').hide();
+	     	   }
+	        })  
+	 	});
+	 }
+	</script>
+</body>
+</html>

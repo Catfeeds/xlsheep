@@ -1,0 +1,10 @@
+<volist name="userlist" id="vo">
+	<li class="ui-justify">
+		<div class="num">{$vo.index}</div>
+		<div class="y-user">
+			<img src="{$vo.headimgurl}">
+			<span class="name">{:handleNickname($vo['nickname'])}</span>
+		</div>
+		<div class="num-k">{$vo.num}x{$vo.catname}</div>
+	</li>
+</volist>

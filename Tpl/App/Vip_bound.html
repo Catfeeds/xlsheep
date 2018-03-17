@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>农牧源牧场</title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="MobileOptimized" content="320">
+		<!--默认宽度320-->
+		<meta http-equiv="cleartype" content="on">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!--删除苹果菜单-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<!--默认颜色-->
+		<meta name="apple-mobile-web-app-title" content="yes">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<!--加载全部后 显示-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--不识别电话-->
+		<link rel="stylesheet" href="__PUBLIC__/App/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/new.css" />
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css" />
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/base.css" />
+		<script type="text/javascript" src="__PUBLIC__/App/js/zepto.min.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/App/gmu/gmu.min.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/App/gmu/app-basegmu.js"></script>
+	</head>
+	<body>
+		<section class="mui-content" id="personalpage">
+			<section class="header-personal">
+				<header class="header-grzx" id="header-grzx">
+					<section class="personal tc">
+						<span class="face block"><img src="{$userinfo.headimgurl}" alt="" title=""/></span>
+						<p>昵称:{$userinfo.nickname} ID:{$userinfo.id}</p>
+					</section>
+				</header>
+			</section>
+			<form class="bdphone-fom">
+					<input type="hidden" id="vid" value="{$userinfo.id}">
+					<input type="tel" class="bdphone-input" id="phone" placeholder="绑定手机号" vaule=""/>
+					<input type="password" class="bdphone-input" id="password" placeholder="设置登录密码" vaule=""/>
+					<input type="password" class="bdphone-input" id="conpassword" placeholder="确认登录密码" vaule=""/>
+					<a href="javascript:void(0)" class="bdphone-btn tc" id="boundjs">绑定手机</a>
+					<p>绑定成功后，手机号码和登录密码可直接登录<a href="">手机网页版(www.qiaonongge.com)</a>和<a>手机APP</a>，无需再注册！</p>					
+			</form>
+		</section>
+		<footer class="my-bar footer">
+			<a class="my-bar-item" href="/App/Shop/index" id="fthome">
+				<span class="i-icon"><i class="i-icon-home"></i></span>
+				<div>首页</div>
+			</a>
+			<a class="my-bar-item" href="/App/Shop/category" id="ftcategory">
+				<span class="i-icon"><i class="i-icon-shop"></i></span>
+				<div>商城</div>
+			</a>
+			<a class="my-bar-item" href="javascript:;" id="ftbase">
+				<span class="i-icon"><i class="i-icon-jd"></i></span>
+				<div>牧场</div>
+			</a>
+			<a class="my-bar-item" href="javascript:;" id="ftvip">
+				<span class="i-icon"><i class="i-icon-farmer"></i></span>
+				<div>农场主</div>
+			</a>
+		</footer>
+		<script>
+			$('#boundjs').click(function(){
+				var mobile = $('#phone').val();
+				var vid = $('#vid').val();
+				var password = $('#password').val();
+				var conpassword = $('#conpassword').val();
+				var re = /^1\d{10}$/;
+				if (re.test(mobile)==false) {
+					zbb_msg("手机号不正确！");
+					return;
+				}
+				if (password=='') {
+					zbb_msg("请输入密码！");
+					return;
+				}
+				if (password != conpassword) {
+					zbb_msg("两次密码不一致！");
+					return;
+				}
+			    $.ajax({
+					type:'post',
+					data:{'mobile':mobile,'password':password,'vid':vid,'conpassword':conpassword},
+					url:"{:U('Vip/bound')}",
+					dataType:'json',
+					success:function(e){
+						if(e.status == 1){
+							zbb_alert(e.msg,function(){
+								window.location.href= "{:U('App/Shop/index')}";
+							});
+						}else{
+							zbb_alert(e.msg);
+							return false;
+						}
+					},
+					error:function(){
+					    zbb_alert('通讯失败！');
+						return false;
+					}
+				});	
+				return false;
+			});
+		</script>
+		<script>
+			$('#ftbase,#ftvip').click(function(){
+				zbb_msg("请先绑定手机号码和登录密码！");
+				return;
+			});
+		</script>	
+	</body>
+</html>

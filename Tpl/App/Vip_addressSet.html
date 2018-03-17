@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>修改地址-{$_SESSION['WAP']['shopset']['name']}</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="weui_cells">
+	       	    <div class="weui_cell">
+	   	            <div class="weui_cell_hd"><label class="weui_label"><em class="required">*</em>收件人</label></div>
+	   	            <div class="weui_cell_bd weui_cell_primary">
+	   	            	<input id="name" class="weui_input" type="text" placeholder="请填写收件人姓名" value="{$data.name}">
+	   	            </div>
+	   	        </div>
+        	    <div class="weui_cell">
+    	            <div class="weui_cell_hd"><label class="weui_label"><em class="required">*</em>详细地址</label></div>
+    	            <div class="weui_cell_bd weui_cell_primary">
+    	            	<input id="address" class="weui_input" type="text" placeholder="请输入详细地址" value="{$data.address}">
+    	            </div>
+    	        </div>
+    	        <div class="weui_cell">
+    	            <div class="weui_cell_hd"><label class="weui_label"><em class="required">*</em>手机号码</label></div>
+    	            <div class="weui_cell_bd weui_cell_primary">
+    	            	<input id="mobile"  class="weui_input" type="tel" placeholder="请输入手机号码" value="{$data.mobile}">
+    	            </div>
+    	        </div>
+    	         <div class="weui_cell">
+    	            <div class="weui_cell_hd"><label class="weui_label">备注</label></div>
+    	            <div class="weui_cell_bd weui_cell_primary">
+    	            	<input id="remark"  class="weui_input" type="text" placeholder="如：家，公司" value="{$data.remark}">
+    	            </div>
+    	        </div>
+			</div>
+			<input type="hidden" value="{$data.id}" id="id"/>
+			<input type="hidden" value="{$data.is_default}" id="is_default"/>
+			<div class="set-default">
+				<h2>设为默认地址</h2>
+				<div class="d-switch <eq name="data.is_default" value="1">active</eq>">
+					<span></span>
+				</div>
+			</div>
+			<div class="weui_btn_area">
+		        <a id="ads-btn" class="weui_btn weui_btn_primary fz_14 lh_2_5" href="javascript:">保存地址</a>
+		    </div>
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+ <script src="__PUBLIC__/App/js/fastclick.js"></script>
+ <script type="text/javascript">
+ $(function() {
+	  FastClick.attach(document.body);
+ });
+</script>
+<script>
+	$('#ads-btn').click(function(){
+		var id=$('#id').val();
+		var address=$('#address').val();
+		var name=$('#name').val();
+		var mobile=$('#mobile').val();
+		var remark=$('#remark').val();
+		var is_default=$('#is_default').val();
+		var mre = /^(13[0-9]|14[57]|15[012356789]|17[0678]|18[0-9])\d{8}$/;
+		if(address==''){
+			$.toptip('请填写地址详情！', 'error');
+			return;
+		}else if(name==''){
+			$.toptip('请填写收货人！', 'error');
+			return;
+		}else if(mobile==''){
+			$.toptip('请填写手机号码！', 'error');
+			return;
+		}else if (mre.test(mobile)==false) {
+			$.toptip('手机号码格式不正确！', 'error');
+			return;
+		}
+		
+		$.ajax({
+			type:'post',
+			data:{'id':id,'address':address,'name':name,'mobile':mobile,'remark':remark,'is_default':is_default},
+			url:"{:U('Vip/addressSet')}",
+			dataType:'json',
+			success:function(e){
+				if (e.status==1) {
+					$.toast('操作成功',function(){location.href="{:U('App/Vip/address')}";});
+				} else {
+					$.toptip(e.msg, 'error');
+				}
+				return false;
+			},
+			error:function(){
+			    $.toptip('通讯失败！', 'error');
+				return false;
+			}
+		});	
+		return false;
+	});
+	$(function(){
+		$('.d-switch').click(function() {
+			if($(this).hasClass("active")){
+				$('#is_default').val(0);	
+				$(this).removeClass("active");
+			} else {
+				$('#is_default').val(1);	
+				$(this).addClass("active");
+			}
+		});	
+	})
+</script>
+</html>

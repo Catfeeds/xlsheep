@@ -1,0 +1,232 @@
+<style type="text/css">
+.report-nav{padding:15px 5px;background: #ffffff;border-bottom: 1px solid #eeeeee;}
+.report-nav a {background-color: #2dc3e8;color:#fff;font-size:14px;padding: 5px 12px;border-radius: 5px;margin-right:15px;text-decoration: none;}
+.report-nav a:hover,.report-nav a.active{background-color: #fb6e52;}
+.balance{float:left;width:200px;padding-left: 3px;}
+.balance span{color:red;font-size:16px;}
+</style>
+<script src="__PUBLIC__/Admin/js/datetime/moment.js"></script>
+<script src="__PUBLIC__/Admin/js/datetime/daterangepicker.js"></script>
+
+<div class="row">
+	<div class="col-xs-12 col-md-12">
+		<div class="widget">
+			<div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i>
+				<span class="widget-caption">会员资金流水</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize">
+						<i class="fa fa-expand"></i>
+					</a>
+					<a href="#" data-toggle="collapse">
+						<i class="fa fa-minus"></i>
+					</a>
+					<a href="#" data-toggle="dispose">
+						<i class="fa fa-times"></i>
+					</a>
+				</div>
+			</div>
+			<div class="widget-body">
+				<div class="table-toolbar">
+					<div class="balance">
+						返现总金额：<span> {$total_money}元</span><br>
+						商品出售总金额：<span style="color:green"> {$income}元</span><br>
+						支付平台总手续费：<span> {$expenditure}元</span>
+					</div>
+					<div class="pull-right">
+						<form id="App-search">
+							<!--
+							<label style="margin-bottom: 0px;">
+							<select class="form-control" name="type" >
+                                <option value="0">类型</option>
+                                <option value="1" <eq name="type" value="1">selected</eq>>商城收入</option>
+                                <option value="2" <eq name="type" value="2">selected</eq>>商城支出</option>
+                             </select>
+                        	</label>  -->
+							<label style="margin-bottom: 0px;">
+								<input name="vipid" type="search" class="form-control input-sm" value="{$vipid}" placeholder="会员ID">
+							</label>
+							<label style="margin-bottom: 0px;">
+								<input name="keyword" type="search" class="form-control input-sm" value="{$keyword}" placeholder="会员姓名或手机号码" style="width:160px;">
+							</label>
+                             <label style="margin-bottom: 0px;">
+								<input id="date" name="date" type="search" class="form-control input-sm" value="{$date}" placeholder="请选择日期" style="width:180px;">
+							</label>
+							<input type="hidden" name="search" value="1">
+							<a href="{:U('Admin/Report/areaindex')}" class="btn btn-success" data-loader="App-loader" data-loadername="会员分红资金" data-search="App-search">
+								<i class="fa fa-search"></i>搜索
+							</a>
+							<button href="javascript:void(0)" class="btn btn-primary" id="exportOrder"><i class="fa fa-save"></i>导出报表</button>
+						</form>
+					</div>
+					<div style="clear:both"></div>
+				</div>
+
+				<table id="App-table" class="table table-bordered table-hover">
+					<thead class="bordered-darkorange">
+						<tr role="row">
+							<th>流水号</th>
+							<th>会员ID</th>
+							<th>会员昵称</th>
+							<th>手机号码</th>
+							<th>金额</th>
+							<th>支付类型</th>
+							<th>余额</th>
+							<th>明细类型</th>
+							<th>关联订单号</th>
+							<th>备注</th>
+							<th>记录时间</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="cache" id="vo">
+							<tr id="item{$vo.id}">
+								<td class=" sorting_1">{$vo.id}</td>
+								<td class=" ">{$vo.vipid}</td>
+								<td class=" ">{$vo.nickname}</td>
+								<td class=" ">{$vo.mobile}</td>
+								<td class=" " style="color:#04da3c">{:abs($vo['money'])}</td>
+								<td class=" ">
+									<switch name="vo.paytype">
+										<case value="money">余额支付</case>
+										<case value="wxpay">微信支付</case>
+										<case value="alipay">支付宝</case>		
+										<default />		
+									</switch>
+								</td>
+								<td class=" ">{$vo.balance}</td>
+								<td class=" ">
+									<switch name="vo.type">
+										<case value="1">充值</case>
+										<case value="2">提现</case>
+										<case value="3">购买商品</case>
+										<case value="4">众筹创业项目</case>
+										<case value="5">项目收益</case>
+										<case value="6">返还本金</case>
+										<case value="7">取消提现</case>
+										<case value="8">手续费</case>
+										<case value="9">退款</case>
+										<case value="10">赎回</case>
+										<case value="11">带来注册奖励</case>
+										<case value="12">带来消费奖励</case>
+										<case value="13">购买VIP会员</case>
+										<case value="17">区域产品被购买返回费用</case>
+										<case value="18">配送费用</case>
+									</switch>
+									</td>
+								<td class=" ">{$vo.oid}</td>
+								<td class=" ">
+									{$vo.remark}
+								</td>
+								<td class=" ">{$vo.ctime|date="Y-m-d H:i:s",###}</td>								
+							</tr>
+						</volist>
+												
+					</tbody>
+				</table>
+				<div class="row DTTTFooter">
+					{$page}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+	setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->
+<!--全选特效封装/全部删除-->
+<script type="text/javascript">
+	//全选
+	var checkall=$('#App-table .App-checkall');
+	var checks=$('#App-table .App-check');
+	var trs=$('#App-table tbody tr');
+	$(checkall).on('click',function(){
+		if($(this).is(":checked")){			
+			$(checks).prop("checked","checked");
+		}else{
+			$(checks).removeAttr("checked");
+		}		
+	});
+	$(trs).on('click',function(){
+		var c=$(this).find("input[type=checkbox]");
+		if($(c).is(":checked")){
+			$(c).removeAttr("checked");
+		}else{
+			$(c).prop("checked","checked");
+		}		
+	});
+	//发放分红
+	var btnfenhong=$('.fenhong');
+	$(btnfenhong).on('click',function(){
+			var id=$(this).data('id');
+			$.ajax({
+					type:"post",
+					url:"{:U('Admin/Finance/fenhong')}",
+					data:{'id':id},
+					dataType: "json",
+					//beforeSend:$.App.loading(),
+					success:function(mb){
+						//$.App.loading();
+						bootbox.dialog({
+	                	message: mb,
+	                	title: "发放分红",
+	                	className: "modal-darkorange",
+	                	buttons: {
+	                		   success: {
+			                        label: "确定",
+			                        className: "btn-blue",
+			                        callback: function () {
+			                        	var fhrate=$('#AppFinanceFhRate').val();
+			                        	if(!fhrate){
+			                        		alert('请填写实际年收益率!');
+			                        		return false;
+			                        	}
+			                        	var dt=$('#AppFinanceFh').serialize();
+			                        	var funok=function(){	
+				                        	$.ajax({
+				                        		type:"post",
+				                        		url:"{:U('Admin/Finance/fhSave')}",
+				                        		data:dt,
+				                        		dataType:"json",
+				                        		async:false,
+				                        		success:function(info){
+				                        			if(info['status']){
+				                        				$.App.alert('success',info['msg']);
+				                        				$('#App-reloader').trigger('click');
+				                        			}else{
+				                        				$.App.alert('danger',info['msg']);
+				                        			}
+				                        			return false;
+				                        		},
+				                        		error:function(xhr){
+													$.App.alert('danger','通讯失败！请重试！');
+													return false;
+												}
+				                        	});
+			                        	}
+			                        	$.App.confirm("确认要给此人发放分红吗？此操作不可逆转！",funok);
+			                        }
+			                   },
+			                    "取消": {
+			                        className: "btn-danger",
+			                        callback: function () { }
+			                    }
+		                	}
+		            	});
+					},
+					error:function(xhr){
+						$.App.alert('danger','通讯失败！请重试！');
+					}
+			});
+		return false;
+	});
+	$('#date').daterangepicker();
+    $('#exportOrder').on('click',function(){
+        $("#App-search").attr('action',"{:U('Admin/Report/areaExport')}");
+        $("#App-search").submit();
+    })
+</script>
+<!--/全选特效封装-->

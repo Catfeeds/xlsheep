@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>我的推广-{$_SESSION['WAP']['shopset']['name']}</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd tuiguang_wp">
+			<div class="bd_tab">
+				<div class="weui_navbar">
+			        <div class="weui_navbar_item weui_bar_item_on">
+			          带来注册
+			        </div>
+			        <div class="weui_navbar_item">
+			          带来购买
+			        </div>
+			    </div>
+		    </div>
+			<div class="list_nav">
+				<ul>
+					<li>
+						<div class="weui_cells">
+							<div class="weui_cells_title">主人您带来新用户有{$reg_count}位，注册佣金{$reg_money}元（每一位注册+ 关注发放{$vipset['tj_money']}元推广佣金）！
+								<a class="color_blue" href="{:U('App/Buy/record',array('type'=>11))}">查看佣金流水账</a>
+							</div>
+							<div class="weui_cells mg_t0">
+								<div class="weui_cell">
+									<a href="{:U('App/Vip/procommission')}" class="weui_btn weui_btn_mini weui_btn_primary">邀请好友</a>
+									<div class="tips_cvst">
+										<p>注册奖励{$vipset['tj_money']}元，首笔每1千元</br>再奖励{$vipset['tj_xf_money']}元（佣金{$vipset['max_tg_commission']}封顶）</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="weui_cells">
+							<div class="weui_cells_title">主人你带来首次购买有 {$xf_count}位，（购买成功一个月后到帐）购买佣金拟{$xf_money_ni}元，已到帐{$xf_money_dz}元，未到帐{$xf_money_wdz}元！
+								<a class="color_blue" href="{:U('App/Buy/record',array('type'=>12))}">查看佣金流水账</a>
+							</div>
+							<div class="weui_cells mg_t0">
+								<div class="weui_cell">
+									<a href="{:U('App/Vip/procommission')}" class="weui_btn weui_btn_mini weui_btn_primary">邀请好友</a>
+									<div class="tips_cvst">
+										<p>注册奖励{$vipset['tj_money']}元，首笔每1千元</br>再奖励{$vipset['tj_xf_money']}元（佣金{$vipset['max_tg_commission']}封顶）</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+<script>
+	$('.list_nav ul li').eq(0).show();
+	// 点击明细显示
+	$('.tuiguang_wp .weui_navbar .weui_navbar_item').eq(0).click(function () {
+		$('.list_nav ul li').eq(1).hide();
+		$('.tuiguang_wp .weui_navbar .weui_navbar_item').removeClass('weui_bar_item_on');
+		$('.tuiguang_wp .weui_navbar .weui_navbar_item').eq(0).addClass('weui_bar_item_on');
+		$('.list_nav ul li').eq(0).animate({"height":'toggle',"opacity": 'toggle'}, "fadeIn");
+	});
+	// 点击兑换显示
+	$('.tuiguang_wp .weui_navbar .weui_navbar_item').eq(1).click(function () {
+		$('.list_nav ul li').eq(0).hide();
+		$('.tuiguang_wp .weui_navbar .weui_navbar_item').removeClass('weui_bar_item_on');
+		$('.tuiguang_wp .weui_navbar .weui_navbar_item').eq(1).addClass('weui_bar_item_on');
+		$('.list_nav ul li').eq(1).animate({"height":'toggle',"opacity": 'toggle'}, "fadeIn");
+	});
+</script>
+</html>

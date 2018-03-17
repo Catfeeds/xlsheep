@@ -1,0 +1,535 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/swiper.min.css" />
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/swiper.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery.lazyload.min.js"></script>
+	<title>第{$cache.id}期：{$cache.name}<if condition="$cache['restrict'] gt 0">【限<i>{$cache.restrict}</i>{$cache.unit}】</if>-{$_SESSION['WAP']['shopset']['name']}</title>
+</head>
+<body>
+	<div class="wrap">
+		<div class='bd'>
+			<div class="sx-ban">
+			<notempty name="appalbum">
+				<div class="swiper-container">
+				    <div class="swiper-wrapper">
+				       <foreach name="appalbum" item="vo">
+				        <div class="swiper-slide"><img src="{$vo.imgurl}" width="100%"></div>
+				        </foreach>
+				    </div>
+				    <div class="swiper-pagination"></div>		
+				</div>
+				</notempty>
+				<empty name="appalbum">
+					<notempty name="apppic">
+						<img src="{$apppic.imgurl}" width="100%">
+					</notempty>
+				</empty>
+			</div>
+			<div class="weui_cells buy_msg mg_0">
+				<a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">
+		        	<div class="weui_media_hd">
+			            <img class="weui_media_appmsg_thumb" src="{$apppic.imgurl}" alt="">
+			          </div>
+			          <div class="weui_media_bd">
+			            <p class="weui_media_desc color_0 fz_16">第<i>{$cache.id}</i>期：{$cache.name}<if condition="$cache['restrict'] gt 0">【限<i>{$cache.restrict}</i>{$cache.unit}】</if></p>
+			            <div class="weui_media_desc weui_media_desc02 fz_12">
+							<eq name='way' value='3'>
+								<p>实物或分红</p>
+							<else/>
+								<eq name='way' value='2'>
+									<p>收益方式：到期领取实物</p>
+								<else/>
+									<p>年回报率：<i>{$cache['rate']*100}%</i></p>
+								</eq>
+							</eq>
+
+
+							<p>自提价格：<i>￥<span id="goods-price">{$cache.price}</span>/{$cache.unit}</i></p>
+							<p>按份价格：<i>￥<span id="copies-goods-price">{$cache.copies_price}</span>/份</i></p>
+							<p>认领周期：<i>{$cache.cycle}天</i></p>
+							<eq name="cache.isobject" value="0">
+							<p>分红方式：<i>{$cache.bonusway}</i></p>
+							</eq>
+			            </div>
+		        	</div>
+				</a>               
+                
+		       <div class="weui_cell">
+	                <div class="weui_cell_bd weui_cell_primary">
+	                   <p>选择数量</p>
+	                </div>
+	                <div class="weui_cell_ft count_wp text_c">
+						<div class="dtl_num bd_ul">
+							<a href="javascript:;" class="dtl_mar1 color_6" style="width: 25%" id="goods-dec">-</a>
+							<input type="text" value="1" style="width:28%" class="text_c dtl_input dtl_mar1" id="goods-total" >
+							<a href="javascript:;" class="color_6" style="width: 25%" id="goods-add">+</a>
+						</div>
+	                </div>
+	            </div>
+	            <div class="weui_cell">
+                  	<div class="weui_cell_bd weui_cell_primary">
+                    	<p>自提总价：<i class="fz_16 color_red">￥<span id="total-price">{$cache.price_formated}</span></i></p>
+                  	</div>
+                  	<div class="weui_cell_ft"></div>
+                </div>
+	            <div class="weui_cell">
+                  	<div class="weui_cell_bd weui_cell_primary">
+                    	<p>按份总价：<i class="fz_16 color_red">￥<span id="copies-total-price">{$cache.copies_price_formated}</span></i></p>
+                  	</div>
+                  	<div class="weui_cell_ft"></div>
+                </div>
+                <div class="weui_cell">
+                  	<div class="weui_cell_bd weui_cell_primary">
+                    	<p>甲方：<empty name="cache['partyinfo']['id']">暂无<else/><a href="{:U('App/Artical/Party',array('id'=>$cache['partyinfo']['id']))}"><i class="color_red" style="font-size: 12px;"><span>{$cache['partyinfo']['name']}</span></i></a></empty></p>
+                  	</div>
+                  	<div class="weui_cell_ft"></div>
+                </div>
+                <notempty name='isys'>
+					<div class="weui_cell">
+	                  	<div class="weui_cell_bd weui_cell_primary">
+	                    	<p>预售时间：<i class="fz_16 color_red"><span>{$cache.stime|date='Y-m-d H:i:s',###}</span></i></p>
+	                  	</div>
+	                  	<div class="weui_cell_ft"></div>
+	                </div>
+              	</notempty>
+              	<eq name='cache.isproject' value='1'>
+					<div class="weui_cell">
+	                  	<div class="weui_cell_bd weui_cell_primary">
+	                    	<p>众筹结束时间：<i class="fz_16 color_red"><span>{$cache.endtime|date='Y-m-d H:i:s',###}</span></i></p>
+	                    	<p style="font-size: 12px">(此商品为众筹，到期众筹未成功，购买金额将退回至余额。)</p>
+	                  	</div>
+	                  	<div class="weui_cell_ft"></div>
+	                </div>
+              	</eq>
+			</div>
+			<div class="weui_cells" style="padding:15px 0px;">
+		        <label for="weuiAgree" class="weui-agree" style="display:inline">
+                    <input id="weuiAgree" type="checkbox" class="weui-agree__checkbox">
+                </label>
+                <span class="weui-agree__text">
+                       同意<a href="{:U('App/Artical/index/',array('id'=>10))}" class="color_blue">《农牧源服务协议》</a>
+                    </span>
+		        <div class="weui_btn_area">
+		        	<empty name="old_order">
+		                <eq name="cache.status" value="1">
+	                	<a class="weui_btn weui_btn_primary fz_16" id='fastbuy'>马上认领</a>
+	            		<else />
+	            		<a class="weui_btn gray_btn fz_16" href="javascript:;">已售罄</a>
+	            		</eq>
+	            	<else />
+	            		<a class="weui_btn weui_btn_primary fz_16" href="{:U('App/Buy/pay',array('orderid'=>$old_order['id'],'paytype'=>$old_order['paytype']))}">继续支付：{$old_order['oid']}</a>
+	            	<div style="text-align: center;margin-top: 15px;font-size: 15px;">{$old_order['totalnum']}{$cache.unit}{$cache.vname}正在付款，如15分钟未完成支付会释放</div>
+	            	</empty>
+	            </div>
+			</div>
+			 <div class="dtl-prt back2 fonts9 border-t1" style="margin-top: 12px;padding: 0 5px;">
+			{$cache.content|htmlspecialchars_decode}
+			</div>
+			<div class="weui_cells">
+				<div class="bd_tab">
+					<div class="weui_navbar" style="z-index: 0">
+				        <div class="weui_navbar_item weui_bar_item_on">
+				          详细购买记录
+				        </div>
+				        <div class="weui_navbar_item">
+				          本期排行榜
+				        </div>
+					</div>
+				</div>
+				<div class="goumai_jl">
+					<div class="weui_cells mg_0" id="list">
+						<volist name="userlist" id="vo">
+						<a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">
+				          <div class="weui_media_hd">
+					            <img class="weui_media_appmsg_thumb" src="{$vo.headimgurl}" alt="">
+					          </div>
+					          <div class="weui_media_bd">
+					            <div class="weui_media_title">
+									<div class="weui_cell pd_0">
+								        <div class="weui_cell_bd weui_cell_primary">
+								            <p>{:handleNickname($vo['nickname'])}</p>
+								        </div>
+								        <div class="weui_cell_ft fz_14"><i>{$vo.totalnum}</i>{$vo.unit}</div>
+								    </div>
+					            </div>
+					            <p class="weui_media_desc fz_12">{$vo.ctime|date="Y-m-d H:i:s",###}</p>
+				          </div>
+				        </a>
+						</volist>
+					</div>
+					<eq name="usermore" value="1">
+						<div class="weui-infinite-scroll" id="infinite">
+							<div class="infinite-preloader"></div>
+									  正在加载...
+						</div>
+					</eq>
+				</div>
+				<div class="level_wp">
+					<div class="weui_cells mg_0">
+						<volist name="userranklist" id="vo">
+						<a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">
+							<div class="level_icon"><img src="__PUBLIC__/App/images/rank{$vo.index}.png"></div>
+				          	<div class="weui_media_hd">
+					            <img class="weui_media_appmsg_thumb" src="{$vo.headimgurl}" alt="">
+					        </div>
+					          <div class="weui_media_bd">
+								<div class="weui_cell pd_0">
+							        <div class="weui_cell_bd weui_cell_primary">
+							            <p>{:handleNickname($vo['nickname'])}</p>
+							        </div>
+							        <div class="weui_cell_ft fz_14"><i>{$vo.num}</i>{$vo.unit}</div>
+							    </div>
+				          </div>
+				        </a>
+				        </volist>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 底部导航 -->
+        <include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+ <script src="__PUBLIC__/App/js/fastclick.js"></script>
+ <script type="text/javascript">
+ $(function() {
+	  FastClick.attach(document.body);
+ });
+</script>
+<script>
+// 二级导航切换
+$('.bd_tab .weui_navbar_item').eq(0).click(function(){
+	$('.bd_tab .weui_navbar_item').eq(1).removeClass('weui_bar_item_on');
+	$('.bd_tab .weui_navbar_item').eq(0).addClass('weui_bar_item_on');
+	$('.level_wp').hide();
+	$('.goumai_jl').animate({"width":'toggle',"opacity": 'toggle'}, "fadeIn");
+})
+$('.bd_tab .weui_navbar_item').eq(1).click(function(){
+	$('.bd_tab .weui_navbar_item').eq(0).removeClass('weui_bar_item_on');
+	$('.bd_tab .weui_navbar_item').eq(1).addClass('weui_bar_item_on');
+	$('.goumai_jl').hide();
+	$('.level_wp').animate({"width":'toggle',"opacity": 'toggle'}, "fadeIn");
+})
+</script>
+<!--全局封装-->
+<script type="text/javascript">
+	var goodsid="{$cache.id}";
+	var issku="{$cache.issku}";
+	var vipid="{$_SESSION.WAP.vipid}";
+	var loginback="{$loginback}";
+</script>
+<!--封装图集-->
+<notempty name="appalbum">
+<script type="text/javascript">
+var swiper = new Swiper('.swiper-container',{
+	pagination: '.swiper-pagination',
+       paginationClickable: true
+});
+</script>
+</notempty>
+<!--封装SKU-->
+<script type="text/javascript">
+	var goodsid="{$cache.id}";
+	<neq name="skujson" value="">
+	var skujson=$.parseJSON('{$skujson}');
+	<else/>
+	var skujson='';
+	</neq>
+	var skuwrap=$('#sku-wrap');
+	var allsku=$('.sku');
+	var allskuattr=$('.sku span');
+	var finalsku=$('#finalsku');
+	var goodsprice=$('#goods-price');
+	var goodsnum=$('#goods-num');
+	$(allskuattr).on('click',function(){
+		var fasku=$(this).parent().parent('.sku');
+		var fa=$(this).parent();
+		var son=$(fa).find('span');
+		$(fasku).data('attr',$(this).data('attr'));
+		$(son).css({'background':'#FFFFFF','color':'#636363','border':'1px solid #e5e5e5'});
+		$(this).css({'background':'#f77c1c','color':'#FFFFFF','border':'1px solid #f77c1c'});
+		var str='';
+		var totalsku=0;
+		var totalattr=0;
+		$(allsku).each(function(){
+			var dt=$(this).data('attr');
+			if(dt){
+				str=str+dt+'-';
+				totalattr=totalattr+1;
+			}
+			totalsku=totalsku+1;
+		});
+		str=str.substring(0,str.length-1);
+		if(totalsku==totalattr){
+			str=goodsid+'-'+str;
+			<neq name="skujson" value="">
+			$tmpsku=skujson[str];
+			<else/>
+			$tmpsku='';
+			</neq>
+			$(finalsku).data('sku',$tmpsku['sku']);
+			$(finalsku).data('skuattr',$tmpsku['skuattr']);
+			$(goodsnum).html($tmpsku['num']);
+			$(goodsprice).html($tmpsku['price']);
+		}
+		
+	});
+</script>
+<!--封装购物车-->
+<script type="text/javascript">
+	var goodsnum=$('#goods-num');
+	var goodsdec=$('#goods-dec');
+	var goodsadd=$('#goods-add');
+	var goodstotal=$('#goods-total');
+	var goodsprice=$('#goods-price');
+	var copiesgoodsprice=$('#copies-goods-price');
+	var addtocart=$('#addtocart');
+	var fastbuy=$('#fastbuy');
+	var basketnum=$('#basketnum');
+	$('#goods-total').bind('input propertychange', function() {
+        var newnum = $('#goods-total').val();
+        var totalprice = $(goodsprice).html()*newnum;
+        var copiestotalprice = $(copiesgoodsprice).html()*newnum;
+		$('#total-price').html(totalprice.toFixed(2));
+		$('#copies-total-price').html(copiestotalprice.toFixed(2));
+    });
+	$(goodsadd).on('click',function(){
+		var num=Number($(goodstotal).val());
+		var total=Math.min(num+1, 999);
+		$(goodstotal).val(total);
+		var totalprice = $(goodsprice).html()*total;
+        var copiestotalprice = $(copiesgoodsprice).html()*total;
+		$('#total-price').html(totalprice.toFixed(2));
+		$('#copies-total-price').html(copiestotalprice.toFixed(2));
+		return false;
+	});
+	$(goodsdec).on('click',function(){
+		var num=Number($(goodstotal).val());
+		var total=Math.max(num - 1, 1);
+		$(goodstotal).val(total);
+		var totalprice = $(goodsprice).html()*total;
+        var copiestotalprice = $(copiesgoodsprice).html()*total;
+		$('#total-price').html(totalprice.toFixed(2));
+        $('#copies-total-price').html(copiestotalprice.toFixed(2));
+		return false;
+	});
+	//立刻购买特效
+	$(fastbuy).on('click',function(){
+		if(!$("#weuiAgree").is(':checked')) {
+			$.toptip('请先同意《农牧源服务协议》！', 'error');
+			return false;
+		}	
+		var goodsnum=Number($('#goods-num').html());
+		var num=Number($(goodstotal).val());
+		var isys = "{$isys}";
+		if(isys == 1){
+			$.toptip('还未正式出售，请查看预售时间！', 'error');
+			return false;
+		}
+		if(goodsnum-num<0){
+			App_gmuMsg('该产品剩余数量不足！请调整购买量或选择其他产品！');
+			return false;
+		}
+		if(!vipid){
+			var cfun=function(){
+				window.location.href=loginback;
+			}
+			App_gmuMsg('您还未登录，2秒后自动跳转登陆界面！',cfun);
+			return false;
+		}
+		var price=$(goodsprice).html();
+		var num=$(goodstotal).val();
+		var dt={'id':goodsid,'num':num};
+		//保证订单生成页的返回
+		var orderurl="{:U('App/Buy/choose')}/id/"+goodsid+"/num/"+num;
+		var fun=function(){
+			window.location.href=orderurl;
+		}
+		var okfun=function(){window.location.href="{:U('App/Vip/auth')}";}
+		$.ajax({
+			type:"post",
+			url:"{:U('App/Buy/fastbuy')}",
+			dataType:'json',
+			data:dt,
+			success:function(info){
+				if(info['status']){
+					$.toast(info['msg'],fun);
+				} else {
+					if(info['ys']==1) {
+						$.alert(info['msg']);
+					} else if(info['zl']==1){
+						$.alert(info['msg'],okfun);
+						$.confirm(info['msg'], function() {
+							okfun();
+						}, function() {
+							  return false;
+						});
+					} else if(info['order']==1){
+						$.alert(info['msg'],function(){window.location.href=info['url']});
+					} else {
+						$.alert(info['msg']);
+					}
+					return false;
+				}
+			},
+			error:function(xh,obj){
+				$.alert('通讯失败，请重试！');
+			}
+		});
+		return false;
+	});
+</script>
+<!--通用分享-->
+<!--新版分享特效-->
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+	var share_url = "http://{$_SERVER['HTTP_HOST']}__ROOT__/App/Buy/details/ppid/{$_SESSION['WAP']['vipid']}/id/{$cache.id}";
+	var share_title="{$cache.name}";
+	var share_content = "{$_SESSION['SHOP']['set']['summary']}";
+	var share_img="{$_SESSION['WAP']['shopset']['url']}{$apppic.imgurl}";	
+	
+  wx.config({
+      debug: false,
+      appId: "{$jsapi['appId']}",
+	  timestamp: "{$jsapi['timestamp']}",
+	  nonceStr: "{$jsapi['nonceStr']}",
+	  signature: "{$jsapi['signature']}",
+      jsApiList: [
+        'checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'hideMenuItems',
+        'showMenuItems',
+        'hideAllNonBaseMenuItem',
+        'showAllNonBaseMenuItem',
+      ]
+  });
+  
+  wx.ready(function () {
+	  	//开启菜单
+	  	wx.showOptionMenu();
+	  	//隐藏菜单
+	  	//wx.hideOptionMenu();
+	    //分享给朋友
+	    wx.onMenuShareAppMessage({
+	      title: share_title,
+	      desc: share_content,
+	      link: share_url,
+	      imgUrl: share_img,
+	      trigger: function (res) {
+	        //alert('用户点击发送给朋友');
+	      },
+	      success: function (res) {
+	        //alert('已分享');
+	      },
+	      cancel: function (res) {
+	        //alert('已取消');
+	      },
+	      fail: function (res) {
+	        //alert(JSON.stringify(res));
+	      }
+	    });
+	    //分享到朋友圈
+	    wx.onMenuShareTimeline({
+	      title: share_title,
+	      link: share_url,
+	      imgUrl: share_img,
+	      trigger: function (res) {
+	        //alert('用户点击分享到朋友圈');
+	      },
+	      success: function (res) {
+	        //alert('已分享');
+	      },
+	      cancel: function (res) {
+	        //alert('已取消');
+	      },
+	      fail: function (res) {
+	        //alert(JSON.stringify(res));
+	      }
+	    });
+	    //分享到QQ
+	    wx.onMenuShareQQ({
+	      title: share_title,
+	      desc: share_content,
+	      link: share_url,
+	      imgUrl: share_img,
+	      trigger: function (res) {
+	        //alert('用户点击分享到QQ');
+	      },
+	      complete: function (res) {
+	        //alert(JSON.stringify(res));
+	      },
+	      success: function (res) {
+	        //alert('已分享');
+	      },
+	      cancel: function (res) {
+	        //alert('已取消');
+	      },
+	      fail: function (res) {
+	        //alert(JSON.stringify(res));
+	      }
+	    });
+  });
+  $(document).ready(function () {
+	  $('.ui-tab-nav li').click(function () {
+	  var index = $(this).index();
+	  $(this).attr('class',"current").siblings('li').removeClass('current');
+	  $('.ui-tab-content li').eq(index).show(200).siblings('.ui-tab-content li').hide();
+	  $('html,body').animate({scrollTop:$('.ui-tab-nav').offset().top},800);
+	  });
+  })
+  	if($("#infinite")[0]) {
+			var p = 1;
+			var loading = false;
+			$(document.body).infinite().on("infinite", function() {
+			  if(loading) return;
+			  loading = true;
+			  p=p+1;
+			  param ="?p="+p+"&gid="+goodsid;  
+		      $.get("{:U('App/Ajax/buyUserList')}"+param,function(data){  
+		    	   if(data.status==1) {
+		    		   if(data.info) {		
+		                   $("#list").append(data.info);
+		    			   loading = false;
+		                   if(data.more==0) {	            			  
+		                	   $(document.body).destroyInfinite();	
+		                   }
+		    	   	   }  
+                	   $('#infinite').hide();
+		    	   }
+		       })  
+			});
+		}
+  function formatCurrency(num) {  
+    num = num.toString().replace(/\$|\,/g,'');  
+    if(isNaN(num))  
+        num = "0";  
+    sign = (num == (num = Math.abs(num)));  
+    num = Math.floor(num*100+0.50000000001);  
+    cents = num%100;  
+    num = Math.floor(num/100).toString();  
+    if(cents<10)  
+    cents = "0" + cents;  
+    for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)  
+    num = num.substring(0,num.length-(4*i+3))+','+  
+    num.substring(num.length-(4*i+3));  
+    return (((sign)?'':'-') + num + '.' + cents);  
+}  
+</script>
+<script type="text/javascript">
+  $(function() {
+      $("img.lazy").show().lazyload({effect: "fadeIn"});
+  });
+</script>
+</html>

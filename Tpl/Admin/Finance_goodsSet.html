@@ -1,0 +1,389 @@
+<!--百度编辑器-->
+<script src="__PUBLIC__/Admin/ueditor/ueditor.config.js"></script>
+<script src="__PUBLIC__/Admin/ueditor/ueditor.all.min.js"></script>
+<script src="__PUBLIC__/Admin/My97DatePicker/WdatePicker.js"></script>
+<div class="row">
+    <div class="col-xs-12 col-xs-12">
+        <div class="widget radius-bordered">
+            <div class="widget-header bg-blue">
+                <i class="widget-icon fa fa-arrow-down"></i>
+                <span class="widget-caption">金融产品设置</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body">
+                <form id="AppForm" action="" method="post" class="form-horizontal" data-bv-message="" data-bv-feedbackicons-valid="glyphicon glyphicon-ok" data-bv-feedbackicons-invalid="glyphicon glyphicon-remove" data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+                    <input type="hidden" name="id" value="{$cache.id}">
+                    <div class="form-title">
+                        <a href="{:U('Admin/Finance/goods/')}" class="btn btn-primary" data-loader="App-loader" data-loadername="产品分组">
+                            <i class="fa fa-mail-reply"></i>返回
+                        </a>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">选择分类<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <select class="form-control" name="cid" data-bv-notempty="true"
+                                                               data-bv-notempty-message="不能为空">
+                                <option value="0">顶级分类</option>
+                                <volist name="cate" id="vo">
+                                    <option value="{$vo.id}" <eq name="vo.id" value="$cache.cid">selected</eq>>{$vo.name}</option>
+                                    <volist name="vo['_child']" id="vo2">
+                                        <option value="{$vo2.id}" <eq name="vo2.id" value="$cache.cid">selected</eq>>&nbsp;&nbsp;└{$vo2.name}</option>
+                                        <foreach name="vo2['_child']" item="vo3">
+                                            <option value="{$vo3.id}" <eq name="vo3.id" value="$cache.cid">selected</eq>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└{$vo3.name}</option>
+                                            <foreach name="vo3['_child']" item="vo4">
+                                                <option value="{$vo4.id}" <eq name="vo4.id" value="$cache.cid">selected</eq>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└{$vo4.name}</option>
+                                                <foreach name="vo4['_child']" item="vo5">
+                                                    <option value="{$vo5.id}" <eq name="vo5.id" value="$cache.cid">selected</eq>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└{$vo5.name}</option>
+                                                </foreach>
+                                            </foreach>
+                                        </foreach>
+                                    </volist>
+                                </volist>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">产品名称<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="name" placeholder="必填" data-bv-notempty="true" data-bv-notempty-message="不能为空" value="{$cache.name}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">产品编号<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="number" placeholder="必填" data-bv-notempty="true" data-bv-notempty-message="不能为空" value="{$cache.number}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">甲方<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="party" placeholder="请填写甲方ID" value="{$cache.party}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">品种缩写<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="vname" placeholder="必填，如鸡，羊，鸡蛋等" data-bv-notempty="true" data-bv-notempty-message="不能为空" value="{$cache.vname}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">产品大图片<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" name="pic" value="{$cache.pic}" id="App-pic" placeholder="尺寸：350*350px">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default shiny" type="button" onclick="appImgviewer('App-pic')"><i class="fa fa-camera-retro"></i>预览</button><button class="btn btn-default shiny" type="button" onclick="appImguploader('App-pic',false)"><i class="glyphicon glyphicon-picture"></i>上传</button>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">产品详情顶部图片<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" name="bigpic" value="{$cache.bigpic}" id="App-bigpic" placeholder="尺寸：360*120px">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default shiny" type="button" onclick="appImgviewer('App-bigpic')"><i class="fa fa-camera-retro"></i>预览</button><button class="btn btn-default shiny" type="button" onclick="appImguploader('App-bigpic',false)"><i class="glyphicon glyphicon-picture"></i>上传</button>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">产品单位<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="unit" placeholder="" value="{$cache.unit}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">产品价格<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="price" placeholder="必填" data-bv-notempty="true" data-bv-notempty-message="不能为空" value="{$cache.price}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">按份价格<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="copies_price" placeholder="必填" data-bv-notempty="true" data-bv-notempty-message="不能为空" value="{$cache.copies_price}">
+                                <span class="text darkorange">0或留空表示不能安份购买</span>
+                        </div>
+                    </div>
+                    
+                    <eq name="shopset.isfx" value="1">
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">分销佣金</label>
+                        <div class="col-lg-2">
+                            <div class="input-group input-group-xs">
+                                <span class="input-group-btn">
+                           <button class="btn btn-darkorange" type="button">一级(%)：</button>
+                            </span>
+                                <input name="fx1rate" type="text" class="form-control" value="{$cache.fx1rate}">
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="input-group input-group-xs">
+                                <span class="input-group-btn">
+                             <button class="btn btn-darkorange" type="button">二级(%)：</button>
+                         </span>
+                                <input name="fx2rate" type="text" class="form-control" value="{$cache.fx2rate}">
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="input-group input-group-xs">
+                                <span class="input-group-btn">
+                             <button class="btn btn-darkorange" type="button">三级(%)：</button>
+                         </span>
+                                <input name="fx3rate" type="text" class="form-control" value="{$cache.fx3rate}">
+                            </div>
+                        </div>
+                    </div>
+                    </eq>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">周期(天)<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="cycle" placeholder="必填" data-bv-notempty="true" data-bv-notempty-message="不能为空" value="{$cache.cycle}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">是否众筹</label>
+                        <div class="col-md-7">
+                            <label>
+                                <input type="hidden" name="isproject" value="{$cache.isproject}" id="isproject">
+                                <input class="checkbox-slider slider-icon colored-primary" type="checkbox" id="isprojectBtn" <eq name="cache.isproject" value="1">checked="checked"</eq>>
+                                <span class="text darkorange">&nbsp;&nbsp;&larr; ON表示是，OFF表示不是，如果是众筹，则关闭资金返还功能</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" id="endtime"  <neq name="cache.isobject" value="1">style="display:none"</neq>>
+                        <label class="control-label col-md-2"">众筹结束时间</label>
+                        <div class="input-group input-group-sm col-lg-4 left15" style="left:15px">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control" id="endtime" name="endtime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="<if condition="$cache.endtime gt 0">{$cache.endtime|date='Y-m-d H:i:s',###}</if>"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">是否实物返还</label>
+                        <div class="col-md-7">
+                            <label>
+                                <input type="hidden" name="isobject" value="{$cache.isobject}" id="isobject">
+                                <input class="checkbox-slider slider-icon colored-primary" type="checkbox" id="isobjectBtn" <eq name="cache.isobject" value="1">checked="checked"</eq>>
+                                <span class="text darkorange">&nbsp;&nbsp;&larr; ON表示是，OFF表示不是，如果是实物返还，则不分红和返回本金，到期后邮寄实物。</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="address" <neq name="cache.isobject" value="1">style="display:none"</neq>>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">快递费用</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" name="postage" placeholder="不填则说明不支持快递" value="{$cache.postage}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">返还时间</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" name="rtime" placeholder="请填写实物返还时间" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="<if condition="$cache.rtime gt 0">{$cache.rtime|date='Y-m-d H:i:s',###}</if>"/>
+                            </div>
+                        </div>
+
+                        <notempty name='ziti'>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">自提点</label>
+                                <div class="col-lg-4">
+                                    <volist name="ziti" id="vo">
+                                        <label>
+                                            <input type="checkbox" class="colored-blue oa-check" <in name="vo.id" value="$cache.adressid">checked="checked"</in> value="{$vo.id}" data-label="{$vo.address}">
+                                            <span class="text">{$vo.address}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        </label>
+                                    </volist>
+                                    <input type="hidden" name="adressid" id="adressid" value="{$cache.adressid}" />
+                                </div>
+                            </div>
+                        </notempty>
+                    </div>
+
+                    <div class="form-group" id='money'>
+                        <label class="control-label col-md-2">是否资金返还</label>
+                        <div class="col-md-7">
+                            <label>
+                                <input type="hidden" name="ismoney" value="{$cache.ismoney}" id="ismoney">
+                                <input class="checkbox-slider slider-icon colored-primary" type="checkbox" id="ismoneyBtn" <eq name="cache.ismoney" value="1">checked="checked"</eq>>
+                                <span class="text darkorange">&nbsp;&nbsp;&larr; ON表示是，OFF表示不是，如果是资金返还，则不邮寄实物，到期后返还资金。</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="virtual" <neq name="cache.ismoney" value="1">style="display:none"</neq>>
+	                    <div class="form-group">
+	                        <label class="col-lg-2 control-label">预期年回报率(%)<sup>*</sup></label>
+	                        <div class="col-lg-4">
+	                            <input type="text" class="form-control" name="rate" placeholder="必填" data-bv-notempty="true" data-bv-notempty-message="不能为空" value="{$cache['rate']*100}">
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label class="col-lg-2 control-label">选择分红方式<sup>*</sup></label>
+	                        <div class="col-lg-4">
+	                            <select class="form-control" id="bonusway" name="bonusway" data-bv-notempty="true"
+	                                data-bv-notempty-message="不能为空">
+	                            	<option value="">选择分红方式</option>  
+	                                <option value="1" <eq name="cache.bonusway" value="1">selected</eq>>到期分红</option>     
+	                                <!-- <option value="2" <eq name="cache.bonusway" value="2">selected</eq>>按月分红</option>  -->
+	                                <option value="3" <eq name="cache.bonusway" value="3">selected</eq>>按天分红</option>
+	                            </select>
+	                        </div>
+	                    </div>   
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">限购<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="restrict" placeholder="必填，0表示不限" data-bv-notempty="true" data-bv-notempty-message="0表示不限" value="{$cache.restrict}">
+                        </div>
+                    </div>                 
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">产品数量<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="num" placeholder="必填" data-bv-notempty="true" data-bv-notempty-message="不能为空" value="{$cache.num}">
+                        </div>
+                    </div>                 
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">产品份数<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="copies" placeholder="必填" data-bv-notempty="true" data-bv-notempty-message="不能为空" value="{$cache.copies}">
+                        </div>
+                    </div>    
+                    <div class="form-group" id="starttime">
+                        <label class="control-label col-md-2"">开售时间</label>
+                        <div class="input-group input-group-sm col-lg-4 left15" style="left:15px">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control" id="stime" name="stime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="<if condition="$cache.stime gt 0">{$cache.stime|date='Y-m-d H:i:s',###}</if>"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">直播信号</label>
+                        <div class="col-lg-4">
+                            <select class="form-control" name="vid">
+                            	<option value="">选择直播信号</option> 
+                            	<volist name="video" id="vo"> 
+                                	<option value="{$vo.id}" <if condition="$cache.vid eq $vo['id']">selected</if>>{$vo.title}</option>                                  
+                            	</volist>
+                            </select>
+                        </div>
+                    </div>
+                    <eq name="cache.status" value='2'>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">对客户留言<sup>*</sup><i style="font-style: normal;font-size: 12px;color: #f33;">(提示：每句话以句号结束)</i></label>
+                            <div class="col-lg-4">
+                                <textarea style="margin: 0px;width: 390px;height: 136px;padding: 8px;" name="message">{$cache.message}</textarea>
+                            </div>
+                        </div>
+                    </eq>                  
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">产品详情<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <!--必须插入空input避免验证冲突-->
+                            <input type="hidden">
+                            <script type="text/plain" id="J-ueditor">
+                                {$cache.content|htmlspecialchars_decode}
+                            </script>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-4">
+                            <button class="btn btn-primary btn-lg" type="submit">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button class="btn btn-palegreen btn-lg" type="reset">重填</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->
+<!--编辑器封装-->
+<script type="text/javascript">
+var ue = UE.getEditor('J-ueditor', {
+    textarea: 'content' //提交字段名，必须填写，数据库必须有此字段    
+});
+$('#isprojectBtn').on('click', function() {
+    var value = $(this).prop('checked') ? 1 : 0;
+    $('#isproject').val(value);
+    if(value!=1) {
+        $('#endtime').hide();
+        $('#money').show();
+    } else {
+        $('#endtime').show();
+        $('#money').hide();
+    }
+});
+$('#isobjectBtn').on('click', function() {
+    var value = $(this).prop('checked') ? 1 : 0;
+    $('#isobject').val(value);
+    if(value!=1) {
+        $('#address').hide();
+    } else {
+        $('#address').show();
+    }
+});
+$('#ismoneyBtn').on('click', function() {
+    var value = $(this).prop('checked') ? 1 : 0;
+    $('#ismoney').val(value);
+    if(value!=1) {
+        $('#virtual').hide();
+    } else {
+        $('#virtual').show();
+    }
+});
+$('#isziti').on('click', function() {
+    var value = $(this).prop('checked') ? 1 : 0;
+    $('#isziti').val(value);
+});
+</script>
+<!--/编辑器封装-->
+<!--表单验证与提交封装-->
+<script type="text/javascript">
+$('#AppForm').bootstrapValidator({
+    submitHandler: function(validator, form, submitButton) {
+        var lid = '';
+        var checks = $('.label-check');
+        $(checks).each(function() {
+            if ($(this).is(":checked")) {
+                lid += $(this).val() + ',';
+            }
+        });
+        var ismoney = $('#ismoney').val();
+        var isobject = $('#isobject').val();
+        if(ismoney == isobject && ismoney!=1){
+            $.App.alert('danger','请选择实物返还或资金返还');
+            return false;
+        }
+        $('#lid').val(lid);
+        var oa='';
+        var checks=$('.oa-check');
+        $(checks).each(function(){
+            if($(this).is(":checked")){
+                oa+=$(this).val()+',';
+            }
+        });
+        $('#adressid').val(oa);
+        var tourl = "{:U('Admin/Finance/goodsSet')}";
+        var data = $('#AppForm').serialize();
+        $.App.ajax('post', tourl, data, null);
+        return false;
+    },
+});
+</script>
+<!--/表单验证与提交封装-->

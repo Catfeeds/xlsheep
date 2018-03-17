@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>拼团-农牧源</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/swiper.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+	<script src="__PUBLIC__/App/js/swiper.js"></script>
+	<style type="text/css">	
+	.allgoods_list .goods .goods_msg .weui_media_desc{overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;max-height:38px;white-space:normal;word-wrap:break-word}
+	.allgoods_list .buy_btn{padding: 2px 5px;font-size:12px;background:#fe8b31;color:#fff;border-radius:5px;margin-top:10px}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="top_nav">
+				<div class="swiper-container top_nav_swp">
+				  <div class="swiper-wrapper">
+				    <div class="swiper-slide">
+						<a href="{:U('App/Activity/actlist')}" <if condition="$type eq 0">class="on"</if>>全部</a>
+				    </div>
+				    <volist name="cates" id="vo">
+				    <div class="swiper-slide">
+						<a href="{:U('App/Activity/actlist',array('type'=>$vo['id']))}" <if condition="$type eq $vo['id']"> class="on"</if>>{$vo.name}</a>
+				    </div>
+				    </volist>
+				  </div>
+				</div>
+			</div>
+			<div class="banner">
+				<div class="swiper-container tuangou_swp">
+					  <div class="swiper-wrapper">
+					    <adv pid ="10" limit="5" item="v">
+			                 <div class="swiper-slide">
+								<a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if> >
+					              	<img src="{$v[imgurl]}" title="{$v[title]}"width="100%" style="{$v[style]}"/>
+					             </a>
+						    </div>
+				        </adv>
+					</div>
+					<div class="swiper-pagination tuangou_swp_pagination"></div>
+				</div>
+			</div>
+			<div class="pd_15 text_c">
+				<p class=" color_9">————<i style="margin:0px 10px;">拼团区域</i>————</p>
+			</div>
+			<div class="weui_cells allgoods_list" style="margin-top: 0;padding-top: 5px;">
+				<div class="goods_list01_bd bd_ul flex_w" id="list">
+					<empty name="cache">
+						<div class="weui-loadmore weui-loadmore_line">
+						  <span class="weui-loadmore__tips">暂无拼团</span>
+						</div>
+					<else />
+					<volist name='cache' id='vv'>
+						<div class="goods">
+							<a href="{:U('App/Activity/actgoods',array('id'=>$vv['id']))}">
+								<img src="{$vv['apppic']['imgurl']}" class="goods_img">
+							</a>
+							<div class="goods_msg">
+								<p>{$vv.name}</p>
+								<!-- <p class="fz_12 color_9 weui_media_desc">{$vo.summary|msubstr=0,10}</p> -->
+								<div class="c_float mg_t10 weui_media_box pd_0 bd_ul">
+									<div class="f_left">
+										<p class="color_org">团购价：￥{$vv.price}</p>
+										<p>已团：{$vv.sells}件</p>
+									</div>
+									<div class="f_right">
+										<a href="{:U('App/Activity/actgoods',array('id'=>$vv['id']))}" class="fr buy_btn">立即参团</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						</volist>
+					</div>
+				</div>			
+				<eq name="datamore" value="1">
+				<div class="weui-infinite-scroll" id="infinite">
+					<div class="infinite-preloader"></div>
+						  正在加载...
+					</div>
+				</eq>
+				</empty>
+			</div>
+			<include file="./Tpl/App/Shop_footer.html" />
+		</div>
+	</div>
+</body>
+<script> 
+var mySwiper3 = new Swiper('.top_nav_swp', {
+	slidesPerView : 'auto',//'auto'
+})
+var mySwiper4 = new Swiper('.tuangou_swp', {
+	pagination : '.tuangou_swp_pagination',
+})
+var type="{$type}";
+if($("#infinite")[0]) {
+	var p = 1;
+	var loading = false;
+	$(document.body).infinite().on("infinite", function() {
+	  if(loading) return;
+	  loading = true;
+	  p=p+1;
+	  param ="?p="+p+"&type="+type;  
+      $.get("{:U('App/Activity/actlist')}"+param,function(data){  
+    	   if(data.status==1) {
+    		   if(data.info) {		
+                   $("#list").append(data.info);
+    			   loading = false;
+                   if(data.more==0) {	            			  
+                	   $(document.body).destroyInfinite();
+                   }
+    	   	   }   
+        	   $('#infinite').hide();
+    	   }
+       })  
+	});
+}
+</script>
+</html>

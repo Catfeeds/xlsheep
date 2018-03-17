@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh">
+    <meta charset="UTF-8">
+    <title>{$_SESSION['WAP']['shopset']['name']}-充值记录</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=0" name="viewport">
+    <link href="__PUBLIC__/App/images/qiaonongge.ico" type="image/x-icon" rel="shortcut icon">
+    <link href="__PUBLIC__/App/css/buy/comon.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/style.css" />   
+    <!--组件依赖js begin-->
+	<script src="__PUBLIC__/App/js/zepto.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/gmu/gmu.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/gmu/app-basegmu.js"></script>
+	<!--组件依赖js end-->
+</head>
+<body class="un-ms-con" style="background-color: rgb(244, 243, 239);">
+    <header class="mui-bar mui-bar-nav">
+			<a href="javascript:history.go(-1)" class="mui-icon mui-icon-back"></a>
+			<h2 class="mui-title">充值记录</h2>
+	</header>
+    <empty name="data">
+    <div class="no-goat">
+        <div class="orange no-goat-tips">暂无记录</div>
+    </div>
+    <else />
+    <div class="sheep-record mui-content">
+        <ul class="record-list" id="viprecord-list">
+        	<volist name="data" id="vo">
+            <li>
+                <a>
+                    <div class="listitem">
+                        <div class="title">{$vo.event}</div>
+                        <div class="time">{$vo.ctime|date="Y-m-d H:i:s",###}</div>
+                        <div class="money <if condition="$vo.status lt 2"> orange<else /> green</if>">{$vo.money}元</div>
+                        <div class="clearboth"></div>
+                    </div>
+                </a>
+            </li>
+            </volist>           
+        </ul>
+       	<section style="margin:0.5rem 1% 1rem; width:98%; line-height:2rem; display:inline-block;">
+			<?php if($page > 1){ ?>
+				<a class="fl gray" style="padding:.2rem 1rem; border:.083rem solid #d8dce6;" href="/App/buy/viprecord/page/<?php echo $page - 1;?>">上一页</a>
+			<?php }?>
+			<?php if($page<$totalPage){ ?>
+				<a class="fr gray" style="padding:.2rem 1rem; border:.083rem solid #d8dce6;" href="/App/buy/viprecord/page/<?php echo $page + 1;?>">下一页</a>
+			<?php }?>
+		</section>
+    </div>
+    </empty>
+</section>
+	</article>
+	<footer class="my-bar footer">
+			<a class="my-bar-item" href="/App/Shop/index" id="fthome">
+				<span class="i-icon"><i class="i-icon-home"></i></span>
+				<div>首页</div>
+			</a>
+			<a class="my-bar-item" href="/App/Shop/category/type/0" id="ftcategory">
+				<span class="i-icon"><i class="i-icon-shop"></i></span>
+				<div>商城</div>
+			</a>
+			<a class="my-bar-item" href="/App/Buy/index" id="ftbase">
+				<span class="i-icon"><i class="i-icon-jd"></i></span>
+				<div>牧场</div>
+			</a>
+			<a class="my-bar-item m-active" href="/App/Vip/index" id="ftvip">
+				<span class="i-icon"><i class="i-icon-farmer"></i></span>
+				<div>农场主</div>
+			</a>
+	</footer>
+
+</body>
+
+</html>

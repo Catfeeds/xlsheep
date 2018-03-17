@@ -1,0 +1,12 @@
+<volist name="cache" id="vo">
+   <div class="weui-media-box weui-media-box_appmsg">
+       <div class="weui-media-box__hd">
+           <a href="javascript:;"><img class="weui-media-box__thumb" src="{$vo.headimgurl}"></a>
+       </div>
+       <div class="weui-media-box__bd">
+           <h4 class="weui-media-box__title">{$vo.nickname}</h4>
+           <p class="weui-media-box__desc">还差<i>{$vo.left}</i>人，剩余<i id="timecount_{$vo.id}" data-end="{$vo.rtime|date='Y/m/d H:i:s',###}"><span class="hour">0</span>:<span class="mini">0</span>:<span class="sec">0</span>:<span class="hm">0</span></i></p>
+       </div>
+       <span class="weui-cell__ft"><a href="{:U('App/Activity/joinGroup',array('id'=>$vo['id']))}" class="go_join">去参团</a></span>
+   </div>
+</volist>

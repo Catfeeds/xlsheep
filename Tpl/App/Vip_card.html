@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>我的优惠券</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+		<empty name="data">
+			<div class="no-item">暂无优惠券</div>
+		<else />
+			<div class="coupon_wp">
+				<volist name="data" id="vo">
+				<div class="coupon_bd <eq name="vo.status" value="3">coupon_pass<else/>coupon_new</eq>">
+					<div class="coupon_top pd_10 c_float">
+						<div class="f_left c_float">
+							<div class="coupon_price mg_r10 f_left">￥{$vo.money}</div>
+							<div class="coupon_rules f_left">
+								<p>代金券</p>
+								<p>全场抵扣{$vo.money}优惠</p>
+								<p>订单满{$vo.usemoney}可用</p>
+							</div>
+						</div>
+						<div class="f_right tips">
+							<p>商城通用劵</p>
+						</div>
+					</div>
+					<div class="coupon_btm c_float">
+						<p class="f_left">截止<i class="mg_r10">{$vo.etime|date='Y-m-d',###}</i><i>{$vo.etime|date='H:i:s',###}</i></p>
+						<p class="f_right">ID: <i>{$vo.cardno}</i></p>
+					</div>
+					<eq name="vo.status" value="3">
+					<div class="pass_icon"><img class="img" src="__PUBLIC__/App/images/passout.png" alt=""></div>
+					</eq>
+				</div>
+				</volist>
+			</div>
+			</empty>
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+</html>

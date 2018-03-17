@@ -1,0 +1,49 @@
+ <div class="row">
+        <div class="col-md-12">
+                <form id="AppTxForm" action="" method="post" class="form-horizontal"
+                                                  data-bv-message=""
+                                                  data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                                                  data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                                                  data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+                   <input type="hidden" name="id" value="{$cache.id}">   
+                   <div class="form-group">
+                        <label class="col-lg-3 control-label">会员ID</label>
+                        <div class="col-lg-7">
+                        	<input type="text" class="form-control" value="{$cache.vip_id}" readonly="readonly">
+                        </div>
+               
+                   </div>               
+                   <div class="form-group">
+                        <label class="col-lg-3 control-label">提现金额</label>
+                        <div class="col-lg-7">
+                        	<input type="text" class="form-control" value="{$cache.txprice}" readonly="readonly">
+                        </div>
+               
+                   </div>
+                   <div class="form-group">
+                        <label class="col-lg-3 control-label">提现姓名</label>
+                        <div class="col-lg-7">
+                        	<input type="text" class="form-control" value="{$cache.txname}" readonly="readonly">
+                        </div>
+                   </div>
+                   <div class="form-group">
+                        <label class="col-lg-3 control-label">提现支付宝账号</label>
+                        <div class="col-lg-7">
+                        	<input type="text" class="form-control" value="{$cache.txcard}" readonly="readonly">
+                        </div>
+                   </div>                
+                   <div class="form-group">
+                        <label class="col-lg-3 control-label">转账凭证</label>
+                        <div class="col-lg-7">
+                         	<div class="input-group input-group-sm">
+                                <input type="text" class="form-control" name="voucher" value="{$cache.voucher}" id="App-voucherpic" data-bv-notempty="true" data-bv-notempty-message="请上传转账凭证" readonly="readonly">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default shiny" type="button" onclick="appImgviewer('App-voucherpic')"><i class="fa fa-camera-retro"></i>预览</button><button class="btn btn-default shiny" type="button" onclick="appImguploader('App-voucherpic',false)"><i class="glyphicon glyphicon-picture"></i>上传</button>
+                            </span>
+                            </div>
+                        </div>
+                   </div>
+               </form>
+        </div>
+</div>
+

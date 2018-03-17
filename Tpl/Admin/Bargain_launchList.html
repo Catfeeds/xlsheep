@@ -1,0 +1,107 @@
+<div class="row">
+	<div class="col-xs-12 col-md-12">
+		<div class="widget">
+			<div class="widget-header bg-blue">
+				<i class="widget-icon fa fa-arrow-down"></i>
+				<span class="widget-caption">发起砍价列表</span>
+				<div class="widget-buttons">
+					<a href="#" data-toggle="maximize">
+						<i class="fa fa-expand"></i>
+					</a>
+					<a href="#" data-toggle="collapse">
+						<i class="fa fa-minus"></i>
+					</a>
+					<a href="#" data-toggle="dispose">
+						<i class="fa fa-times"></i>
+					</a>
+				</div>
+			</div>
+			<div class="widget-body">
+				<div class="table-toolbar" style="height: 52px;">
+					<empty name="status">
+						<button class="btn btn-danger" disabled="disabled">预留按钮</button>
+					</empty>
+					<div class="pull-right">
+						<form id="App-search">
+						   <label style="margin-bottom: 0px; ">
+								<select name="status" id="status">
+									<option value="">请选择状态</option>
+									<option value="0" <if condition="$status eq '0'">selected</if>>砍价中</option>
+									<option value="1" <if condition="$status eq '1'">selected</if>>已下单</option>
+									<option value="2" <if condition="$status eq '2'">selected</if>>已过期</option>
+								</select>
+							</label>
+							<label style="margin-bottom: 0px;">
+								<input name="goodsid" type="search" class="form-control input-sm" placeholder="输入商品ID" value="{$goodsid}">
+							</label>
+							<label style="margin-bottom: 0px;">
+								<input name="vipid" type="search" class="form-control input-sm" placeholder="输入发起者ID" value="{$vipid}">
+							</label>
+							<label style="margin-bottom: 0px;">
+								<input name="name" type="search" class="form-control input-sm" placeholder="输入商品名称" value="{$name}">
+							</label>
+							<a href="{:U('Admin/Bargain/launchList/')}" class="btn btn-success" data-loader="App-loader" data-loadername="发起砍价列表" data-search="App-search">
+								<i class="fa fa-search"></i>搜索
+							</a>
+						</form>
+					</div>
+				</div>
+
+				<table id="App-table" class="table table-bordered table-hover">
+					<thead class="bordered-darkorange">
+						<tr role="row">
+							<th>ID</th>
+							<th>商品ID</th>
+							<th>商品名称</th>
+							<th>商品底价</th>
+							<th>状态</th>
+							<th>砍价次数</th>
+							<th>已砍金额</th>
+							<th>当前价钱</th>
+							<th>发起者ID</th>
+							<th>发起者昵称</th>
+							<th>发起时间</th>
+							<th>过期时间</th>							
+							<th>下单时间</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="cache" id="vo">
+							<tr id="item{$vo.id}">
+								<td class=" sorting_1">{$vo.id}</td>
+								<td class=" ">{$vo.goodsid}</td>
+								<td class=" ">{$vo.name}</td>
+								<td class=" ">{$vo.bprice}</td>
+								<td class=" "><switch name="vo.status">
+									<case value="0">砍价中</case>
+									<case value="1">已下单</case>
+									<case value="2">已过期</case>
+								</switch></td>
+								<td class=" ">{$vo.count}</td>
+								<td class=" ">{$vo.cutmoney}</td>
+								<td class=" ">{$vo.currentmoney}</td>
+								<td class=" ">{$vo.vipid}</td>
+								<td class=" ">{$vo.nickname}</td>
+								<td class=" ">{$vo.ctime|date='Y-m-d H:i:s',###}</td>
+								<td class=" ">{$vo.time|date='Y-m-d H:i:s',###}</td>
+								<td class=" "><eq name="vo.status" value="1">{$vo.etime|date='Y-m-d H:i:s',###}<else />未下单</eq></td>
+								<td class="center ">
+									<a href="{:U('Admin/Bargain/helpList/',array('id'=>$vo['id']))}" class="btn btn-primary btn-xs" data-loader="App-loader" data-loadername="查看砍价详情"><i class="fa fa-eye"></i> 查看砍价详情</a>				
+								</td>
+							</tr>
+						</volist>												
+					</tbody>
+				</table>
+				<div class="row DTTTFooter">
+					{$page}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+	setBread($('#tmpbread').html());
+</script>

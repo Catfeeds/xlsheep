@@ -1,0 +1,10 @@
+<notempty name='cache'>
+  <li style='color:#37c258'>选择自提点</li>
+  <volist name="cache" id="vo">
+     <li class="choose" data-id='{$vo.id}' data-address='{$vo.address}'><i>{$vo.address}&nbsp;&nbsp;距离:{$vo.distance}KM</i></li>
+  </volist> 
+<else/>
+  <li style="text-align: center;">区域内暂无自提点</li>
+</notempty>
+
+

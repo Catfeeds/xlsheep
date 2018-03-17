@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />
+<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/base.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/frozen.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+<script type="text/javascript"  src="__PUBLIC__/App/js/rem.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/common.js"></script>
+<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+<title>站内消息</title>
+</head>
+<body>
+<div class="weui-pull-to-refresh-layer">
+    <div class="pull-to-refresh-arrow"></div>
+    <div class="pull-to-refresh-preloader"></div>
+    <div class="down">下拉刷新</div>
+    <div class="up">释放刷新</div>
+    <div class="refresh">正在刷新...</div>
+ </div>
+<section class="wrap-page" style="padding-bottom: 524px;">
+	<empty name="data">
+	<div style="padding:30px 0;text-align:center;color:#ff8300">暂无消息</div>
+	<else />
+	<div class="noticebox">
+    	<div class="ui-tab" id="gaobox">
+		    <ul class="ui-tab-content bgf">
+		        <li>
+		        	<div class="t-news" id='list'>
+		        		<volist name="data" id="vo">
+		        		<a href="{:U('App/Vip/msgRead',array('id'=>$vo['id']))}" class="item">
+		        			<h3  <eq name='vo.read' value='0'>class="unread"</eq>>{$vo.title}</h3>
+		        			<p class="info-time"  style="text-indent:0;">{$vo.ctime|date='Y-m-d H:i:s',###}</p>
+		        		</a>
+						</volist>
+		        	</div>
+		        </li>
+		        
+		    </ul>
+		</div>
+    </div>
+     <eq name="datamore" value="1">
+	    <div class="weui-infinite-scroll" id="infinite">
+		<div class="infinite-preloader"></div>
+			  正在加载...
+		</div>
+	</eq>
+	</empty>
+</section>
+ <include file="./Tpl/App/Shop_footer.html" />
+ <script src="__PUBLIC__/App/js/fastclick.js"></script>
+ <script type="text/javascript">
+ $(function() {
+	  FastClick.attach(document.body);
+ });
+</script>
+<script type="text/javascript">
+if($("#infinite")[0]) {
+	var p = 1;
+	var loading = false;
+	$(document.body).infinite().on("infinite", function() {
+	  if(loading) return;
+	  loading = true;
+	  p=p+1;
+	  param ="?p="+p;  
+      $.get("{:U('App/Ajax/messageList')}"+param,function(data){  
+    	   if(data.status==1) {
+    		   if(data.info) {	    			   
+                   $("#list").append(data.info);
+    			   loading = false;
+                   if(data.more==0) {	            			  
+                	   $(document.body).destroyInfinite();
+                   }
+    	   	   }     
+        	   $('#infinite').hide();
+    	   }
+       })  
+	});
+}
+$(document.body).pullToRefresh();
+$(document.body).on("pull-to-refresh", function() {
+	param ="?p=1";
+      $.get("{:U('App/Ajax/messageList')}"+param,function(data){  
+    	   if(data.status==1) {
+    		   if(data.info) {	
+                   $("#list").html(data.info);	
+        		   if(!$("#infinite")[0] && data.more) {
+        			   window.location.reload();
+        		   }
+    	   	   }   
+			   resetPage();
+    	   }
+       }) 
+});
+function resetPage() {
+	 p = 1;
+	 $(document.body).pullToRefreshDone();
+	 $(document.body).infinite();
+	 $('#infinite').show();
+}
+</script>
+</body>
+</html>

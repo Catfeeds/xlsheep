@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/base.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/iconfont.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/venobox.css" type="text/css" media="screen" />
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/venobox.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.vbox').venobox();		
+		})
+	</script>
+	<title>我的农场</title>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd notice_list">
+			<empty name="cache">
+				<div class="weui_cells mg_0">
+				<div class="weui_cell">
+			        <div class="weui_cell_bd weui_cell_primary">
+			            <p>暂无项目</p>
+			        </div>
+		        </div>
+			</div>
+			<div class="weui_cells">
+				<volist name="goodslist" id="vo">
+				<div class="weui_cell">
+			        <div class="weui_cell_bd weui_cell_primary fz_14">
+			            <p>第<i>{$vo.id}</i>期  {$vo.name}</p>
+			            <p class="fz_12 color_9"><i>{:number_format($vo['price'],2)}元可起投</i></p>
+			        </div>
+			        <div class="weui_cell_ft mg_l10"><a href="{:U('App/Buy/details',array('id'=>$vo['id']))}" class="org_btn">立即购买</a></div>
+		        </div>
+				</volist>
+			</div>
+			<else />
+			<volist name="cache" id="vo">
+			<div class="weui_cells">
+				<div class="weui_cell">
+			        <div class="weui_cell_bd weui_cell_primary fz_14">
+			            <p>第<i>{$vo.id}</i>期  {$vo.name}</p>
+			        </div>
+			        <div class="weui_cell_ft mg_l10">
+			        	<a href="{:U('App/Buy/sheepdetail',array('id'=>$vo['sid']))}" class="org_btn">查看详情</a>
+			        </div>
+			        <div class="weui_cell_ft mg_l10">
+			        <if condition="$vo[vid] gt 0">
+			        	<a class="vbox" data-type="iframe" href="{:U('App/Video/show',array('id'=>$vo['vid']))}"><img class="monitor_icon" src="__PUBLIC__/App/images/monitor_icon.png" alt=""></a>
+			        	<else />
+			        	<a href="javascript:;"><img class="monitor_icon" src="__PUBLIC__/App/images/monitor_icon.png" alt=""></a>
+			        </if>
+			        </div>
+		        </div>
+			</div>
+			</volist>
+			</empty>
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+</html>

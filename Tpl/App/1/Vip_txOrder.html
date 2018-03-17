@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>申请提现-{$_SESSION['WAP']['shopset']['name']}</title>
+		<meta charset="utf-8" />
+		<!--页面优化-->
+		<meta name="MobileOptimized" content="320">
+		<!--默认宽度320-->
+		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<!--viewport 等比 不缩放-->
+		<meta http-equiv="cleartype" content="on">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!--删除苹果菜单-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<!--默认颜色-->
+		<meta name="apple-mobile-web-app-title" content="yes">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<!--加载全部后 显示-->
+		<meta content="telephone=no" name="format-detection" />
+		<!--不识别电话-->
+		<meta content="email=no" name="format-detection" />
+		<link rel="stylesheet" href="__PUBLIC__/App/css/style.css?v=2" />
+		<script type="text/javascript" src="__PUBLIC__/App/js/zepto.min.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/App/gmu/gmu.min.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/App/gmu/app-basegmu.js"></script>
+		<style type="text/css">
+			.debits a{color: #606060;font-size: 12px;}
+			.withdrawals h2 a{float:right;font-size:14px;color:#f05213;}
+		</style>
+	</head>
+	<body>
+		<section class="mui-inner-wrap">
+			<section class="mui-content">
+				<form action="" method="post" id="AppForm" style="padding: 0;">
+					<div class="debits">账户余额：<strong class="color_red" id='txvm'>{$vip.money}</strong>元</div>
+					<if condition="$vip.txcard eq ''">
+					<div class="debits">
+						<p class="color_red"><i>注意：您还没有绑定银行卡信息！</i><a href="{:U('App/Vip/bind',array('type'=>4))}">马上去设置</a></p>
+					</div>
+					<else/>
+					<div class="withdrawals">
+						<h2>提现账号<a href="{:U('App/Vip/bind',array('type'=>4))}">修改银行卡</a></h2>
+						<p id="username">姓名：{$vip.txname}</p>
+						<p id="phone">手机：{$vip.txmobile}</p>
+						<p id="bank">银行：{$vip.txyh}</p>
+						<p>所属分行：{$vip.txfh}</p>
+						<p>开户行所在地：{$vip.txszd}</p>
+						<p id="idcard">卡号：{$vip.txcard}</p>
+					</div>
+					<div class="debits" id="cash">
+						<div class="cash_money"><span>提现金额：</span><input type="text" name="txprice" value="" placeholder="请输入提现金额" id="txprice"></div>
+						<p class="color_red">注意:提现必须大于{$_SESSION['WAP']['vipset']['tx_money']}</p>
+					</div>
+					<input id="txtype" type="hidden" name="txtype" value="3">
+					</if>
+				</form>
+				<if condition="$vip.txcard neq ''">
+				<a href="javascript:;" class="fr ads-btn fonts9 back3 text-c" id="txbtn">提现</a>
+				</if>
+			</section>			
+		</section>
+		<footer class="my-bar footer">
+			<a class="my-bar-item" href="/App/Shop/index" id="fthome">
+				<span class="i-icon"><i class="i-icon-home"></i></span>
+				<div>首页</div>
+			</a>
+			<a class="my-bar-item" href="/App/Shop/category/type/0" id="ftcategory">
+				<span class="i-icon"><i class="i-icon-shop"></i></span>
+				<div>商城</div>
+			</a>
+			<a class="my-bar-item" href="/App/Buy/index" id="ftbase">
+				<span class="i-icon"><i class="i-icon-jd"></i></span>
+				<div>牧场</div>
+			</a>
+			<a class="my-bar-item" href="/App/Vip/index" id="ftvip">
+				<span class="i-icon"><i class="i-icon-farmer"></i></span>
+				<div>农场主</div>
+			</a>
+		</footer>
+	</body>
+	<if condition="$vip.txcard neq ''">
+	<script>
+	$('.ads-btn').click(function() {
+		var txvm = Number($('#txvm').html());
+		var txmin = {$_SESSION['WAP']['vipset']['tx_money']};
+		var txprice = Number($('#txprice').val());
+		if(!txprice) {
+			App_gmuMsg('请填写提现金额！');
+			return false;
+		}
+		if(txprice > txvm) {
+			App_gmuMsg('提现金额不能大于会员帐户余额！');
+			return false;
+		}
+		if(txprice < txmin) {
+			App_gmuMsg('提现金额不能小于最低提现金额！');
+			return false;
+		}
+		$.ajax({
+			type: 'post',
+			data: $("#AppForm").serialize(),
+			url: "{:U('App/Vip/txorder')}",
+			dataType: 'json',
+			success: function(e) {
+				if(e.status == 1) {
+					var fun = function() {
+						window.location.href = "{:U('App/Buy/record')}";
+					}
+					App_gmuMsg(e.info, fun);
+					return false;
+				} else {
+					zbb_msg(e.info);
+					return false;
+				}
+			},
+			error: function() {
+				zbb_alert('通讯失败！');
+				return false;
+			}
+		});
+	})
+</script>
+</if>
+</html>

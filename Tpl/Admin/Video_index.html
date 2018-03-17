@@ -1,0 +1,129 @@
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <div class="widget">
+            <div class="widget-header bg-blue">
+                <i class="widget-icon fa fa-arrow-down"></i>
+                <span class="widget-caption">直播管理</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body">
+            	<div class="table-toolbar">
+                    <a href="{:U('Admin/Video/add')}" class="btn btn-primary" data-loader="App-loader" data-loadername="添加文章">
+                        <i class="fa fa-plus"></i>新增直播
+                    </a>
+                    <a href="#" class="btn btn-danger" id="App-delall">
+                        <i class="fa fa-delicious"></i>全部删除
+                    </a>
+                    <div class="pull-right">
+                        <form id="App-search">
+                            <label style="margin-bottom: 0px;">
+                                <input name="keyword" type="search" class="form-control input-sm" placeholder="请输入标题" value="{$keyword}">
+                            </label>
+                            <a href="{:U('Admin/Video/index/')}" class="btn btn-success" data-loader="App-loader" data-loadername="直播" data-search="App-search">
+                                <i class="fa fa-search"></i>搜索
+                            </a>
+                        </form>
+                    </div>
+                </div>
+                <table id="App-table" class="table table-bordered table-hover">
+                    <thead class="bordered-darkorange">
+                        <tr role="row">
+                            <th width="20px">
+                                <div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+                                    <label style="padding-left: 4px;">
+                                        <input type="checkbox" class="App-checkall colored-blue">
+                                        <span class="text"></span>
+                                    </label>
+                                </div>
+                            </th>
+                            <th width="80px">ID</th>
+                            <th width="80px">分类</th>
+                            <th width="80px">名称</th>
+                            <th width="200px">图片</th>
+                            <th width="100px">链接</th>  
+                            <th width="50px">排序</th>                           
+                            <th width="150px">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <volist name="video" id="vo">
+                            <tr id="item{$vo.id}">
+                                <td>
+                                    <div class="checkbox" style="margin-bottom: 0px; margin-top: 0px;">
+                                        <label style="padding-left: 4px;">
+                                            <input name="checkvalue" type="checkbox" class="colored-blue App-check" value="{$vo.id}">
+                                            <span class="text"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    {$vo.id}
+                                </td>
+                                 <td>
+                                    {$cates[$vo[cid]]}
+                                </td>
+                                <td>
+                                    {$vo.title}
+                                </td>
+                                <td>
+                                <img src="{$vo.imgurl}" height="60" onerror="this.src='/Public/App/images/lyd_default.png'">
+                                    
+                                </td>
+                                <td>
+                                     {$vo.src}
+                                </td>
+                                <td class=" "><input class="form-control input-sm" type="text" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')" onpaste="this.value=this.value.replace(/[^\d.]/g,'')" onchange="ajaxUpdateField(this);" name="sorts" size="4" data-table="Video" data-id="{$vo.id}" value="{$vo.sorts}"></td>
+                                <td>
+                                   <a href="{:U('Admin/Video/add',array('id'=>$vo['id']))}" class="btn btn-success btn-xs" data-loader="App-loader" data-loadername="设置分组"><i class="fa fa-edit"></i> 编辑</a>&nbsp;&nbsp;<a href="{:U('Admin/Artical/del/')}" class="btn btn-danger btn-xs" data-type = "del" data-ajax="{:U('Admin/Video/del/',array('id'=>$vo['id']))}" ><i class="fa fa-trash-o"></i> 删除</a>
+                                </td>
+
+                            </tr>
+                        </volist>
+                    </tbody>
+                </table>
+                <div class="row DTTTFooter">
+                    {$page}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+setBread($('#tmpbread').html());
+</script>
+
+<!--/面包屑导航封装-->
+<!--全选特效封装/全部删除-->
+<script type="text/javascript">
+//全选
+var checkall = $('#App-table .App-checkall');
+var checks = $('#App-table .App-check');
+var trs = $('#App-table tbody tr');
+$(checkall).on('click', function() {
+    if ($(this).is(":checked")) {
+        $(checks).prop("checked", "checked");
+    } else {
+        $(checks).removeAttr("checked");
+    }
+});
+$(trs).on('click', function() {
+    var c = $(this).find("input[type=checkbox]");
+    if ($(c).is(":checked")) {
+        $(c).removeAttr("checked");
+    } else {
+        $(c).prop("checked", "checked");
+    }
+});
+</script>

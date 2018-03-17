@@ -1,0 +1,61 @@
+<volist name="cache" id="vo">
+		<div class="weui_cells">
+			<div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>订单编号：{$vo.oid}</p>
+                </div>
+                <div class="weui_cell_ft color_org">
+                 <switch name="vo.status">
+						<case value="0">已取消</case>
+						<case value="1">待付款</case>
+						<case value="2">待发货</case>
+						<case value="3">待收货</case>
+						<case value="4">退货中</case>
+						<case value="5">已完成</case>
+						<case value="6">已关闭</case>
+						<case value="7">退货完成</case>
+					</switch>
+                </div>
+            </div>
+            <volist name="vo.items" id="vt">
+            <a href="{:U('App/Shop/goods',array('id'=>$vt[goodsid]))}" class="weui_media_box weui_media_appmsg bz_wrap">
+                   <div class="weui_media_hd">
+                       <img class="img weui_media_appmsg_thumb" src="{$vt.pic}" alt="">
+                   </div>
+                   <div class="weui_media_bd fz_14">
+                       <p>{$vt.name}</p>
+                       <notempty name="vt.skuattr">
+					<p>{$vt.skuattr}</p>
+					</notempty>
+                   </div>
+                   <div class=" ovflw ">
+                          <p><i class="color_org">￥{$vt.price}</i></p>
+                          <p class="text_r fonts85">X{$vt.num}</p>
+                      </div>
+               </a>
+			</volist>
+               <div class="weui_cell fz_14">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>共<i>{$vo.totalnum}</i>件商品</p>
+                </div>
+                <div class="weui_cell_ft">合计：<i class="color_6">￥{$vo.payprice}</i>
+                    <br/>
+                    配送手续费：<i class="color_6">￥{$vo.delivery_fee}</i>
+                </div>
+            </div>
+   			<div class="pd_15 c_float bod_top">
+                   <div class="f_right">
+					   <div class="weui_cell_ft weui_media_box weui_media_appmsg pd_0">
+						   <div>
+                               <eq name="vo.status" value="2">
+                                   <a href="{:U('App/Shop/pickupDeliver',array('sid'=>0,'id'=>$vo['id']))}" class="weui_btn weui_btn_mini weui_btn_primary">到达自提点</a>
+
+                               </eq>
+							   <a href="{:U('App/Shop/deliveryOrderDetail',array('sid'=>0,'orderid'=>$vo['id']))}" class="weui_btn weui_btn_mini weui_btn_primary">查看订单</a>
+
+						   </div>
+					   </div>
+				   </div>
+               </div>
+		</div>
+		</volist>

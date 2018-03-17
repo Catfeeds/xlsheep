@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>{$_SESSION['WAP']['shopset']['name']}</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/activity/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/activity/jquery-weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/swiper.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script src="__PUBLIC__/App/js/activity/jquery-weui.min.js"></script>
+	<script src="__PUBLIC__/App/js/time.js"></script>
+	<style type="text/css">
+	.invite .count_time{background:#fff;padding:0;}
+	</style>
+</head>
+<style>
+body,html{background:#fff}
+.goods_list .weui-media-box_appmsg .weui-media-box__hd,.goods_list .weui-media-box_appmsg .weui-media-box__hd img{width:100px;height:65px}
+.goods_list .weui-media-box__bd{text-align:left}
+.goods_list .price{font-size:18px;line-height:1;color:red;margin-right:5px}
+.tag{padding:10px 15px;background:#f6f6f6;overflow:hidden display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;display: box;justify-content: space-between;-webkit-justify-content: space-between;-moz-justify-content: space-between;-ms-justify-content: space-between;}
+.tag .succes_icon{width:15px;height:15px;float:left;margin-top:3px}
+.invite_bth{border-radius:5px!important;border-right:5px!important;width:95%!important;display:block!important;margin:0 auto;line-height:2.5!important}
+.tip-text {padding:10px 0;}
+.tip-text img{position: relative;top: -2px;left: -2px;}
+</style>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="invite ">
+				<div class="goods_list">
+					<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+	                    <div class="weui-media-box__hd">
+	                        <img class="weui-media-box__thumb" src="{$apppic.imgurl}" alt="">
+	                    </div>
+	                    <div class="weui-media-box__bd">
+	                        <h4 class="weui-media-box__title">{$cache.name}</h4>
+	                        <div class="weui-media-box__desc">
+								<p><i>{$cache.peoplenum}人团</i><i>  &nbsp·&nbsp</i>已团<i>{$cache.sells}</i>件</p>
+								<p><i class="price">￥{$cache.price}</i>/ {$cache.unit}<i>拼团省<i>{$cache['oprice']-$cache['price']}</i>元</i></p>
+	                        </div>
+	                    </div>
+	                </a>
+                </div>
+                <div class="tag">
+					<p><img class="succes_icon" src="__PUBLIC__/App/images/succes.png" alt="">全程包邮</p>
+					<p><img class="succes_icon" src="__PUBLIC__/App/images/succes.png" alt="">24小时发货</p>
+					<p><img class="succes_icon" src="__PUBLIC__/App/images/succes.png" alt="">假一赔十</p>
+                </div>
+				<div class="invite_msg">
+					
+					<div class="my_team">
+						<div class="member captain">
+							<span class="label_float">团长</span>
+							<img class="id_head" src="{$vip.headimgurl}" alt="{$vip.nickname}">
+						</div>
+						<empty name="member">
+						<div class="member"></div>
+						<else />
+						<volist name="member" id="vo">
+						<div class="member"><img class="id_head" src="{$vo.headimgurl}" alt="{$vo.nickname}"></div>
+						</volist>
+						</empty>
+					</div>
+					<if condition="$group['status'] eq 0">	
+					<p class="b_text">仅剩<i>{$group.left}</i>个名额，<span><span id="timecount" data-end="{$group.rtime|date='Y/m/d H:i:s',###}"><span class="hour">0</span>:<span class="mini">0</span>:<span class="sec">0</span>:<span class="hm">0</span></span>后结束</p>
+					<a href="javascript:;" class="invite_bth fastbuy" data-id="{$group.id}">一键参团</a>
+					<else />
+					<div class="tip-text"><div><i><img src="__PUBLIC__/App/images/text_tip.png"></i><i><if condition="$group['status'] eq 1">团已满<else />拼团失败</if></i></div></div>
+					<a href="javascript:;" class="invite_bth fastbuy" data-id="0">一键开团</a>
+					</if>
+				</div>
+				<div class="weui-cells order_detial_msg">
+					<a class="weui-cell weui-cell_access" href="javascript:;">
+		                <div class="weui-cell__bd">
+		                    <p>拼团须知</p>
+		                </div>
+		                <div class="weui-cell__ft">
+							·好友参团·人满发货·人不满退款
+		                </div>
+		            </a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 分享成功的弹窗 -->
+	<div class="invite_success" style="display:none;">
+		<div class="success_tips_msg">
+			<div class="tips_title"><i class="iconfont icon-chenggong color_red2"></i>分享成功</div>
+			<div class="tips_bd">
+				<p>分享<i>3</i>次以上，成团率高达98%哦~</p>
+				<a href="" class="continue_btn">继续分享</a>
+				<p class="text_tips">好货提示</p>
+				<p>90%的人都在这里发现了心仪好货~</p>
+				<a class="go_index" href="{:U('App/Shop/home')}">前往首页</a>
+			</div>
+		</div>
+	</div>
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+var share_url = "http://{$_SERVER['HTTP_HOST']}__ROOT__/App/Activity/joinGroup/id/{$group['id']}";
+var share_title="{$cache.name}";
+var share_content = "{$cache.summary|myTrim}";
+var share_img="{$_SESSION['WAP']['shopset']['url']}{$apppic.imgurl}";
+
+wx.config({
+  debug: false,
+  appId: "{$jsapi['appId']}",
+  timestamp: "{$jsapi['timestamp']}",
+  nonceStr: "{$jsapi['nonceStr']}",
+  signature: "{$jsapi['signature']}",
+  jsApiList: [
+    'checkJsApi',
+    'onMenuShareTimeline',
+    'onMenuShareAppMessage',
+    'onMenuShareQQ',
+    'onMenuShareWeibo',
+    'hideMenuItems',
+    'showMenuItems',
+    'hideAllNonBaseMenuItem',
+    'showAllNonBaseMenuItem',
+  ]
+});
+
+wx.ready(function () {
+    //开启菜单
+    wx.showOptionMenu();
+    //隐藏菜单
+    //wx.hideOptionMenu();
+    //分享给朋友
+    wx.onMenuShareAppMessage({
+      title: share_title,
+      desc: share_content,
+      link: share_url,
+      imgUrl: share_img,
+      trigger: function (res) {
+        //alert('用户点击发送给朋友');
+      },
+      success: function (res) {
+    	  $('.invite_success').show();
+        //alert('已分享');
+      },
+      cancel: function (res) {
+        //alert('已取消');
+      },
+      fail: function (res) {
+        //alert(JSON.stringify(res));
+      }
+    });
+    //分享到朋友圈
+    wx.onMenuShareTimeline({
+      title: share_title,
+      link: share_url,
+      imgUrl: share_img,
+      trigger: function (res) {
+        //alert('用户点击分享到朋友圈');
+      },
+      success: function (res) {
+    	  $('.invite_success').show();
+        //alert('已分享');
+      },
+      cancel: function (res) {
+        //alert('已取消');
+      },
+      fail: function (res) {
+        //alert(JSON.stringify(res));
+      }
+    });
+});
+$('.fastbuy').on('click',function(){
+    var goodsnum="{$cache.num}";
+    var num=1;
+    var goodsid="{$cache.id}";
+    var vipid="{$_SESSION.WAP.vipid}";
+    var groupid = $(this).data('id');
+    if(goodsnum-num<=0){
+        $.toptip('该产品库存不足！请调整购买量或选择其他属性！', 'error');
+        return false;
+    }
+    if(!vipid){
+        var fun=function(){
+            window.location.href=loginback;
+        }
+        $.toast('您还未登录，2秒后自动跳转登陆界面！',function(){window.location.href=loginback;});
+        return false;
+    }
+    var dt={'sid':0,'goodsid':goodsid,'vipid':vipid,'num':num,'isact':1,'groupid':groupid};
+    //保证订单生成页的返回
+    var orderurl="{:U('App/Shop/orderMake',array('sid'=>0,'lasturl'=>$lasturl))}";
+    $.ajax({
+        type:"post",
+        url:"{:U('App/Shop/fastbuy')}",
+        dataType:'json',
+        data:dt,
+        success:function(info){
+            if(info['status']){
+                window.location.href=orderurl;
+            }else{
+            	if(info.url) {
+					$.confirm(info['msg'], function() {
+						  window.location.href=info['url'];
+					}, function() {
+						  return false;
+					 });
+				} else {
+					$.toptip(info['msg'], 'error');
+				}
+            }
+        },
+        error:function(xh,obj){
+            $.toptip('通讯失败，请重试！', 'error');
+        }
+    });
+    return false;
+});
+<if condition="$group['status'] eq 0">
+$("#timecount").fnTimeCountDown("{$group.rtime|date='Y/m/d H:i:s',###}");
+</if>
+</script>
+</body>
+</html>

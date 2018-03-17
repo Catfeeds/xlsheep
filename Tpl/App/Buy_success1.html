@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>产品返还详情</title>
+    <link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+    <link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+</head>
+<style>
+    body,html{
+        background: #fff;
+    }
+    .weui_icon_success:before {
+        font-size: 23px;
+        color: #09bb07;
+        margin-top: -5px;
+        margin-right: 10px;
+    }
+</style>
+<body>
+<div class="wrap">
+    <div class="bd">
+        <div class="pd_10 text_c mg_t10">
+            <p style="font-size: 16px;font-weight: bold;">产品返还详情</p>
+            <div class="pd_10 text_l mg_t10">
+                {$cate.content|htmlspecialchars_decode}
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+            <div class="bd_ul01">
+                <div class="btn_wp bd_ul">
+                    <a class="add_goods" href="{$url}" id="addtocart" style="width: 100%">返回</a>
+                </div>
+            </div>
+        </div>
+</div>
+</body>
+</html>

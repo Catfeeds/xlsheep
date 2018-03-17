@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>合同详情</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/layout.css"/>
+</head>
+<body>
+	<section class="wrap-page wrap">
+		<div class="bd">
+		    <div class="mg_t0 fz_14">
+		    	<div class="weui_cell">
+			    	<section class="">
+			    		<h4 class="weui_media_title" style="text-align: center;">《{$contract_info.title}》</h4><br>
+			    		<p>合同编号：{$cache.no}</p>
+			    		<p>签订时间：{$cache.ctime|date="Y-m-d H:i:s",###}</p>
+			    		<p>甲方：{$goods.party}</p>
+			    		<p>乙方：{$vip.name}</p>
+			    		<p>丙方：广州蜜拓蜜生物科技有限公司</p>
+			    		<p>身份证号码：{$cache.idno}</p>
+			    		<p>手机号码：{$cache.vipmobile}</p>
+			    		<p>{$cache.name}</p>
+			    		<p>认购数量：{$cache.totalnum}</p>
+			    		<p>总投资金额：{$cache.totalprice}</p>
+			    		<p>拟收益：{$cache.profit}</p>
+			    		<p>分红方式：{$fh}</p>
+			    		<p>订单编号：{$cache.oid}</p>
+			    		<p>产品编号：{$goods.number}</p>
+						<p>保险单号：<notempty name='cache.insurance'>{$cache.insurance}<else/>暂无</notempty></p>
+						<p>合同开始时间：{$cache.ctime|date="Y-m-d H:i:s",###}</p>
+						<p>合同结束时间：{$cache.etime|date="Y-m-d H:i:s",###}</p>
+	
+					</section>
+				</div>
+		    	<article class="weui_article">
+		    	      <section>
+		    	        <section>
+		    	          <p>{$contract_info.content|htmlspecialchars_decode}</p>
+		    	        </section>
+		    	      </section>
+		    	</article>
+		    </div>
+		</div>
+	</section>
+</body>
+<script src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+<script src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+<include file="./Tpl/App/Shop_share.html" />
+</html>

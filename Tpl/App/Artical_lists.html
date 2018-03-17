@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>{$cates[$cid]}-{$_SESSION['WAP']['shopset']['name']}</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/weui.min.css" />
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/jquery-weui.min.css" />
+	<link rel="stylesheet" href="__PUBLIC__/App/css/base.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd">
+			<div class="weui_cells">
+				<ul class="index_icon_list02 bd_ul">
+					<volist name="temp" id="v">
+						<!-- <li <eq name="v.cid" value="$cid">class="on"</eq>>
+							<a href="{:U('App/Artical/lists',array('cid'=>$v['id']))}">
+								<p>{$v.name}</p>
+							</a>
+
+						</li> -->
+						<div class="weui_navbar_item <eq name='cid' value='$v.id'>weui_bar_item_on</eq>">
+		                    <a href="{:U('App/Artical/lists',array('cid'=>$v['id']))}">{$v.name}</a>
+		                </div>
+					</volist>
+			    </ul>
+			</div>
+			<div class="weui_cells msg_list">
+				<volist name="cache" id="vo">
+				<a href="{:U('App/Artical/index',array('id'=>$vo['id']))}" class="weui_media_box weui_media_appmsg">
+		          <div class="weui_media_hd">
+		            <img class="weui_media_appmsg_thumb" src="{$vo.imgurl}" alt="" onerror="this.src='/Public/App/images/default.jpg'">
+		          </div>
+		          <div class="weui_media_bd">
+		            <h4 class="weui_media_title fz_14 color_6">{$vo.title}</h4>
+		            <p class="weui_media_desc"> <neq name="vo.sub" value="">{$vo.sub|msubstr=0,40}</neq></p>
+		          </div>
+		        </a>
+				</volist>
+			</div>
+			<!--<a class="float_car">-->
+				<!--<i class="iconfont icon-gouwuche fz_25"></i>-->
+			<!--</a>-->
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+</body>
+</html>

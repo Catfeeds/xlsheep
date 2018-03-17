@@ -1,0 +1,146 @@
+<!--百度编辑器-->
+<script src="__PUBLIC__/Admin/ueditor/ueditor.config.js"></script>
+<script src="__PUBLIC__/Admin/ueditor/ueditor.all.min.js"></script>
+<div class="row">
+    <div class="col-xs-12 col-xs-12">
+        <div class="widget radius-bordered">
+            <div class="widget-header bg-blue">
+                <i class="widget-icon fa fa-arrow-down"></i>
+                <span class="widget-caption">商品设置</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body">
+                <form id="AppForm" action="" method="post" class="form-horizontal" data-bv-message="" data-bv-feedbackicons-valid="glyphicon glyphicon-ok" data-bv-feedbackicons-invalid="glyphicon glyphicon-remove" data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+                    <input type="hidden" name="zid" value="<?php echo $_GET['id'];?>">
+                    <div class="form-title">
+                        <a href="{:U('Admin/Finance/huibaos',array('id'=>$_GET['id']))}" class="btn btn-primary" data-loader="App-loader" data-loadername="商品分组">
+                            <i class="fa fa-mail-reply"></i>返回
+                        </a>
+                    </div>
+<!--                     <div class="form-group">
+                        <label class="col-lg-2 control-label">利息金额<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="price" placeholder="必填" data-bv-notempty="true" data-bv-notempty-message="不能为空" value="{$cache.price}">
+                        </div>
+                    </div> -->
+
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">回报标题<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <textarea class="form-control" name="summary" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">是否实物返还</label>
+                        <div class="col-md-7">
+                            <label>
+                                <input type="hidden" name="address" value="" id="address">
+                                <input class="checkbox-slider slider-icon colored-primary" type="checkbox" id="addressBtn" >
+                                <span class="text darkorange">&nbsp;&nbsp;&larr; ON表示要，OFF表示不要</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">回报描述<sup>*</sup></label>
+                        <div class="col-lg-4">
+                            <!--必须插入空input避免验证冲突-->
+                            <input type="hidden">
+                            <script type="text/plain" id="J-ueditor">
+                                {$cache.content|htmlspecialchars_decode}
+                            </script>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">年回报率</label>
+                        <div class="col-lg-4">
+                            <input class="form-control" type="text" name="per">
+                        </div>
+                    </div>
+<!--                     <div class="form-group">
+                        <label class="col-lg-2 control-label">发送回报时间</label>
+                        <div class="col-lg-4">
+                            <input placeholder="单位：天" class="form-control" type="text" name="tianshu">
+                        </div>
+                    </div> -->
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-4">
+                            <button class="btn btn-primary btn-lg" type="submit">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button class="btn btn-palegreen btn-lg" type="reset">重填</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--面包屑导航封装-->
+<div id="tmpbread" style="display: none;">{$breadhtml}</div>
+<script type="text/javascript">
+setBread($('#tmpbread').html());
+</script>
+<!--/面包屑导航封装-->
+<!--编辑器封装-->
+<script type="text/javascript">
+var ue = UE.getEditor('J-ueditor', {
+    textarea: 'content' //提交字段名，必须填写，数据库必须有此字段    
+});
+</script>
+<!--/编辑器封装-->
+<!--表单验证与提交封装-->
+<script type="text/javascript">
+if ($('#issellsbtn').prop('checked')) {
+    $('#dissells').slideDown();
+} else {
+    $('#dissells').slideUp();
+}
+$('#AppForm').bootstrapValidator({
+    submitHandler: function(validator, form, submitButton) {
+        var lid = '';
+        var checks = $('.label-check');
+        $(checks).each(function() {
+            if ($(this).is(":checked")) {
+                lid += $(this).val() + ',';
+            }
+        });
+        $('#lid').val(lid);
+        var tourl = "{:U('Admin/Finance/huibaoPost')}";
+        var data = $('#AppForm').serialize();
+        $.App.ajax('post', tourl, data, null);
+        return false;
+    },
+});
+$('#isskubtn').on('click', function() {
+    var value = $(this).prop('checked') ? 1 : 0;
+    $('#issku').val(value);
+});
+$('#ismybtn').on('click', function() {
+    var value = $(this).prop('checked') ? 1 : 0;
+    $('#ismy').val(value);
+});
+$('#issellsbtn').on('click', function() {
+    var value;
+    if ($(this).prop('checked')) {
+        value = 1;
+        $('#dissells').slideDown();
+    } else {
+        value = 0;
+        $('#dissells').slideUp();
+    }
+    $('#issells').val(value);
+});
+$('#addressBtn').on('click', function() {
+    var value = $(this).prop('checked') ? 1 : 0;
+    $('#address').val(value);
+});
+</script>
+<!--/表单验证与提交封装-->

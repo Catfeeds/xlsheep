@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+
+	<head lang="zh">
+		<meta charset="UTF-8">
+		<title>绑定银行卡-{$_SESSION['WAP']['shopset']['name']}</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=0" name="viewport">
+		<link href="__PUBLIC__/App/css/buy/comon.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/App/css/style.css?v=2" />
+		<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+		<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+		<script type="text/javascript" src="__PUBLIC__/App/js/zepto.min.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/App/gmu/gmu.min.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/App/gmu/app-basegmu.js"></script>
+		<style>
+			#AppForm .add-uls li input#idno{
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				width: 57.5%;
+				border: 1px solid #eee;
+				font-size: 14px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<section class="mui-content" id="">
+			<form action="" method="post" id="AppForm">
+				<div class="add-ads">
+					<ul class="add-uls">
+						
+						<eq name="type" value="1">
+							<li class="ovflw">
+								<span class="mui-text-left">手机号码：</span>
+								<input type="text" name="mobile" value="{$data.mobile}" placeholder="请输入手机号码"  id="mobile" <notempty name="data.mobile">readonly="readonly"</notempty> />
+							</li>
+							<li class="ovflw">
+								<span class="mui-text-left">真实姓名：</span>
+								<input type="text" name="name" value="{$data.name}" placeholder="请输入姓名"  id="name" <notempty name="data.name">readonly="readonly"</notempty> />
+							</li>
+						</eq>
+
+						<eq name="type" value="2">
+							<li class="ovflw">
+								<span class="mui-text-left">微信昵称：</span>
+								<input type="text" name="txnickname" value="{$data.txnickname}" placeholder="请输入提现的微信号昵称"  id="txnickname" <notempty name="data.txnickname">readonly="readonly"</notempty> />
+							</li>
+							<li class="ovflw">
+								<span class="mui-text-left">微信号：</span>
+								<input type="text" name="wxhao" value="{$data.txwxhao}" placeholder="请输入提现的微信号"  id="wxhao" <notempty name="data.txwxhao">readonly="readonly"</notempty> />
+							</li>
+						</eq>
+
+						<eq name="type" value="4">
+							<li class="ovflw yinhang">
+								<span class="mui-text-left">姓名：</span>
+								<input type="text" name="txname" value="{$data.txname}" placeholder="请输入姓名" id="txname" <if condition="$data.txname neq ''">readonly="readonly" style="border:0"</if> />
+							</li>
+							<li class="ovflw yinhang">
+								<span class="mui-text-left">身份证号：</span>
+								<input type="text" name="idno" value="{$data.idno|default=''}" placeholder="请输入身份证号码"  id="idno" <notempty name="data.idno">readonly="readonly"</notempty>  />
+							</li>
+							<li class="ovflw yinhang">
+								<span class="mui-text-left">电话：</span>
+								<input type="text" name="txmobile" value="{$data.txmobile}" placeholder="请输入联系电话" id="txmobile" />
+							</li>
+							<li class="ovflw yinhang">
+								<span class="mui-text-left">开户银行：</span>
+								<input type="text" name="txyh" value="{$data.txyh}" placeholder="请输入银行" id="txyh" />
+							</li>
+							<li class="ovflw yinhang">
+								<span class="mui-text-left">所属分行：</span>
+								<input type="text" name="txfh" value="{$data.txfh}" placeholder="请输入银行分行" id="txfh" />
+							</li>
+
+							<li class="ovflw yinhang">
+								<span class="mui-text-left">开户行所在地：</span>
+								<input type="text" name="txszd" value="{$data.txszd}" placeholder="请输入银行所在地" id="txszd" />
+							</li>
+							<li class="ovflw yinhang">
+								<span class="mui-text-left">银行卡号：</span>
+								<input type="text" name="txcard" value="{$data.txcard}" placeholder="请输入银行卡号" id="txcard" />
+							</li>
+						</eq>
+					
+					</ul>
+					<input id="type" type="hidden" name="type" value="{$type}">
+					<eq name="type" value="4">
+					<dl class="tipsnav">
+						<dt class="add-tips color3 fonts2 zx">注意：</dt>
+						<dd>1.绑定银行卡后，修改银行卡号只能填写第一次绑定姓名名下的银行卡！</dd>
+					</dl>
+					</eq>
+					</div>
+			</form>
+			<a href="javascript:;" class="fr ads-btn fonts9 back3 text-center" id="savebtn">保存</a>
+		</section>
+		<include file="./Tpl/App/Shop_footer.html" />
+		<script>
+			$('.ads-btn').click(function() {
+				if($('#type').val() == 1) {
+					var mobile = $('#mobile').val();
+					var name = $('#name').val();
+					var email = $('#email').val();
+
+					if(name == '') {
+						zbb_msg("请输入姓名！");
+						return;
+					}
+					if(mobile == '') {
+						zbb_msg("请输入手机！");
+						return;
+					}
+
+					// var re = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
+					// if(re.test(email) == false) {
+					// 	zbb_msg("请输入正确的电子邮箱！");
+					// 	return;
+					// }
+				} else if($('#type').val() == 2) {
+					var wxhao = $('#wxhao').val();
+					if(!wxhao) {
+						App_gmuMsg('请填写微信号！');
+						return false;
+					}
+					var txnickname = $('#txnickname').val();
+					if(!txnickname){
+						App_gmuMsg('请填写微信昵称！');
+						return false;
+					}
+
+				} else if($('#type').val() == 3) {
+					var ali_account = $('#alipay').val();
+					var mobileReg = /^(13[0-9]|14[57]|15[012356789]|17[0678]|18[0-9])\d{8}$/;
+					var emailReg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+					if(!ali_account) {
+						App_gmuMsg('请填写支付宝账号！');
+						return false;
+					}
+					if(!mobileReg.test(ali_account) && !emailReg.test(ali_account)) {
+						App_gmuMsg('请填写正确的支付宝账号！');
+						return false;
+					}
+				} else if($('#type').val() == 4) {
+					if(!$('#txname').val()) {
+						App_gmuMsg('请填写提现姓名！');
+						return false;
+					}
+                    var idno = $('#idno').val();
+                    if(idno==''){
+                        App_gmuMsg('请填写身份证号码！');
+                        return;
+                    }
+                    if(IdentityCodeValid(idno)==false){
+                        return;
+                    }
+					if(!$('#txmobile').val()) {
+						App_gmuMsg('请填写提现手机！');
+						return false;
+					}
+					if(!$('#txyh').val()) {
+						App_gmuMsg('请填写开户银行！');
+						return false;
+					}
+					if(!$('#txfh').val()) {
+						App_gmuMsg('请填写开户银行分行！没有请填写总行!');
+						return false;
+					}
+					if(!$('#txszd').val()) {
+						App_gmuMsg('请填写提现所在地！');
+						return false;
+					}
+					if(!$('#txcard').val()) {
+						App_gmuMsg('请填写提现银行卡号！');
+						return false;
+					}
+				}
+				var jumpurl = '';
+				$.ajax({
+					type: 'post',
+					data: $("form").serialize(),
+					url: "{:U('App/Vip/bind')}",
+					dataType: 'json',
+					success: function(e) {
+						if(e.status == 0 && e.url != '') {
+							jumpurl = e.url;
+							var fun = function() {
+								window.location.href = jumpurl;
+							}
+							App_gmuMsg(e.info, fun);
+							return false;
+						}
+						zbb_msg(e.info);
+						return false;
+					},
+					error: function() {
+						zbb_alert('通讯失败！');
+						return false;
+					}
+				});
+				return false;
+			});
+            function IdentityCodeValid(code) {
+                var city={11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽宁",22:"吉林",23:"黑龙江 ",31:"上海",32:"江苏",33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",41:"河南",42:"湖北 ",43:"湖南",44:"广东",45:"广西",46:"海南",50:"重庆",51:"四川",52:"贵州",53:"云南",54:"西藏 ",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外 "};
+                var tip = "";
+                var pass= true;
+
+                if(!code){
+                    tip = "请输入身份证号码";
+                    pass = false;
+                }
+                else if(!/^\d{17}(\d|x)$/i.test(code)) {
+                    tip = "身份证号格式错误";
+                    pass = false;
+                }
+                else if(!city[code.substr(0,2)]) {
+                    tip = "身份证号地址编码错误";
+                    pass = false;
+                }
+                else{
+                    //18位身份证需要验证最后一位校验位
+                    if(code.length == 18){
+                        code = code.split('');
+                        //∑(ai×Wi)(mod 11)
+                        //加权因子
+                        var factor = [ 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 ];
+                        //校验位
+                        var parity = [ 1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2 ];
+                        var sum = 0;
+                        var ai = 0;
+                        var wi = 0;
+                        for (var i = 0; i < 17; i++)
+                        {
+                            ai = code[i];
+                            wi = factor[i];
+                            sum += ai * wi;
+                        }
+                        var last = parity[sum % 11];
+                        if(parity[sum % 11] != code[17]){
+                            tip = "身份证号校验位错误";
+                            pass =false;
+                        }
+                    }
+                }
+                if(!pass)
+                    App_gmuMsg(tip);
+                return pass;
+            }
+		</script>
+	</body>
+
+</html>

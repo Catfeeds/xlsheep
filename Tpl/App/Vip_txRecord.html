@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>提现记录</title>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/jquery-weui.min.css"/>
+	<link rel="stylesheet" href="__PUBLIC__/App/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/layout.css">
+	<link rel="stylesheet" href="__PUBLIC__/App/css/buy/comon.css"/>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/App/js/jquery-weui.min.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="bd recharge_list">
+			<div class="bd_tab">
+				<div class="weui_navbar">
+			        <div class="weui_navbar_item">
+			          <a href="{:U('Vip/czRecord')}">充值</a>
+			        </div>
+			        <div class="weui_navbar_item weui_bar_item_on">
+			          <a href="{:U('Vip/txRecord')}">提现</a>
+			        </div>
+			    </div>
+		    </div>
+		    <div class="balance_wp">
+		    	<empty name="cache">
+				<div class="no-goat">
+			        <div class="orange no-goat-tips">暂无记录</div>
+			    </div>
+			    <else />
+		    	<ul>
+			    	<li>
+			    		<volist name="cache" id="vo">
+				    	<div class="weui_cells">
+							<div class="bod_top pd_10">
+								<div class="c_float">
+									<p class="f_left">提现编号：<i class="mg_r10">{$vo.id}</i>
+									<if condition="$vo['txtype'] eq 0">
+										卡尾号<i>{$vo.txcard}</i></p>
+									<else/>
+										微信号<i>{$vo.txwxhao}</i>
+									</if>
+									<p class="color_green f_right">{$vo.txprice}</p>
+								</div>
+								<div class="c_float fz_12 mg_t5 color_9">
+									<p class="f_left"><i class="mg_r10">
+									<if condition="$vo['status'] eq 2">
+										{$vo.txtime|date="Y-m-d H:i:s",###}</i></p>
+									<else/>
+										{$vo.txsqtime|date="Y-m-d H:i:s",###}</i></p>
+									</if>
+									<p class="f_right fz_14">
+									<switch name="vo.status">    
+										<case value="0">已取消</case>    
+										<case value="1">待处理</case>
+										<case value="2">已完成</case>
+									</switch>
+									</p>
+								</div>
+							</div>
+						</div>
+						</volist>
+					</li>
+				</ul>
+				<eq name="datamore" value="1">
+					 <div class="weui-infinite-scroll" id="infinite">
+						<div class="infinite-preloader"></div>
+							  正在加载...
+					</div>
+				</eq>
+				</empty>
+		    </div>
+				
+		</div>
+		<include file="./Tpl/App/Shop_footer.html" />
+	</div>
+	<script type="text/javascript">
+	if($("#infinite")[0]) {
+		var p = 1;
+		var loading = false;
+		$(document.body).infinite().on("infinite", function() {
+		  if(loading) return;
+		  loading = true;
+		  p=p+1;
+		  param ="?p="+p;  
+	      $.get("{:U('App/Ajax/txRecord')}"+param,function(data){  
+	    	   if(data.status==1) {
+	    		   if(data.info) {	    			   
+	                   $("#list").append(data.info);
+	    			   loading = false;
+	                   if(data.more==0) {	            			  
+	                	   $(document.body).destroyInfinite();
+	                   }
+	    	   	   }  
+					$('#infinite').hide();          		   
+	    	   }
+	       })  
+		});
+	}
+	</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="dns-prefetch" href="//mobile.yangkeduo.com">
+    <link rel="dns-prefetch" href="//cdn.yangkeduo.com">
+    <link rel="dns-prefetch" href="//apiv2.yangkeduo.com">
+    <link rel="dns-prefetch" href="//pinduoduo.img-cn-shanghai.aliyuncs.com">
+    <link rel="dns-prefetch" href="//omsproduction.img-cn-shanghai.aliyuncs.com">
+    <link rel="dns-prefetch" href="//testpdd.img-cn-shanghai.aliyuncs.com">
+    <link rel="dns-prefetch" href="//pinduoduo.b0.upaiyun.com">
+    <link rel="dns-prefetch" href="//testpdd.b0.upaiyun.com">
+    <link rel="dns-prefetch" href="//omsproduction.b0.upaiyun.com">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link rel="shortcut icon" href="//cdn.yangkeduo.com/favicon.ico">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <meta property="og:title" content="拼多多商城"/>
+    <meta property="og:description" content="风靡全国的拼团商城，优质商品新鲜直供，快来一起拼多多吧"/>
+    <meta property="og:image" content="http://pinduoduo.img-cn-shanghai.aliyuncs.com/base/share_logo.jpg"/>
+    <link rel="stylesheet" href="http://cdn.yangkeduo.com/assets/css/react_boot_064dac6ae97432f2398a7eb6d2f13917.css">
+<link rel="stylesheet" href="http://cdn.yangkeduo.com/assets/css/react_common_4bb28666247ed8adb17e3fc8aa852814.css">
+<link rel="stylesheet" href="http://cdn.yangkeduo.com/assets/css/react_index_bb6fd1d7213ef52b22a2dc9f090ad61d.css">
+
+    <title>拼多多</title>
+</head>
+
+<body>
+    <!--<script src='assets/js/fastclick.js'></script>-->
+    <div id="main"></div>
+
+<script>
+    window.rawData= null;
+</script>
+<!-- <script src='assets/js/react.min.js'></script> -->
+<!-- <script src='assets/js/react-dom.min.js'></script> -->
+<script>!function(e){function a(c){if(t[c])return t[c].exports;var r=t[c]={exports:{},id:c,loaded:!1};return e[c].call(r.exports,r,r.exports,a),r.loaded=!0,r.exports}var c=window.webpackJsonpForReact;window.webpackJsonpForReact=function(o,n){for(var d,s,f=0,p=[];f<o.length;f++)s=o[f],r[s]&&p.push.apply(p,r[s]),r[s]=0;for(d in n)e[d]=n[d];for(c&&c(o,n);p.length;)p.shift().call(null,a);if(n[0])return t[0]=0,a(0)};var t={},r={7:0};a.e=function(e,c){if(0===r[e])return c.call(null,a);if(void 0!==r[e])r[e].push(c);else{r[e]=[c];var t=document.getElementsByTagName("head")[0],o=document.createElement("script");o.type="text/javascript",o.charset="utf-8",o.async=!0,o.src=a.p+"assets/js/react_chunk_"+({0:"react_audio_record",1:"react_boot",2:"react_goods",4:"react_group",5:"react_index",6:"react_common"}[e]||e)+"_"+{0:"be36a123ebe9fa6de7f4",1:"588232aa082b185a55a1",2:"c8bfb4855c3c37ec63fc",3:"6c6c08122d374a10731d",4:"6f16c4ee59deac935b8f",5:"06f691389873bf47a6fa",6:"030561934b3c5807446e"}[e]+".js",t.appendChild(o)}},a.m=e,a.c=t,a.p="http://cdn.yangkeduo.com/"}([]);</script>
+<script src="http://cdn.yangkeduo.com/assets/js/react_common_030561934b3c5807446e.js" crossorigin></script>
+<script src="http://cdn.yangkeduo.com/assets/js/react_boot_588232aa082b185a55a1.js" crossorigin></script>
+<script src="http://cdn.yangkeduo.com/assets/js/react_index_06f691389873bf47a6fa.js" crossorigin></script>
+<script>
+    // FastClick.attach(document.body);
+</script>
+</body>
+
+
+</html>
